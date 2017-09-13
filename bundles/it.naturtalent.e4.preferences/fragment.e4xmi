@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_cyttcJn1EeO0WaX6XhVZ_g">
+  <imports xsi:type="commands:Command" xmi:id="_J9zcYInTEeeXRuY5oMmD8Q" elementId="it.naturtalent.application.command.tempDir"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_MqfTYJn6EeO0WaX6XhVZ_g" featurename="children" parentElementId="it.naturtalent.e4.application.menu.window" positionInList="">
+    <elements xsi:type="menu:MenuSeparator" xmi:id="_4nEhAJn8EeO0WaX6XhVZ_g" elementId="it.naturtalent.e4.preferences.menuseparator.0"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_TzWzgJn6EeO0WaX6XhVZ_g" elementId="it.naturtalent.e4.preferences.handledmenuitem.0" label="Pr&#xe4;ferenzen" command="_fkdDAJn6EeO0WaX6XhVZ_g"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_YgzaEJn6EeO0WaX6XhVZ_g" featurename="commands" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Command" xmi:id="_fkdDAJn6EeO0WaX6XhVZ_g" elementId="it.naturtalent.e4.preferences.command.show" commandName="showPreferenceView"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_HmDBwJn9EeO0WaX6XhVZ_g" featurename="handlers" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Handler" xmi:id="_MAaUQJn9EeO0WaX6XhVZ_g" elementId="it.naturtalent.e4.preferences.handler.0" contributionURI="bundleclass://it.naturtalent.e4.preferences/it.naturtalent.e4.preferences.handlers.PreferenceHandler" command="_fkdDAJn6EeO0WaX6XhVZ_g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_rNrFMIkQEeeYgp_a-84UGA" elementId="it.naturtalent.e4.preferences.handler.tempHandler" contributionURI="bundleclass://it.naturtalent.e4.preferences/it.naturtalent.e4.preferences.handlers.TempFolderHandler" command="_J9zcYInTEeeXRuY5oMmD8Q"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Gntg0IkDEeeYgp_a-84UGA" featurename="addons" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="application:Addon" xmi:id="_Z3Zo0IkDEeeYgp_a-84UGA" elementId="it.naturtalent.e4.preferences.addon.0" contributionURI="bundleclass://it.naturtalent.e4.preferences/it.naturtalent.e4.preferences.PreferenceAddOn"/>
+  </fragments>
+</fragment:ModelFragments>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_YVNf8PRfEeGryJmObduxFQ" elementId="it.naturtalent.e4.application" bindingContexts="_YVNf8fRfEeGryJmObduxFQ">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_YVNgB_RfEeGryJmObduxFQ" elementId="it.naturtalent.e4.application.mainwindow" label="NaturTalent" width="1200" height="675">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_YVRxYPRfEeGryJmObduxFQ" elementId="it.naturtalent.trimwindow.perspectivestack">
+      <children xsi:type="advanced:Perspective" xmi:id="_hDmYoAxYEeS5yb4eEOCF0Q" elementId="it.naturtalent.project.perspective" label="Projekte" iconURI="icon://ICON_PROJECT">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_yKg2QAxYEeS5yb4eEOCF0Q" elementId="it.naturtalent.e4.project.ui.partsashcontainer.explorer" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_2Rq44AxYEeS5yb4eEOCF0Q" elementId="it.naturtalent.e4.project.ui.partstack.explorer"/>
+          <children xsi:type="basic:PartStack" xmi:id="_-umB4AxYEeS5yb4eEOCF0Q" elementId="it.naturtalent.e4.project.ui.partstack.1"/>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_YVOHAPRfEeGryJmObduxFQ" elementId="menu:org.eclipse.ui.main.menu">
+      <children xsi:type="menu:Menu" xmi:id="_YVOHAfRfEeGryJmObduxFQ" elementId="it.naturtalent.e4.application.menu.file" label="%Application.fileLabel">
+        <children xsi:type="menu:Menu" xmi:id="_yFKs4ElXEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.application.menu.new" label="Neu" mnemonics="%Application.newLabel"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_YVOHAvRfEeGryJmObduxFQ" elementId="it.naturtalent.e4.application.handledmenuitem.open" label="%Application.openLabel" iconURI="platform:/plugin/it.naturtalent.application/icons/project_open.gif" command="_YVNf_vRfEeGryJmObduxFQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_YVRKUPRfEeGryJmObduxFQ" label="%Application.saveLabel" iconURI="platform:/plugin/it.naturtalent.application/icons/save_edit.gif" command="_YVNgAfRfEeGryJmObduxFQ"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_0ZmSwEUnEeK2PdDjk-7XFQ" elementId="it.naturtalent.e4.application.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_zLBXMJ5eEeOFYoXHuK-9zg" elementId="it.naturtalent.e4.application.handledmenuitem.close" label="%Application.close" command="_ZsyCQJ5eEeOFYoXHuK-9zg"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_LJ8ZAJ5gEeOFYoXHuK-9zg" elementId="it.naturtalent.e4.application.handledmenuitem.reopen" label="%Application.reopen" command="_fw5g0J5eEeOFYoXHuK-9zg"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_Lh3bsJ5eEeOFYoXHuK-9zg" elementId="it.naturtalent.e4.application.menuseparator.2"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_B9GnUEVlEeKHJNB-XLVjrA" elementId="it.naturtalent.e4.application.handledmenuitem.copy" label="%Application.copyLabel" command="_ebYbQEVkEeKHJNB-XLVjrA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_M5W5gEVlEeKHJNB-XLVjrA" elementId="it.naturtalent.e4.application.handledmenuitem.paste" label="%Application.pasteLabel" command="_iAwmgEVkEeKHJNB-XLVjrA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_pxYqMEVkEeKHJNB-XLVjrA" elementId="it.naturtalent.e4.application.handledmenuitem.rename" label="%Application.renameLabel" command="_VaLggEVkEeKHJNB-XLVjrA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_FU-HUEXvEeKJ8OovkwKB8w" elementId="it.naturtalent.e4.application.handledmenuitem.delete" label="%Application.deleteLabel" command="_--7LQEXuEeKJ8OovkwKB8w"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_kbFdEEUmEeK2PdDjk-7XFQ" elementId="it.naturtalent.e4.application.handledmenuitem.refresh" label="%Application.refreshLabel" command="_GWBxIAGSEeKCIfX2qxxZ-g"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_wt3n4EUnEeK2PdDjk-7XFQ" elementId="it.naturtalent.e4.application.menuseparator.expimp"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_LJebcFsKEeKxTaRLvpPRlA" elementId="it.naturtalent.e4.application.handledmenuitem.export" label="%Application.exportLabel" command="_1BwWYFsJEeKxTaRLvpPRlA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_WcKQoFsKEeKxTaRLvpPRlA" elementId="it.naturtalent.e4.application.handledmenuitem.import" label="%Application.importLabel" command="_7VHx4FsJEeKxTaRLvpPRlA"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_jIGXwFsKEeKxTaRLvpPRlA" elementId="it.naturtalent.e4.application.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_2iMSUIpdEeOahtNvIwc_-g" elementId="it.naturtalent.e4.application.handledmenuitem.tempDir" label="%Application.tempDirLabel" tooltip="ein temporäres Verzeichnis öffnen" command="_fZx-IInFEeeXRuY5oMmD8Q"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_iO3mYKXMEeK7hI62gfp-og" elementId="it.naturtalent.e4.application.handledmenuitem.0" label="%Application.changeWorkspaceLabel" command="_5ukAcKXLEeK7hI62gfp-og"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_YVRKUfRfEeGryJmObduxFQ" label="%Application.quitLabel" command="_YVNf-vRfEeGryJmObduxFQ"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_ETBX0PcvEeGojrWysTBP8w" elementId="it.naturtalent.e4.application.menu.window" label="%Application.windowsLabel">
+        <children xsi:type="menu:Menu" xmi:id="_3WfygHxuEeKgbbt-1JHBMA" elementId="it.naturtalent.e4.application.menu.show" label="%Application.showViewLabel">
+          <children xsi:type="menu:MenuSeparator" xmi:id="_irx68CJGEeOBoJW8wPNM_Q" elementId="it.naturtalent.e4.application.menuseparator.1"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_tUCDICIyEeOBoJW8wPNM_Q" elementId="it.naturtalent.e4.application.handledmenuitem.1" label="%Application.othersLabel" command="_a1rscPcvEeGojrWysTBP8w"/>
+        </children>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_YVRKUvRfEeGryJmObduxFQ" elementId="it.naturtalent.e4.application.menu.help" label="Help">
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_YVRKU_RfEeGryJmObduxFQ" label="About" command="_YVNgBPRfEeGryJmObduxFQ"/>
+      </children>
+      <children xsi:type="menu:Menu" xmi:id="_URrwYFZxEeO1L4EhIDW9MQ" elementId="it.naturtalent.e4.application.menu.tools" label="Tools">
+        <children xsi:type="menu:DynamicMenuContribution" xmi:id="_e1F_oEfLEeWFmPpjQCeLdw" elementId="it.naturtalent.e4.application.dynamicmenucontribution.tools" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.DynamicToolMenu"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_WdH10EfQEeWnQ9EjQwNfiQ" elementId="it.naturtalent.e4.application.handledmenuitem.quit" label="quit" command="_YVNf-vRfEeGryJmObduxFQ"/>
+      </children>
+    </mainMenu>
+    <trimBars xmi:id="_YVRxZPRfEeGryJmObduxFQ">
+      <children xsi:type="menu:ToolBar" xmi:id="_YVRxZfRfEeGryJmObduxFQ" elementId="toolbar:org.eclipse.ui.main.toolbar">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_02hw0HbMEeOpc9TgLkg68Q" elementId="it.naturtalent.e4.application.handledtoolitem.0" label="" iconURI="icon://MENU_NEW" tooltip="%Application.newLabel" command="_Kz7xYHbPEeOpc9TgLkg68Q"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_YVRxZvRfEeGryJmObduxFQ" iconURI="icon://MENU_OPEN" tooltip="%Application.openLabel" command="_YVNf_vRfEeGryJmObduxFQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_YVRxZ_RfEeGryJmObduxFQ" iconURI="icon://MENU_SAVE" tooltip="%Application.saveLabel" command="_YVNgAfRfEeGryJmObduxFQ"/>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_dDuoUPsUEeGLhaGm4A7QOw" elementId="it.naturtalent.e4.application.toolbar.perspectives">
+        <children xsi:type="menu:ToolControl" xmi:id="_pjiKkPjoEeGmm-tYwuWOLA" elementId="it.naturtalent.e4.application.toolcontrol.perspectives" contributionURI="bundleclass://it.naturtalent.e4.PerspectiveSwitcher/it.naturtalent.e4.perspectiveswitcher.tools.PerspectiveSwitcherSwtTrim"/>
+      </children>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_YVNf-_RfEeGryJmObduxFQ" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.handlers.QuitHandler" command="_YVNf-vRfEeGryJmObduxFQ"/>
+  <handlers xmi:id="_YVNf__RfEeGryJmObduxFQ" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.handlers.OpenHandler" command="_YVNf_vRfEeGryJmObduxFQ"/>
+  <handlers xmi:id="_YVNgAvRfEeGryJmObduxFQ" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.handlers.SaveHandler" command="_YVNgAfRfEeGryJmObduxFQ"/>
+  <handlers xmi:id="_YVNgBfRfEeGryJmObduxFQ" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.handlers.AboutHandler" command="_YVNgBPRfEeGryJmObduxFQ"/>
+  <handlers xmi:id="_hwqhkPcvEeGojrWysTBP8w" elementId="it.naturtalent.application.handler.showViews" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.handlers.ShowViewsHandler" command="_a1rscPcvEeGojrWysTBP8w"/>
+  <handlers xmi:id="_L7g5EKXMEeK7hI62gfp-og" elementId="it.naturtalent.application.handler.switchWorkspace" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.handlers.SwitchWorkspaceHandler" command="_5ukAcKXLEeK7hI62gfp-og"/>
+  <handlers xmi:id="_36b0cHbREeOpc9TgLkg68Q" elementId="it.naturtalent.application.handler.newWizard" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.handlers.NewHandler" command="_Kz7xYHbPEeOpc9TgLkg68Q"/>
+  <bindingTables xmi:id="_YVNf_PRfEeGryJmObduxFQ" elementId="it.naturtalent.e4.application.bindingTable" bindingContext="_YVNf8fRfEeGryJmObduxFQ">
+    <bindings xmi:id="_YVNf_fRfEeGryJmObduxFQ" keySequence="M1+Q" command="_YVNf-vRfEeGryJmObduxFQ">
+      <tags>type:user</tags>
+    </bindings>
+    <bindings xmi:id="_YVNgAPRfEeGryJmObduxFQ" keySequence="M1+O" command="_YVNf_vRfEeGryJmObduxFQ">
+      <tags>type:user</tags>
+    </bindings>
+    <bindings xmi:id="_YVNgA_RfEeGryJmObduxFQ" keySequence="M1+S" command="_YVNgAfRfEeGryJmObduxFQ"/>
+    <bindings xmi:id="_YVNgBvRfEeGryJmObduxFQ" keySequence="M1+A" command="_YVNgBPRfEeGryJmObduxFQ"/>
+    <bindings xmi:id="_YuMZgEVlEeKHJNB-XLVjrA" keySequence="CTRL+C" command="_ebYbQEVkEeKHJNB-XLVjrA">
+      <tags>type:user</tags>
+    </bindings>
+    <bindings xmi:id="_dM6nkEVlEeKHJNB-XLVjrA" keySequence="CTRL+V" command="_iAwmgEVkEeKHJNB-XLVjrA">
+      <tags>type:user</tags>
+    </bindings>
+    <bindings xmi:id="_bdICwEVWEeKHJNB-XLVjrA" keySequence="F5" command="_GWBxIAGSEeKCIfX2qxxZ-g"/>
+    <bindings xmi:id="_e6WbgEXuEeKJ8OovkwKB8w" keySequence="DEL" command="_--7LQEXuEeKJ8OovkwKB8w">
+      <tags>type:user</tags>
+    </bindings>
+    <bindings xmi:id="_jG2CAIpfEeOahtNvIwc_-g" elementId="it.naturtalent.e4.application.keybinding.tempDir" keySequence="CTRL+T"/>
+  </bindingTables>
+  <rootContext xmi:id="_YVNf8fRfEeGryJmObduxFQ" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
+    <children xmi:id="_YVNf8vRfEeGryJmObduxFQ" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
+    <children xmi:id="_YVNf8_RfEeGryJmObduxFQ" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
+  </rootContext>
+  <commands xmi:id="_YVNf_vRfEeGryJmObduxFQ" elementId="org.eclipse.ui.file.open" commandName="openCommand"/>
+  <commands xmi:id="_YVNf-vRfEeGryJmObduxFQ" elementId="org.eclipse.ui.file.exit" commandName="quitCommand"/>
+  <commands xmi:id="_YVNgAfRfEeGryJmObduxFQ" elementId="org.eclipse.ui.file.save" commandName="saveCommand"/>
+  <commands xmi:id="_YVNgBPRfEeGryJmObduxFQ" elementId="org.eclipse.ui.help.aboutAction" commandName="aboutCommand"/>
+  <commands xmi:id="_a1rscPcvEeGojrWysTBP8w" elementId="it.naturtalent.application.command.showViews" commandName="showViewsCommand"/>
+  <commands xmi:id="_GWBxIAGSEeKCIfX2qxxZ-g" elementId="it.naturtalent.application.refresh" commandName="refreshCommand"/>
+  <commands xmi:id="_VaLggEVkEeKHJNB-XLVjrA" elementId="it.naturtalent.application.rename" commandName="renameCommand"/>
+  <commands xmi:id="_ebYbQEVkEeKHJNB-XLVjrA" elementId="it.naturtalent.application.copy" commandName="copyCommand"/>
+  <commands xmi:id="_iAwmgEVkEeKHJNB-XLVjrA" elementId="it.naturtalent.application.paste" commandName="pasteCommand"/>
+  <commands xmi:id="_--7LQEXuEeKJ8OovkwKB8w" elementId="it.naturtalent.application.delete" commandName="deleteCommand"/>
+  <commands xmi:id="__CpP8ElXEeK9FcUTGbSajQ" elementId="it.naturtalent.application.newFolder" commandName="newFolderCommand"/>
+  <commands xmi:id="_bPzHgEovEeKe98mRhRmliA" elementId="it.naturtalent.application.newFile" commandName="newFileCommand"/>
+  <commands xmi:id="_KFQdAE7jEeKHl_UfCGMO3g" elementId="it.naturtalent.application.newProject" commandName="newProjectCommand"/>
+  <commands xmi:id="_1BwWYFsJEeKxTaRLvpPRlA" elementId="it.naturtalent.application.exportProject" commandName="exportProjectCommand"/>
+  <commands xmi:id="_7VHx4FsJEeKxTaRLvpPRlA" elementId="it.naturtalent.application.importProject" commandName="importProjectCommand"/>
+  <commands xmi:id="_5ukAcKXLEeK7hI62gfp-og" elementId="it.naturtalent.application.command.witchWorkspace" commandName="switchWorkspaceCommand"/>
+  <commands xmi:id="_Kz7xYHbPEeOpc9TgLkg68Q" elementId="it.naturtalent.application.command.newWizard" commandName="newWizardCommand"/>
+  <commands xmi:id="_ZsyCQJ5eEeOFYoXHuK-9zg" elementId="it.naturtalent.application.command.close" commandName="closeProject"/>
+  <commands xmi:id="_fw5g0J5eEeOFYoXHuK-9zg" elementId="it.naturtalent.application.command.reopen" commandName="reopenProject"/>
+  <commands xmi:id="_fZx-IInFEeeXRuY5oMmD8Q" elementId="it.naturtalent.application.command.tempDir" commandName="tempDirCommand"/>
+  <addons xmi:id="_YVNf9PRfEeGryJmObduxFQ" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_YVNf9fRfEeGryJmObduxFQ" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_YVNf9vRfEeGryJmObduxFQ" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_YVNf9_RfEeGryJmObduxFQ" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_YVNf-PRfEeGryJmObduxFQ" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_YVNf-fRfEeGryJmObduxFQ" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_h9KQ9gIGEeOZAZqoNK6RhA" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_ncQG8M8GEeOI9YftshfQPA" elementId="it.naturtalent.e4.application.addon.0" contributionURI="bundleclass://it.naturtalent.application/it.naturtalent.application.CenterWindowAddon"/>
+</application:Application>

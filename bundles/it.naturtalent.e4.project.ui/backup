@@ -1,0 +1,24 @@
+          <menus xmi:id="_tI-6cBMXEeKGXvZQX1uidA" elementId="it.naturtalent.e4.project.ui.menu.explorer">
+              <tags>ViewMenu</tags>
+            </menus>
+            <menus xsi:type="menu:PopupMenu" xmi:id="_UJt1sBsIEeKFeNIhPqVHIg" elementId="it.naturtalent.e4.project.popupmenu.explorer" label="">
+              <children xsi:type="menu:Menu" xmi:id="_WVbfUElrEeKaOI1dI1of_w" elementId="it.naturtalent.e4.project.ui.menu.0" label="Neu">
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_4EmMkE7lEeKHl_UfCGMO3g" elementId="it.naturtalent.e4.project.ui.handledmenuitem.newProject" label="Projekt" command="_sVDuME7jEeKHl_UfCGMO3g"/>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_YUAE0ElrEeKaOI1dI1of_w" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.newFolderLabel" command="_hnKZoEloEeKaOI1dI1of_w"/>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_5xrVcEovEeKe98mRhRmliA" elementId="it.naturtalent.e4.project.ui.handledmenuitem.newFile" label="%Explorer.newFileLabel" command="_kWBFIEovEeKe98mRhRmliA"/>
+                <children xsi:type="menu:MenuSeparator" xmi:id="_WVwAgHWXEeOXrvWL9QLNWg" elementId="it.naturtalent.e4.project.ui.menuseparator.1"/>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_ZT7B0HWXEeOXrvWL9QLNWg" elementId="it.naturtalent.e4.project.ui.handledmenuitem.newOthers" label="%Explorer.newAndere" command="_aRUBMHbWEeOpc9TgLkg68Q"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_WnYU0EqFEeK-qeHIwLGIiA" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.openLabel" command="_HrxRIEqFEeK-qeHIwLGIiA"/>
+              <children xsi:type="menu:Menu" xmi:id="_WPJlQNcSEeKDxr1tUKHbuA" elementId="it.naturtalent.e4.project.ui.menu.openwith" label="&#xd6;ffnen mit"/>
+              <children xsi:type="menu:MenuSeparator" xmi:id="_qYo40EqFEeK-qeHIwLGIiA" elementId="it.naturtalent.e4.project.ui.menuseparator.0"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_fViUEElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.copyLabel" command="_XjqqoEVmEeKHJNB-XLVjrA"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_kfkI8ElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.pasteLabel" command="_bzuxoEVmEeKHJNB-XLVjrA"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_tHZhcElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.deleteLabel" command="_8IvL0EXvEeKJ8OovkwKB8w"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_z4y9wElDEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.renameLabel" command="_de7vMEVmEeKHJNB-XLVjrA"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_bcUm0ElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.refreshLabel" command="_K8d4MEUnEeK2PdDjk-7XFQ"/>
+              <children xsi:type="menu:MenuSeparator" xmi:id="_AyEGAF4bEeKswvca-m6wuQ" elementId="it.naturtalent.e4.project.ui.menuseparator.0"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_1bkt4IpwEeOahtNvIwc_-g" elementId="it.naturtalent.e4.project.ui.handledmenuitem.tempDir" label="%Explorer.tempDir" command="_4x93YIpvEeOahtNvIwc_-g"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_9jmoIKKFEeKCZJgiZJE3TA" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.property" command="_NqvgQKKFEeKCZJgiZJE3TA"/>
+              <children xsi:type="menu:DirectMenuItem" xmi:id="_C5cCMF4bEeKswvca-m6wuQ" elementId="it.naturtalent.e4.project.ui.directmenuitem.0" label="TEST" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.TestProjectHandler"/>
+            </menus>

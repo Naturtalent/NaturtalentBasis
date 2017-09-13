@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Classic Icons Resource Bundle
+Bundle-SymbolicName: it.naturtalent.icons.classic
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: p.yusukekamiyamane.com
+Fragment-Host: it.naturtalent.icons
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: it.naturtalent.icons

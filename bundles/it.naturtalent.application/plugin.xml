@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="product1"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.eclipse.e4.ui.workbench.swt.E4Application"
+            name="it.naturtalent.application">
+            
+        <property
+               name="appName"
+               value="it.naturtalent.application">
+         </property>
+         <property
+               name="applicationXMI"
+               value="it.naturtalent.application/Application.e4xmi">
+         </property>
+         <property
+               name="aboutText"
+               value="Naturtalent">
+         </property>
+         <property
+               name="lifeCycleURI"
+               value="bundleclass://it.naturtalent.application/it.naturtalent.application.ApplicationLifecycle">
+         </property>
+         <property
+               name="rendererFactoryUri"
+               value="bundleclass://it.naturtalent.application/it.naturtalent.application.menu.CustomWorkbenchRendererFactory">
+         </property>
+         <property
+               name="aboutImage"
+               value="icons/nt48x48.gif">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/nt16x16.gif,icons/nt32x32.gif,icons/nt48x48.gif,icons/nt64x64.gif,icons/nt128x128.gif">
+         </property>
+                     
+            
+      </product>
+   </extension>
+
+</plugin>

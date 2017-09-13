@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="it.naturtalent.e4.project.expimp.import">
+   <implementation class="it.naturtalent.e4.project.expimp.ImportAdapterRepository"/>
+   <service>
+      <provide interface="it.naturtalent.e4.project.IImportAdapterRepository"/>     
+   </service>
+</scr:component>

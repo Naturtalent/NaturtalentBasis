@@ -1,0 +1,12 @@
+To create a form-based UI for an EObject, you need a dependency:
+
+org.eclipse.emf.ecp.ui.view.swt
+----------------------------------------------------------
+
+
+Please make sure that the following two bundles are in your Run/Product configuration:
+
+org.eclipse.emf.ecp.view.model.provider.xmi: Provides the view models registered via extension point
+
+org.eclipse.emf.ecp.view.model.provider.generator: Provides the default layout if no view model is explicitly registered
+----------------------------------------------------------

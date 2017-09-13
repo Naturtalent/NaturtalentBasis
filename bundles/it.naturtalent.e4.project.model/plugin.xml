@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated ntproject -->
+      <package
+            uri="http://www.example.org/project"
+            class="it.naturtalent.e4.project.model.project.ProjectPackage"
+            genModel="model/ntproject.genmodel"/>
+   </extension>
+
+</plugin>

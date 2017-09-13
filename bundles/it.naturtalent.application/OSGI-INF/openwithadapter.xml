@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="it.naturtalent.application.openwithadapter">
+   <implementation class="it.naturtalent.application.services.OpenWithEditorAdapterRepository"/>
+   <service>
+      <provide interface="it.naturtalent.application.services.IOpenWithEditorAdapterRepository"/>
+   </service>
+</scr:component>

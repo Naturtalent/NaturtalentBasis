@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="id2"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            apply="notexists"
+            uri="fragment.e4xmi">
+      </fragment>
+      <processor
+            beforefragment="false"
+            class="it.naturtalent.e4.project.ui.ProjectUIProcessor">
+      </processor>
+   </extension>
+   
+   <extension
+         point="org.eclipse.core.expressions.definitions">
+      <definition
+            id="it.naturtalent.e4.project.menu.openWith.fileresource">
+            
+     <with variable="org.eclipse.ui.selection">
+     
+                <or>
+                  <instanceof
+                        value="org.eclipse.core.internal.resources.File">
+                  </instanceof>
+               </or>
+     
+      </with>
+      
+      </definition>
+      
+      
+      
+   </extension>
+      
+
+</plugin>

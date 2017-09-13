@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_AZ7jgBMUEeKGXvZQX1uidA">
+  <imports xsi:type="commands:Command" xmi:id="_K8d4MEUnEeK2PdDjk-7XFQ" elementId="it.naturtalent.application.refresh"/>
+  <imports xsi:type="commands:Command" xmi:id="_XjqqoEVmEeKHJNB-XLVjrA" elementId="it.naturtalent.application.copy"/>
+  <imports xsi:type="commands:Command" xmi:id="_bzuxoEVmEeKHJNB-XLVjrA" elementId="it.naturtalent.application.paste"/>
+  <imports xsi:type="commands:Command" xmi:id="_de7vMEVmEeKHJNB-XLVjrA" elementId="it.naturtalent.application.rename"/>
+  <imports xsi:type="commands:Command" xmi:id="_8IvL0EXvEeKJ8OovkwKB8w" elementId="it.naturtalent.application.delete"/>
+  <imports xsi:type="commands:Command" xmi:id="_hnKZoEloEeKaOI1dI1of_w" elementId="it.naturtalent.application.newFolder"/>
+  <imports xsi:type="commands:Command" xmi:id="_kWBFIEovEeKe98mRhRmliA" elementId="it.naturtalent.application.newFile"/>
+  <imports xsi:type="commands:Command" xmi:id="_sVDuME7jEeKHl_UfCGMO3g" elementId="it.naturtalent.application.newProject"/>
+  <imports xsi:type="commands:Command" xmi:id="_aRUBMHbWEeOpc9TgLkg68Q" elementId="it.naturtalent.application.command.newWizard"/>
+  <imports xsi:type="commands:Command" xmi:id="_4x93YIpvEeOahtNvIwc_-g" elementId="it.naturtalent.application.command.tempDir"/>
+  <imports xsi:type="menu:HandledMenuItem" xmi:id="_edkhEIpwEeOahtNvIwc_-g" elementId="it.naturtalent.e4.application.command.tempDir"/>
+  <imports xsi:type="commands:Command" xmi:id="_K1c2AJ8sEeOgWLfjDX1yNQ" elementId="it.naturtalent.application.command.close"/>
+  <imports xsi:type="commands:Command" xmi:id="_PPjp0J8sEeOgWLfjDX1yNQ" elementId="it.naturtalent.application.command.reopen"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_bCj5YEUkEeK2PdDjk-7XFQ" featurename="handlers" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Handler" xmi:id="_pKA8QEUkEeK2PdDjk-7XFQ" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.RefreshHandler" command="_K8d4MEUnEeK2PdDjk-7XFQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_lnubQEVmEeKHJNB-XLVjrA" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.CopyResourceHandler" command="_XjqqoEVmEeKHJNB-XLVjrA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_uazacEVmEeKHJNB-XLVjrA" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.PasteResourceHandler" command="_bzuxoEVmEeKHJNB-XLVjrA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_0RT60EVmEeKHJNB-XLVjrA" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.RenameResourceHandler" command="_de7vMEVmEeKHJNB-XLVjrA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_AiNtgEXwEeKJ8OovkwKB8w" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.DeleteResourceHandler" command="_8IvL0EXvEeKJ8OovkwKB8w"/>
+    <elements xsi:type="commands:Handler" xmi:id="_xaAnUEloEeKaOI1dI1of_w" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.NewFolderHandler" command="_hnKZoEloEeKaOI1dI1of_w"/>
+    <elements xsi:type="commands:Handler" xmi:id="_rrYwMEovEeKe98mRhRmliA" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.NewFileHandler" command="_kWBFIEovEeKe98mRhRmliA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_M3UI8EqFEeK-qeHIwLGIiA" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.OpenProjectHandler" command="_a-V1gBtJEeSY6vhdIxl-JQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_un9BEE7nEeKHl_UfCGMO3g" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.CreateProjectHandler" command="_sVDuME7jEeKHl_UfCGMO3g"/>
+    <elements xsi:type="commands:Handler" xmi:id="_ulUD4KKFEeKCZJgiZJE3TA" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.PropertyHandler" command="_NqvgQKKFEeKCZJgiZJE3TA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_8Ng8QJ8rEeOgWLfjDX1yNQ" elementId="it.naturtalent.e4.project.ui.handler.0" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.CloseHandler" command="_K1c2AJ8sEeOgWLfjDX1yNQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_oSEFAJ8sEeOgWLfjDX1yNQ" elementId="it.naturtalent.e4.project.ui.handler.1" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.ReopenHandler" command="_PPjp0J8sEeOgWLfjDX1yNQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_FN3dQLgBEeS3sZCjzxGQKg" elementId="it.naturtalent.e4.project.ui.handler.fileExplorer" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.FileExplorerHandler" command="_6xjE0Lf_EeS3sZCjzxGQKg"/>
+    <elements xsi:type="commands:Handler" xmi:id="_O4MUkFWhEeWqOt92cfLIvw" elementId="it.naturtalent.e4.project.ui.handler.createProject" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.CreateProjectHandler" command="_fu3zQFWgEeWqOt92cfLIvw"/>
+    <elements xsi:type="commands:Handler" xmi:id="__v8MsFZIEeWs0IWTttXAEQ" elementId="it.naturtalent.e4.project.ui.handler.openProject" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.OpenProjectHandler" command="_vs3KoFZIEeWs0IWTttXAEQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_fyBKYPrrEeaCq-uzpVRTiA" elementId="it.naturtalent.e4.project.ui.handler.opensystemeditor" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.SystemOpenWithHandler" command="_8U5cYProEeaCq-uzpVRTiA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_R2JLoPx7EeaYytYauPqaDg" elementId="it.naturtalent.e4.project.ui.handler.TESTOpenWith" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.TESThandler" command="_I0aFYPx7EeaYytYauPqaDg"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mhXEsEoWEeKe98mRhRmliA" featurename="children" parentElementId="it.naturtalent.e4.application.menu.new">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_upyHIHzIEeKI9olPChfamg" label="%Explorer.newProjectLabel" command="_sVDuME7jEeKHl_UfCGMO3g"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_L1V4kEoXEeKe98mRhRmliA" label="%Explorer.newFolderLabel" command="_hnKZoEloEeKaOI1dI1of_w"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Aha5kKKFEeKCZJgiZJE3TA" featurename="commands" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Command" xmi:id="_NqvgQKKFEeKCZJgiZJE3TA" elementId="it.naturtalent.e4.project.propertyCommand" commandName="%Explorer.property"/>
+    <elements xsi:type="commands:Command" xmi:id="_a-V1gBtJEeSY6vhdIxl-JQ" elementId="it.naturtalent.e4.project.openCommand" commandName="%Explorer.explorterLabel"/>
+    <elements xsi:type="commands:Command" xmi:id="_6xjE0Lf_EeS3sZCjzxGQKg" elementId="it.naturtalent.e4.project.command.fileExplorer" commandName="%Explorer.fileExplorer"/>
+    <elements xsi:type="commands:Command" xmi:id="_fu3zQFWgEeWqOt92cfLIvw" elementId="it.naturtalent.e4.project.ui.command.createProject" commandName="%Explorer.createProjectLabel"/>
+    <elements xsi:type="commands:Command" xmi:id="_vs3KoFZIEeWs0IWTttXAEQ" elementId="it.naturtalent.e4.project.ui.command.openProject" commandName="%Explorer.openProjectLabel"/>
+    <elements xsi:type="commands:Command" xmi:id="_8U5cYProEeaCq-uzpVRTiA" elementId="it.naturtalent.e4.project.ui.command.openwithsystemeditor" commandName="SystemEditor"/>
+    <elements xsi:type="commands:Command" xmi:id="_I0aFYPx7EeaYytYauPqaDg" elementId="it.naturtalent.e4.project.ui.command.testOpenWith" commandName="Test"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_MDC-wHahEeOft_dJf8JoSA" featurename="children" parentElementId="it.naturtalent.e4.application.menu.new" positionInList="index:8">
+    <elements xsi:type="menu:MenuSeparator" xmi:id="_MFFM0HamEeOft_dJf8JoSA" elementId="it.naturtalent.e4.project.ui.menuseparator.2"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_Q1QwkHahEeOft_dJf8JoSA" elementId="it.naturtalent.e4.project.ui.handledmenuitem.1" label="andere" command="_aRUBMHbWEeOpc9TgLkg68Q"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_7_g80IpAEeOahtNvIwc_-g" featurename="bindings" parentElementId="it.naturtalent.e4.application.bindingTable">
+    <elements xsi:type="commands:KeyBinding" xmi:id="_CXucEIpBEeOahtNvIwc_-g" elementId="it.naturtalent.e4.project.ui.keybinding.0" keySequence="F5" command="_K8d4MEUnEeK2PdDjk-7XFQ"/>
+    <elements xsi:type="commands:KeyBinding" xmi:id="_UFKGUIpxEeOahtNvIwc_-g" elementId="it.naturtalent.e4.project.ui.keybinding.tmpDir" keySequence="M1+T" command="_4x93YIpvEeOahtNvIwc_-g"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_43aYoMzJEeO1K7CGPXg3lQ" featurename="children" parentElementId="it.naturtalent.trimwindow.perspectivestack">
+    <elements xsi:type="advanced:Perspective" xmi:id="_IzFLIMzKEeO1K7CGPXg3lQ" elementId="it.naturtalent.e4.project.ui.perspective.0" label="Test" iconURI="platform:/plugin/it.naturtalent.e4.project.ui/icons/projekt.png">
+      <children xsi:type="basic:PartStack" xmi:id="_L_iqoMzLEeO1K7CGPXg3lQ" elementId="it.naturtalent.e4.project.ui.partstack.0"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_2avDYAxaEeS5yb4eEOCF0Q" featurename="children" parentElementId="it.naturtalent.e4.project.ui.partstack.explorer">
+    <elements xsi:type="basic:Part" xmi:id="_ON30MM5cEeOVmbWX1p1d-w" elementId="it.naturtalent.e4.project.ui.part.explorer" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.navigator.ResourceNavigator" label="Projektexplorer">
+      <menus xmi:id="_sMnvoBsFEeedQ-EvGGux8g" elementId="it.naturtalent.e4.project.ui.menu.explorer">
+        <tags>ViewMenu</tags>
+      </menus>
+      <menus xsi:type="menu:PopupMenu" xmi:id="_UJt1sBsIEeKFeNIhPqVHIg" elementId="it.naturtalent.e4.project.popupmenu.explorer" label="">
+        <children xsi:type="menu:Menu" xmi:id="_WVbfUElrEeKaOI1dI1of_w" elementId="it.naturtalent.e4.project.ui.menu.0" label="Neu">
+          <children xsi:type="menu:DynamicMenuContribution" xmi:id="_O7omoBwPEeS4tMHjTc4JXQ" elementId="it.naturtalent.e4.project.ui.dynamicmenucontribution.1" label="dynamic New" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.DynamicNewMenu"/>
+          <children xsi:type="menu:MenuSeparator" xmi:id="_WVwAgHWXEeOXrvWL9QLNWg" elementId="it.naturtalent.e4.project.ui.menuseparator.1"/>
+          <children xsi:type="menu:HandledMenuItem" xmi:id="_ZT7B0HWXEeOXrvWL9QLNWg" elementId="it.naturtalent.e4.project.ui.handledmenuitem.newOthers" label="%Explorer.newAndere" command="_aRUBMHbWEeOpc9TgLkg68Q"/>
+        </children>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_WnYU0EqFEeK-qeHIwLGIiA" elementId="it.naturtalent.e4.project.menu.open" label="%Explorer.openLabel" command="_a-V1gBtJEeSY6vhdIxl-JQ"/>
+        <children xsi:type="menu:Menu" xmi:id="_WPJlQNcSEeKDxr1tUKHbuA" elementId="it.naturtalent.e4.project.menu.openWith" label="&#xd6;ffnen mit">
+          <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_W9eLUP37EeaxqcR2gOr1TQ" elementId="it.naturtalent.e4.project.menu.openWith.fileresource" coreExpressionId="it.naturtalent.e4.project.menu.openWith.fileresource"/>
+          <children xsi:type="menu:DynamicMenuContribution" xmi:id="_mu0K4BfQEeSnW9ZLX9wbhQ" elementId="it.naturtalent.e4.project.ui.dynamicmenucontribution.0" label="dynamic Open With" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.DynamicOpenWithMenu"/>
+          <children xsi:type="menu:DirectMenuItem" xmi:id="_eDsmQPx-EeaYytYauPqaDg" elementId="it.naturtalent.e4.project.ui.directmenuitem.test" label="System Editor" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.SystemOpenWithHandler"/>
+        </children>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_qYo40EqFEeK-qeHIwLGIiA" elementId="it.naturtalent.e4.project.ui.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_fViUEElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.copyLabel" command="_XjqqoEVmEeKHJNB-XLVjrA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_kfkI8ElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.pasteLabel" command="_bzuxoEVmEeKHJNB-XLVjrA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_tHZhcElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.deleteLabel" command="_8IvL0EXvEeKJ8OovkwKB8w"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_z4y9wElDEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.renameLabel" command="_de7vMEVmEeKHJNB-XLVjrA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_bcUm0ElOEeK9FcUTGbSajQ" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.refreshLabel" command="_K8d4MEUnEeK2PdDjk-7XFQ"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_AyEGAF4bEeKswvca-m6wuQ" elementId="it.naturtalent.e4.project.ui.menuseparator.0"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_hrmCILgBEeS3sZCjzxGQKg" elementId="it.naturtalent.e4.project.ui.handledmenuitem.fileExplorer" label="%Explorer.fileExplorer" command="_6xjE0Lf_EeS3sZCjzxGQKg"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_1bkt4IpwEeOahtNvIwc_-g" elementId="it.naturtalent.e4.project.ui.handledmenuitem.tempDir" label="%Explorer.tempDir" command="_4x93YIpvEeOahtNvIwc_-g"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_9jmoIKKFEeKCZJgiZJE3TA" elementId="it.naturtalent.e4.project.ui.handledmenuitem.0" label="%Explorer.property" command="_NqvgQKKFEeKCZJgiZJE3TA"/>
+        <children xsi:type="menu:Menu" xmi:id="_r1DNkC1jEeerbITeeRzFqg" elementId="it.naturtalent.e4.project.ui.menu.migration" label="Check und Migration">
+          <children xsi:type="menu:DirectMenuItem" xmi:id="_CGWU0CxFEeeRWdqz1Uj02g" elementId="it.naturtalent.e4.project.ui.directmenuitem.migrationprojekt" label="Migration Projekt" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.MigrateProjectDataHandler"/>
+          <children xsi:type="menu:DirectMenuItem" xmi:id="_7AluMC1kEeerbITeeRzFqg" elementId="it.naturtalent.e4.project.ui.directmenuitem.checkProperty" label="Check Property" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.CheckProjectToProperty"/>
+          <children xsi:type="menu:DirectMenuItem" xmi:id="_2mHRgC1lEeerbITeeRzFqg" elementId="it.naturtalent.e4.project.ui.directmenuitem.checkProject" label="Check IProject" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.CheckPropertyToProject"/>
+          <children xsi:type="menu:DirectMenuItem" xmi:id="_p1fuMC3zEee-B68fUIVnew" elementId="it.naturtalent.e4.project.ui.directmenuitem.exportproperties" label="Export Properties" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.ExportPropertiesHandler"/>
+          <children xsi:type="menu:DirectMenuItem" xmi:id="_XbQigC4qEeeyqaMRHSibqQ" elementId="it.naturtalent.e4.project.ui.directmenuitem.importProperties" label="Import Properties" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.ImportPropertiesHandler"/>
+        </children>
+      </menus>
+      <toolbar xmi:id="_ThcOUBsQEeedQ-EvGGux8g" elementId="it.naturtalent.e4.project.ui.toolbar.0">
+        <children xsi:type="menu:DirectToolItem" xmi:id="_VFpMABsQEeedQ-EvGGux8g" elementId="it.naturtalent.e4.project.ui.directtoolitem." label="" iconURI="icon://ICON_FOLDER" tooltip="%Explorer.tooltip.fileExplorer" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.SystemOpenHandler"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_03zLIDqCEeeguLcLTdWmiQ" elementId="it.naturtalent.e4.project.ui.directtoolitem.clipboardPath" iconURI="icon://MENU_PASTE" tooltip="%Explorer.tooltip.pathClipboard" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.ClipboardPath"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_v37NQDqBEeeguLcLTdWmiQ" elementId="it.naturtalent.e4.project.ui.directtoolitem.collapseProjectTree" iconURI="icon://ICON_COLLAPSEALL" tooltip="%Explorer.tooltip.collapse" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.CollapseProjectTree"/>
+      </toolbar>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_DJeQgFPQEeSYNftRglbzFQ" featurename="children" parentElementId="it.naturtalent.e4.project.ui.partstack.1" positionInList="first">
+    <elements xsi:type="basic:Part" xmi:id="_JUBHMFPQEeSYNftRglbzFQ" elementId="it.naturtalent.e4.project.ui.part.emf.ProjectView" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.parts.emf.ProjectView" label="%ProjectView.label" iconURI="icon://ICON_PROJECT_OPEN"/>
+  </fragments>
+</fragment:ModelFragments>

@@ -1,0 +1,38 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>it.naturtalent.basis</groupId>
+	<artifactId>it.naturtalent.basis.bundles</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>it.naturtalent.basis</groupId>
+		<artifactId>it.naturtalent.basis.root</artifactId>
+		<version>1.0.0-SNAPSHOT</version>		
+	</parent>
+
+	<modules>
+		<module>it.naturtalent.application</module>
+		<module>it.naturtalent.e4.PerspectiveSwitcher</module>	
+		<module>it.naturtalent.e4.preferences</module>	
+		<module>it.naturtalent.e4.project</module>
+		<module>it.naturtalent.e4.project.expimp</module>
+		<module>it.naturtalent.e4.project.model</module>
+		<module>it.naturtalent.e4.project.model.edit</module>
+		<module>it.naturtalent.e4.project.service</module>
+		<module>it.naturtalent.e4.project.ui</module>
+		<module>it.naturtalent.e4.project.viewmodel</module>					
+		<module>it.naturtalent.e4.search</module>
+		<module>it.naturtalent.e4.update</module>
+		<module>it.naturtalent.emf.model</module>
+		<module>it.naturtalent.icons</module>
+		<module>it.naturtalent.icons.classic</module>
+		<module>it.naturtalent.jdom</module>		
+		<module>it.wp.common.io</module>
+		<module>it.wp.common.logger</module>		
+	</modules>
+
+</project>
+
+

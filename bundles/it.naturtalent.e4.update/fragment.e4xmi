@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_0ky5sDmZEeO1wvKQm9TUYw">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_37KYkDmZEeO1wvKQm9TUYw" featurename="children" parentElementId="it.naturtalent.e4.application.menu.help">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_GdeRkDpBEeOlw7jPbGoXrQ" elementId="it.naturtalent.e4.update.handledmenuitem.0" label="Update Software" command="_jAeNsDmhEeO1wvKQm9TUYw"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_8aUpkDtcEeObJJENcTDgtw" elementId="it.naturtalent.e4.install.handledmenuitem.0" label="Installation Software" command="_KDbjkDtdEeObJJENcTDgtw"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_K-FccD5nEeONuaF9sHs5Fw" elementId="it.naturtalent.e4.deinstall.handledmenuitem.0" label="Deinstallation Software" command="_BkZwQD5nEeONuaF9sHs5Fw"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_np86UG2GEeebtr1z8oodng" elementId="it.naturtalent.e4.update.handledmenuitem.updatefeatures" label="Update Features" command="_84e08G2DEeebtr1z8oodng"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_bpv3wDmhEeO1wvKQm9TUYw" featurename="commands" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Command" xmi:id="_jAeNsDmhEeO1wvKQm9TUYw" elementId="it.naturtalentupdate.command.0" commandName="UpdateNaturtalent"/>
+    <elements xsi:type="commands:Command" xmi:id="_KDbjkDtdEeObJJENcTDgtw" elementId="it.naturtalentinstall.command.0" commandName="InstallSoftware"/>
+    <elements xsi:type="commands:Command" xmi:id="_BkZwQD5nEeONuaF9sHs5Fw" elementId="it.naturtalentdeinstall.command.0" commandName="Deinstall Software"/>
+    <elements xsi:type="commands:Command" xmi:id="_84e08G2DEeebtr1z8oodng" elementId="it.naturtalent.e4.update.command.1" commandName="Update Features"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NuoLADpBEeOlw7jPbGoXrQ" featurename="handlers" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Handler" xmi:id="_VKJhYDpBEeOlw7jPbGoXrQ" elementId="it.naturtalent.e4.update.handler.0" contributionURI="bundleclass://it.naturtalent.e4.update/it.naturtalent.e4.update.handler.UpdateHandler" command="_jAeNsDmhEeO1wvKQm9TUYw"/>
+    <elements xsi:type="commands:Handler" xmi:id="_VC3FkDtdEeObJJENcTDgtw" elementId="it.naturtalent.e4.install.handler.1" contributionURI="bundleclass://it.naturtalent.e4.update/it.naturtalent.e4.update.handler.InstallHandler" command="_KDbjkDtdEeObJJENcTDgtw"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_CCiJAGmUEee32ZcdVamE5g" featurename="addons" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="application:Addon" xmi:id="_HCnXsGmUEee32ZcdVamE5g" elementId="it.naturtalent.e4.update.addon.0" contributionURI="bundleclass://it.naturtalent.e4.update/it.naturtalent.e4.update.UpdateAddon"/>
+  </fragments>
+</fragment:ModelFragments>

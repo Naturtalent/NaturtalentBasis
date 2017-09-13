@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:basic_1="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_giNrAOzBEeSmV6QvZLDp6A">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_rcqmYOzBEeSmV6QvZLDp6A" featurename="children" parentElementId="it.naturtalent.trimwindow.perspectivestack">
+    <elements xsi:type="advanced:Perspective" xmi:id="_UwD2IOzCEeSmV6QvZLDp6A" elementId="it.naturtalent.emf.ecp.model.perspective.ModelPespective" label="Model" iconURI="icon://ICON_PROJECT">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_pPcEYOzCEeSmV6QvZLDp6A" elementId="it.naturtalent.emf.ecp.model.partsashcontainer.ModelPerspective" horizontal="true">
+        <children xsi:type="basic:PartStack" xmi:id="_wwTNwOzCEeSmV6QvZLDp6A" elementId="it.naturtalent.emf.ecp.model.partstack.ModelExplorer" containerData="3000">
+          <children xsi:type="basic:Part" xmi:id="_SEMfQOziEeS2IK6NjJ3u-g" elementId="it.naturtalent.emf.ecp.model.part.modelExplorer" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.view.ECPModelView" label="Model Explorer" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/folder_brick.png" tooltip="Model Navigator containing Projects">
+            <handlers xmi:id="_GKLrcCgWEeWwr5gnJYQkBg" elementId="it.naturtalent.emf.model.handler.saveProject" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.handlers.SaveProjectHandler" command="_bqphoO3eEeS9paZ2N3ap-w"/>
+            <handlers xmi:id="_0BSycCggEeWwr5gnJYQkBg" elementId="it.naturtalent.emf.model.handler.deleteProject" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.handlers.DeleteProjectHandler" command="_32eToO3dEeS9paZ2N3ap-w"/>
+            <handlers xmi:id="_w_pDcCjdEeW5S9x9CVeWcQ" elementId="it.naturtalent.emf.model.handler.newProject" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.handlers.NewProjectHandler" command="_vInKsO0kEeSSQKvxOn2cUQ"/>
+            <handlers xmi:id="_3-g9QCjhEeW5S9x9CVeWcQ" elementId="it.naturtalent.emf.model.handler.newModelElement" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.handlers.NewModelElementHandler" command="_PBhuUO14EeS3YKpQdj-3pg"/>
+            <handlers xmi:id="_UNawsEXmEeWhur3LeCMGWQ" elementId="it.naturtalent.emf.model.handler.deleteModelElement" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.handlers.DeleteModelElementHandler" command="_UMVV8O3eEeS9paZ2N3ap-w"/>
+            <handlers xmi:id="_EtjZYEyJEeWc4uYpWh2YJw" elementId="it.naturtalent.emf.model.handler.filterPackages" contributionURI="bundleclass://it.naturtalent.emf.model/it.naturtalent.emf.model.modified.FilterPackagesHandler" command="_vE7wEO3eEeS9paZ2N3ap-w"/>
+            <handlers xmi:id="_X98YcC3gEee-B68fUIVnew" elementId="it.naturtalent.emf.model.handler.0" contributionURI="bundleclass://it.naturtalent.emf.model/it.naturtalent.emf.model.handler.ExportHandler" command="_ivl-YO97EeS-7cxArrJyqg"/>
+            <menus xsi:type="menu:PopupMenu" xmi:id="_TCvsMO0kEeSSQKvxOn2cUQ" elementId="org.eclipse.emf.ecp.e4.application.popupmenu.navigator" label="Navigator menu">
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_b0VdoO0kEeSSQKvxOn2cUQ" elementId="it.naturtalent.emf.ecp.model.handledmenuitem.createNewProject" label="Create new project" command="_vInKsO0kEeSSQKvxOn2cUQ"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_bf6CgO3kEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.handledmenuitem.project.closeProject" label="Close" command="_giEjkO3eEeS9paZ2N3ap-w">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_hdaiwO3kEeS9paZ2N3ap-w" coreExpressionId="org.eclipse.emf.ecp.application.e4.isProjectOpened"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_n2PtEO3kEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.handledmenuitem.project.deleteProject" label="Delete" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/delete.gif" command="_32eToO3dEeS9paZ2N3ap-w">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_21Yl4O3kEeS9paZ2N3ap-w" coreExpressionId="org.eclipse.emf.ecp.application.e4.isProjectSelected"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_-EWuAO3kEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.handledmenuitem.project.deleteModelElement" label="Delete Model Element" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/delete.gif" command="_UMVV8O3eEeS9paZ2N3ap-w">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_DbjcMO3lEeS9paZ2N3ap-w" coreExpressionId="org.eclipse.emf.ecp.application.e4.isModelElementSelected"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_GW2vsO3lEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.handledmenuitem.project.openProject" label="Open" command="_ltuJEO3eEeS9paZ2N3ap-w">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_KIfOQO3lEeS9paZ2N3ap-w" coreExpressionId="org.eclipse.emf.ecp.application.e4.isProjectClosed"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_NFpi8O3lEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.application.e4.handledmenuitem.0" label="Filter Model Elements" iconURI="" command="_vE7wEO3eEeS9paZ2N3ap-w">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_8s6wsEy9EeWc4uYpWh2YJw" coreExpressionId="org.eclipse.emf.ecp.application.e4.isProjectSelected"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_iiudEO14EeS3YKpQdj-3pg" elementId="it.naturtalent.emf.ecp.model.handledmenuitem.newModelElement" label="New Model Element" command="_PBhuUO14EeS3YKpQdj-3pg"/>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_anTKEO3lEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.handledmenuitem.import" label="Import Child" command="_3ikDsO3eEeS9paZ2N3ap-w">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_d_2aQO3lEeS9paZ2N3ap-w" coreExpressionId="org.eclipse.emf.ecp.application.e4.isSingleProjectOrModelElementSelected"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_hU5qgO3lEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.handledmenuitem.export" label="Export Child" iconURI="" command="_zvA5kO3eEeS9paZ2N3ap-w">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_7Vwm8O_rEeS_JqPdyPNm0A" coreExpressionId="org.eclipse.emf.ecp.application.e4.isSingleModelElementSelected"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_XEsHYO-EEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.share" label="Share" iconURI="" command="_EiNZwO97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_kE8RoO-EEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.share"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_UnOJ8O-FEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handler.commit" label="Commit" iconURI="" command="_-JmR4O96EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_en4WkO-FEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.commit"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_LqoM8O-GEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handler.update" label="Update" iconURI="" command="_BKLG8O97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_TUdFEO-GEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.update"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_h-mv4O-HEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.undo" label="Undo Last Operation" iconURI="" command="_IU3MAO97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_qdj5MO-HEeS-7cxArrJyqg" coreExpressionId="Undo Last Operation"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_zcsM0O-GEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handler.updateToVersion" label="Update to version..." iconURI="" command="_bTbu0O97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_7x9OoO-GEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.updateToVersion"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_smdp8O-IEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.revert" label="Revert All Operations" iconURI="" command="_Lf4WgO97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_zCjjoO-IEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.revert"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_Ts-LYO-JEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.historyview" label="Show Historyview" iconURI="" command="_PBQLgO97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_bAs3sO-JEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.historyview"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_0FvCcO-JEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.branchCreate" label="Create Branch" iconURI="" command="_TgkPcO97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_6UjVIO-JEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.branchCreate"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_VAvq8O-KEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.branchMerge" label="Merge with Branch" iconURI="" command="_XY06cO97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_aSc1IO-KEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.branchMerge"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_JkX40O-LEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.exportProject" label="Export Project" command="_ivl-YO97EeS-7cxArrJyqg">
+                <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_NLvoIO-LEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.exportProject"/>
+              </children>
+              <children xsi:type="menu:HandledMenuItem" xmi:id="_Xv1R8O-LEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.importProject" label="Import Project" command="_fBjmYO97EeS-7cxArrJyqg"/>
+            </menus>
+            <toolbar xmi:id="__I7isO3fEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.toolbar.0">
+              <children xsi:type="menu:HandledToolItem" xmi:id="_FN2SgO3gEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.application.e4.handledtoolitem.0" label="Save Project" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/save_edit.gif" command="_bqphoO3eEeS9paZ2N3ap-w"/>
+              <children xsi:type="menu:HandledToolItem" xmi:id="_PQeOAO3gEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.application.e4.handledtoolitem.link" label="Link" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/link_with_editor.gif" tooltip="Link With Editor" command="_qIu70O3eEeS9paZ2N3ap-w"/>
+            </toolbar>
+          </children>
+          <children xsi:type="basic:Part" xmi:id="_1_F6UAMdEeW7N8zfSmJMhQ" elementId="org.eclipse.emf.emfstore.client.ui.views.historybrowserview.HistoryBrowserView" contributionURI="bundleclass://org.eclipse.emf.emfstore.client.ui/org.eclipse.emf.emfstore.internal.client.ui.views.historybrowserview.HistoryBrowserView" label="HistoryView" closeable="true">
+            <toolbar xmi:id="_8tDyoAZIEeWKravyDFFdjA" elementId="it.naturtalent.emf.ecp.model.toolbar.0">
+              <children xsi:type="menu:HandledToolItem" xmi:id="_LweugAZJEeWKravyDFFdjA" elementId="it.naturtalent.emf.ecp.model.handledtoolitem.refresh" label="Refresh" iconURI="" command="_LMJH0AZIEeWKravyDFFdjA"/>
+              <children xsi:type="menu:HandledToolItem" xmi:id="_40zesAb4EeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.handledtoolitem.showAllBranches" label="ShowAllBranches" iconURI="" command="_oWf5MAb4EeWu2tFymKvv9Q"/>
+              <children xsi:type="menu:HandledToolItem" xmi:id="_HMHB0AcBEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.handledtoolitem.expandAll" label="Expand All" iconURI="" command="_8ud-QAcAEeWu2tFymKvv9Q"/>
+              <children xsi:type="menu:HandledToolItem" xmi:id="_NgNyQAcDEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.handledtoolitem.collapseAll" label="Collapse All" iconURI="" command="_-RBrQAcCEeWu2tFymKvv9Q"/>
+              <children xsi:type="menu:HandledToolItem" xmi:id="_Qz4zYAcMEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.handledtoolitem.collapseAll" label="Prev Version" iconURI="" tooltip="vorherige Version" command="_EaueUAcMEeWu2tFymKvv9Q"/>
+              <children xsi:type="menu:HandledToolItem" xmi:id="_mNYdUAcIEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.handledtoolitem.collapseAll" label="Next Version" iconURI="" tooltip="n&#xe4;chste Version" command="_hMQs0AcIEeWu2tFymKvv9Q"/>
+              <children xsi:type="menu:HandledToolItem" xmi:id="_CsM4QAcSEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.handledtoolitem.jumpToRevision" label="Jump to Revision" iconURI="" tooltip="Revision suchen" command="_3c6VUAcREeWu2tFymKvv9Q"/>
+            </toolbar>
+          </children>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_TjJhoOzDEeSmV6QvZLDp6A" elementId="it.naturtalent.ef.ecp.model.partsashcontainer.ModelDetails" containerData="7000">
+          <children xsi:type="basic:PartStack" xmi:id="_crPHgOzDEeSmV6QvZLDp6A" elementId="it.naturtalent.emf.ecp.model.partstack.editors" containerData="7000">
+            <tags>editorPart</tags>
+            <tags>NoAutoCollapse</tags>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_hIvNkOzDEeSmV6QvZLDp6A" elementId="it.naturtalent.emf.ecp.model.partstack.stores" containerData="3000">
+            <children xsi:type="basic:Part" xmi:id="_hyto4O3aEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.part.repository" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.view.ECPRepositoryView" label="Model Repositories" iconURI="">
+              <menus xsi:type="menu:PopupMenu" xmi:id="_53uroO3bEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.popupmenu.repository" label="Repo Popup">
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_FIz-UO3cEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.handledmenuitem.checkout" label="Checkout" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/sample.gif" command="_SYhg4O3cEeS9paZ2N3ap-w"/>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_ck5yAO9gEeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.login" label="LogIn" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/repository/login.png" command="_LInigO96EeS-7cxArrJyqg">
+                  <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_HW4SEO-BEeS-7cxArrJyqg" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.login"/>
+                </children>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_JMuZsPpTEeSsmo3euMnWtw" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.logout" label="Logout" command="_glOOAO96EeS-7cxArrJyqg">
+                  <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_AZi3YPpUEeSsmo3euMnWtw" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.logout"/>
+                </children>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_u6kkgO_eEeS_JqPdyPNm0A" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.startLocalServer" label="Start Local Server" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/repository/startLocalServer.png" mnemonics="M1+F2" command="_j5648O96EeS-7cxArrJyqg">
+                  <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_8YN1YO_eEeS_JqPdyPNm0A" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.localServer"/>
+                </children>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_Cy29kO_fEeS_JqPdyPNm0A" elementId="org.eclipse.emf.ecp.emfstore.ui.e4.localServer" label="Delete on server" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/repository/server_delete.png" command="_oTh9gO96EeS-7cxArrJyqg">
+                  <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Oj3tgO_fEeS_JqPdyPNm0A" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.serverDelete"/>
+                </children>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_WjblEO_fEeS_JqPdyPNm0A" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.serverCheckoutBranch" label="Checkout Branch..." command="_saSXgO96EeS-7cxArrJyqg">
+                  <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_fmAY0O_fEeS_JqPdyPNm0A" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.branchCheckout"/>
+                </children>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_mwj7AO_fEeS_JqPdyPNm0A" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.manageUser" label="Manage Users/Groups..." iconURI="platform:/plugin/it.naturtalent.emf.model/icons/repository/user_edit.png" command="_wOMG8O96EeS-7cxArrJyqg"/>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_5ZGuAO_gEeS_JqPdyPNm0A" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.registerEPackage" label="Register EPackage" iconURI="platform:/plugin/it.naturtalent.emf.model/icons/repository/arrow_up.png" command="_0SvhgO96EeS-7cxArrJyqg">
+                  <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_Bd98UO_hEeS_JqPdyPNm0A" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.registerEPackage"/>
+                </children>
+                <children xsi:type="menu:HandledMenuItem" xmi:id="_LcHngO_hEeS_JqPdyPNm0A" elementId="org.eclipse.emf.ecp.e4.emfstore.handledmenuitem.remoteCreateProject" label="Create new project..." iconURI="platform:/plugin/it.naturtalent.emf.model/icons/repository/projectAdd.png" command="_5Ry1cO96EeS-7cxArrJyqg">
+                  <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_RJidUO_hEeS_JqPdyPNm0A" coreExpressionId="org.eclipse.emf.ecp.emfstore.ui.e4.serverProjectCreate"/>
+                </children>
+              </menus>
+            </children>
+          </children>
+        </children>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_otOboO0kEeSSQKvxOn2cUQ" featurename="commands" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Command" xmi:id="_vInKsO0kEeSSQKvxOn2cUQ" elementId="it.naturtalent.emf.ecp.model.command.newProject" commandName="New Project"/>
+    <elements xsi:type="commands:Command" xmi:id="_SYhg4O3cEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.checkoutProject" commandName="Checkout"/>
+    <elements xsi:type="commands:Command" xmi:id="_PBhuUO14EeS3YKpQdj-3pg" elementId="it.naturtalent.emf.ecp.model.command.newModelElement" commandName="New Model element"/>
+    <elements xsi:type="commands:Command" xmi:id="_32eToO3dEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.e4.command.deleteProject" commandName="Delete Project"/>
+    <elements xsi:type="commands:Command" xmi:id="_UMVV8O3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.deleteModelElement" commandName="Delete Model Element"/>
+    <elements xsi:type="commands:Command" xmi:id="_bqphoO3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.saveProject" commandName="Save Project"/>
+    <elements xsi:type="commands:Command" xmi:id="_giEjkO3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.closeProject" commandName="Close Project"/>
+    <elements xsi:type="commands:Command" xmi:id="_ltuJEO3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.openProject" commandName="Open Project"/>
+    <elements xsi:type="commands:Command" xmi:id="_qIu70O3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.linkWithEditor" commandName="Link"/>
+    <elements xsi:type="commands:Command" xmi:id="_vE7wEO3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.project.filterPackages" commandName="Filter Packages"/>
+    <elements xsi:type="commands:Command" xmi:id="_zvA5kO3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.export" commandName="Export"/>
+    <elements xsi:type="commands:Command" xmi:id="_3ikDsO3eEeS9paZ2N3ap-w" elementId="org.eclipse.emf.ecp.e4.application.command.import" commandName="Import"/>
+    <elements xsi:type="commands:Command" xmi:id="_LInigO96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.login" commandName="LogIn"/>
+    <elements xsi:type="commands:Command" xmi:id="_glOOAO96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.logout" commandName="LogOut"/>
+    <elements xsi:type="commands:Command" xmi:id="_j5648O96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.startLocalServer" commandName="Start Local Server"/>
+    <elements xsi:type="commands:Command" xmi:id="_oTh9gO96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.serverDelete" commandName="Delete on server"/>
+    <elements xsi:type="commands:Command" xmi:id="_saSXgO96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.serverCheckoutBranch" commandName="Checkout Branch..."/>
+    <elements xsi:type="commands:Command" xmi:id="_wOMG8O96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.manageUser" commandName="Manage Users/Groups..."/>
+    <elements xsi:type="commands:Command" xmi:id="_0SvhgO96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.registerEPackage" commandName="Register EPackage"/>
+    <elements xsi:type="commands:Command" xmi:id="_5Ry1cO96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.remoteCreateProject" commandName="Create new project..."/>
+    <elements xsi:type="commands:Command" xmi:id="_-JmR4O96EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.commit" commandName="Commit"/>
+    <elements xsi:type="commands:Command" xmi:id="_BKLG8O97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.update" commandName="Update"/>
+    <elements xsi:type="commands:Command" xmi:id="_EiNZwO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.share" commandName="Share"/>
+    <elements xsi:type="commands:Command" xmi:id="_IU3MAO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.undo" commandName="Undo Last Operation"/>
+    <elements xsi:type="commands:Command" xmi:id="_Lf4WgO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.revert" commandName="Revert All Operations"/>
+    <elements xsi:type="commands:Command" xmi:id="_PBQLgO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.historyview" commandName="Show Historyview"/>
+    <elements xsi:type="commands:Command" xmi:id="_TgkPcO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.branchCreate" commandName="Create Branch"/>
+    <elements xsi:type="commands:Command" xmi:id="_XY06cO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.branchMerge" commandName="Merge with Branch"/>
+    <elements xsi:type="commands:Command" xmi:id="_bTbu0O97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.updateToVersion" commandName="Update to version..."/>
+    <elements xsi:type="commands:Command" xmi:id="_fBjmYO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.importProject" commandName="Import Project"/>
+    <elements xsi:type="commands:Command" xmi:id="_ivl-YO97EeS-7cxArrJyqg" elementId="org.eclipse.emf.ecp.e4.emfstore.command.exportProject" commandName="Export Project"/>
+    <elements xsi:type="commands:Command" xmi:id="_LMJH0AZIEeWKravyDFFdjA" elementId="it.naturtalent.emf.ecp.model.command.historyBrowseRefreshAction" commandName="Refresh"/>
+    <elements xsi:type="commands:Command" xmi:id="_oWf5MAb4EeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.command.historyBrowseShowAllBranches" commandName="ShowAllBranches"/>
+    <elements xsi:type="commands:Command" xmi:id="_8ud-QAcAEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.command.historyBrowseExpandAll" commandName="Expand All"/>
+    <elements xsi:type="commands:Command" xmi:id="_-RBrQAcCEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.command.historyBrowseCollapseAll" commandName="Collapse All"/>
+    <elements xsi:type="commands:Command" xmi:id="_hMQs0AcIEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.command.historyBrowseNext" commandName="NextVersion"/>
+    <elements xsi:type="commands:Command" xmi:id="_EaueUAcMEeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.command.historyBrowsePrev" commandName="PrevVersion"/>
+    <elements xsi:type="commands:Command" xmi:id="_3c6VUAcREeWu2tFymKvv9Q" elementId="it.naturtalent.emf.ecp.model.command.historyBrowseJumpToRevision" commandName="JumpToRevision"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Jn8LwO1-EeSNq_0gW5KxEQ" featurename="descriptors" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="basic_1:PartDescriptor" xmi:id="_LAeE8O1-EeSNq_0gW5KxEQ" elementId="org.eclipse.emf.ecp.e4.application.partdescriptor.editor" allowMultiple="true" category="editorPart" closeable="true" contributionURI="bundleclass://org.eclipse.emf.ecp.ui.e4/org.eclipse.emf.ecp.ui.e4.editor.ECPE4Editor"/>
+  </fragments>
+</fragment:ModelFragments>

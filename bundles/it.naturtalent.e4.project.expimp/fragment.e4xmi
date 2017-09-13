@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_JkzHMFsLEeKxTaRLvpPRlA">
+  <imports xsi:type="commands:Command" xmi:id="_RUGVMFsLEeKxTaRLvpPRlA" elementId="it.naturtalent.application.importProject"/>
+  <imports xsi:type="commands:Command" xmi:id="_v6p-8GZoEeKgoLMgtGK29w" elementId="it.naturtalent.application.exportProject"/>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_of4fUFsLEeKxTaRLvpPRlA" featurename="handlers" parentElementId="it.naturtalent.e4.application">
+    <elements xsi:type="commands:Handler" xmi:id="_qiYikFsLEeKxTaRLvpPRlA" contributionURI="bundleclass://it.naturtalent.e4.project.expimp/it.naturtalent.e4.project.expimp.handlers.ImportHandler" command="_RUGVMFsLEeKxTaRLvpPRlA"/>
+    <elements xsi:type="commands:Handler" xmi:id="__8H3cGZoEeKgoLMgtGK29w" contributionURI="bundleclass://it.naturtalent.e4.project.expimp/it.naturtalent.e4.project.expimp.handlers.ExportHandler" command="_v6p-8GZoEeKgoLMgtGK29w"/>
+  </fragments>
+</fragment:ModelFragments>

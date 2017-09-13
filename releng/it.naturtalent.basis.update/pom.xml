@@ -1,0 +1,16 @@
+<project>
+ <modelVersion>4.0.0</modelVersion>
+
+ <parent>
+   <groupId>it.naturtalent.basis</groupId>
+   <artifactId>it.naturtalent.basis.releng</artifactId>
+   <version>1.0.0-SNAPSHOT</version>
+ </parent>
+
+ <artifactId>it.naturtalent.basis.update</artifactId>
+ <version>1.0.0-SNAPSHOT</version>
+ <packaging>eclipse-repository</packaging>
+
+</project>
+
+
