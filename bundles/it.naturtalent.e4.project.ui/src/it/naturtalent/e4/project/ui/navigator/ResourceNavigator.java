@@ -12,6 +12,7 @@ import javax.inject.Named;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -1013,6 +1014,35 @@ public class ResourceNavigator implements IResourceNavigator
             treeViewer.getControl().setRedraw(true);
         }
     }
+    
+    public void setSelection(IAdaptable adaptable)
+	{
+		if (adaptable != null)
+		{			
+			if (getTopLevelStatus())
+			{
+				IWorkingSet[] workingSets = getWindowWorkingSets();
+				for (IWorkingSet workingSet : workingSets)
+				{
+					IAdaptable[] elements = workingSet.getElements();
+					for (IAdaptable element : elements)
+					{
+						if (element.equals(adaptable))
+						{
+							treeViewer.expandToLevel(workingSet, 1);
+							break;
+						}
+					}
+				}
+			}
+			
+			Object obj = adaptable.getAdapter(Project.class);
+			if(obj != null)
+				treeViewer.expandToLevel(obj, 1);
+			treeViewer.setSelection(new StructuredSelection(adaptable), true);	
+		}
+	
+	}
 
     /**
      * Converts the given selection into a form usable by the viewer,
