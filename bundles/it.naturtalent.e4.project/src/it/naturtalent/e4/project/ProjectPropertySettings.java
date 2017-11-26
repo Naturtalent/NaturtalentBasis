@@ -62,6 +62,7 @@ public class ProjectPropertySettings
 	}
 	
 	/**
+	 * Die ProjectPropertyData in der 'propertyData' - Datei im Datenbereich des NrProjekts soeichern.
 	 * 
 	 * @param iProject
 	 * @return

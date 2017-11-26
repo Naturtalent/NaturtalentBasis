@@ -30,11 +30,12 @@ public class ExpImpProcessor
 	public static @Inject @Optional MPart part;
 	
 	@Execute
-	void init (Logger logger)
+	//void init (Logger logger)
+	void init ()
 	{
-		Activator.logger = logger;
-		Activator.projectDataFactory = projectDataFactory;	
-		Activator.projectDataAdapterRegister = projectDataAdapterRegister;
+		//Activator.logger = logger;
+		//Activator.projectDataFactory = projectDataFactory;	
+		//Activator.projectDataAdapterRegister = projectDataAdapterRegister;
 		
 		// Projekt Import/Export Adapter registrieren 
 		importAdapterRepository.addImportAdapter(new ProjectImportAdapter());

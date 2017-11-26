@@ -134,9 +134,9 @@ public class ApplicationPreferenceAdapter extends AbstractPreferenceAdapter
 		if(StringUtils.isNotEmpty(value))
 			tempDirEditor.setText(value);
 		
-		// Prefaerenz Loggerfile
+		// Praeferenz Loggerfile
 		loggerFileText = referenceComposite.getTextLoggerFile();
-		value = getInstancePreference().get(IPreferenceAdapter.PREFERENCE_APPLICATION_LOGGERFILE_KEY, null);
+		value = getInstancePreference().get(IPreferenceAdapter.PREFERENCE_APPLICATION_LOGGERFILE_KEY, null);		
 		if(StringUtils.isEmpty(value))
 		{
 			value = System.getProperty(it.naturtalent.application.Activator.NT_PROGRAM_HOME);

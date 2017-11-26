@@ -44,6 +44,8 @@ public class ImportPropertiesHandler
 	public boolean canExecute()
 	{
 		NtProjects ntProjects = Activator.getNtProjects();
+		if(ntProjects == null)
+			return false;
 		return (ntProjects.getNtProject().size() == 0);
 	}
 }

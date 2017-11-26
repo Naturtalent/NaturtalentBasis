@@ -1,115 +1,89 @@
 package it.naturtalent.e4.project.expimp.dialogs;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.List;
+import it.naturtalent.e4.project.IProjectData;
+import it.naturtalent.e4.project.IResourceNavigator;
+import it.naturtalent.e4.project.ProjectData;
+import it.naturtalent.e4.project.expimp.ExpImpProcessor;
+import it.naturtalent.e4.project.expimp.Messages;
+import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
+import it.naturtalent.e4.project.ui.navigator.WorkbenchLabelProvider;
+import it.naturtalent.e4.project.ui.ws.AggregateWorkingSet;
+import it.naturtalent.e4.project.ui.ws.WorkingSet;
+import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
+import it.naturtalent.e4.project.ui.ws.WorkingSetRoot;
 
-import org.apache.commons.io.FilenameUtils;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
+import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
-import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.PojoProperties;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IWorkingSet;
-import org.eclipse.ui.dialogs.ContainerCheckedTreeViewer;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.databinding.validation.ValidationStatus;
+import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.core.databinding.UpdateValueStrategy;
 
-import it.naturtalent.application.IPreferenceAdapter;
-import it.naturtalent.e4.project.INtProject;
-import it.naturtalent.e4.project.IProjectData;
-import it.naturtalent.e4.project.expimp.Messages;
-import it.naturtalent.e4.project.ui.navigator.WorkbenchLabelProvider;
-import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
-import it.naturtalent.e4.project.ui.ws.WorkingSetRoot;
-import it.naturtalent.icons.core.Icon;
-import it.naturtalent.icons.core.IconSize;
-
-public class ProjectExportDialog extends TitleAreaDialog
+public class SelectExportDialog extends TitleAreaDialog
 {
-	
-	// Exportoptionen
-	public static final int EXPORTOPTION_XMLFORMAT = 0;
-	public static final int EXPORTOPTION_OOFORMAT = 1;
-	public static final int EXPORTOPTION_MSFORMAT = 2;
-	private int exportOption = EXPORTOPTION_XMLFORMAT;
-	
 	private DataBindingContext m_bindingContext;
 	
 	
-	/*
-	 * 
-	 */
-	public class NameFilter extends ViewerFilter
-	{
-		@Override
-		public boolean select(Viewer viewer, Object parentElement,Object element)
-		{
-			if (StringUtils.isNotEmpty(stgFilter))
-			{
-				if (element instanceof IWorkingSet)
-				{
-					IWorkingSet ws = (IWorkingSet) element;
-					return StringUtils.containsIgnoreCase(ws.getName(),
-							stgFilter);
-				}
-
-				if (element instanceof IProject)
-				{					
-					try
-					{
-						String name = ((IProject)element).getPersistentProperty(INtProject.projectNameQualifiedName);
-						return StringUtils.containsIgnoreCase(name,stgFilter);
-					} catch (CoreException e)
-					{
-					}
-				}
-			}
-			return true;
-		}
-	}
-
-
 	public class ExportDestDirectory
 	{
 		String destDir;
@@ -126,7 +100,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 	}
 	
 	/**
-	 * Interne Klasse zum ueberpruefen des Textfeldes 'applicationText'
+	 * Interne Klasse zum Überprüfen des Textfeldes 'applicationText'
 	 * 
 	 * @author dieter
 	 * 
@@ -137,7 +111,6 @@ public class ProjectExportDialog extends TitleAreaDialog
 		{
 			super();
 		}
-		
 
 		@Override
 		public IStatus validate(Object value)
@@ -159,32 +132,21 @@ public class ProjectExportDialog extends TitleAreaDialog
 
 
 	private ExportDestDirectory exportDestDirectory = new ExportDestDirectory();
-		
-	private Tree tree;
-	private ContainerCheckedTreeViewer checkboxTreeViewer;
+	//private IResourceNavigator navigator;
+	
+	private Table table;
+	private CheckboxTableViewer checkboxTableViewer;
 	private Combo comboDestDir;
 	private Button okButton;
 	private Button btnWorkingsets;
 	private Button btnProjects;
-	private Text textSeek;
-	private String stgFilter;
-	private Button btnCheckButton;
-	
-	//private Button btnRadioXML;
-	//private Button btnRadioOO;
-	//private Button btnRadioExcel;
-	
-	private List<Button>optionradios = new ArrayList<Button>();
-	
 	private static ControlDecoration controlDecoration;
 	private IProject [] resultExportProjects;
-	private boolean archivState = false;
 	private File resultDestDir;
 	
 	// DialogSettings 
 	private static final String EXPORT_DESTDIRS_SETTINGS = "export_sourcedirs_settings"; //$NON-NLS-1$
 	private static final String EXPORT_DEST_SETTINGS = "export_source_settings"; //$NON-NLS-1$
-	private static final String EXPORT_OPTION_SETTINGS = "export_option_settings"; //$NON-NLS-1$
 	
 	private IDialogSettings settings = WorkbenchSWTActivator.getDefault().getDialogSettings();
 	
@@ -200,38 +162,51 @@ public class ProjectExportDialog extends TitleAreaDialog
 			return (new File(checkDir,IProjectData.PROJECTDATAFILE).exists());
 		}
 	};
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public ProjectExportDialog(Shell parentShell)
+	public SelectExportDialog(Shell parentShell, MPart part)
 	{
 		super(parentShell);	
+		
+		//this.navigator = (IResourceNavigator) ExpImpProcessor.partService.findPart("it.naturtalent.e4.project.ui.part.explorer");
+		//this.navigator = (IResourceNavigator) ExpImpProcessor.part.getObject();
+		
+		System.out.println("Ok");
+		
+		/*
+		Object obj = part.getObject();
+		if (obj instanceof IResourceNavigator)	
+			this.navigator = (IResourceNavigator) obj;
+			*/
+
 	}
 
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
 	 */
-	@Override 
+	@Override
 	protected Control createDialogArea(Composite parent)
-	{		
-		setTitleImage(Icon.WIZBAN_EXPORT.getImage(IconSize._75x66_TitleDialogIconSize)); //$NON-NLS-1$
+	{
+		setTitleImage(SWTResourceManager.getImage(SelectExportDialog.class, "/icons/full/wizban/export_wiz.png")); //$NON-NLS-1$
 		setMessage(Messages.SelectExportDialog_this_message);
 		setTitle(Messages.SelectExportDialog_this_title);
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(3, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-				
+		
 		Label lblSource = new Label(container, SWT.NONE);
 		lblSource.setText(Messages.SelectExportDialog_lblSource_text);
 		
 		comboDestDir = new Combo(container, SWT.BORDER);
 		comboDestDir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		controlDecoration = new ControlDecoration(comboDestDir, SWT.LEFT | SWT.TOP);		
-		controlDecoration.setImage(Icon.OVERLAY_ERROR.getImage(IconSize._7x8_OverlayIconSize)); 
+		controlDecoration = new ControlDecoration(comboDestDir, SWT.LEFT | SWT.TOP);
+		controlDecoration.setImage(SWTResourceManager.getImage(SelectExportDialog.class, "/icons/full/ovr16/error_ovr.gif")); //$NON-NLS-1$
 		controlDecoration.setDescriptionText(Messages.SelectExportDialog_controlDecoration_descriptionText);
 		
 		// Browse
@@ -251,7 +226,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 				dlg.setText("Exportverzeichnis"); //$NON-NLS-1$
 
 				// Customizable message displayed in the dialog
-				dlg.setMessage("Zielordner der Exportdaten auswï¿½hlen"); //$NON-NLS-1$
+				dlg.setMessage("Zielordner der Exportdaten auswählen"); //$NON-NLS-1$
 
 				// Calling open() will open and run the dialog.
 				// It will return the selected directory, or
@@ -269,7 +244,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 		
 		Group group = new Group(container, SWT.NONE);
 		group.setLayout(new FillLayout(SWT.HORIZONTAL));
-		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		group.setText(Messages.SelectExportDialog_group_text);
 		
 		btnWorkingsets = new Button(group, SWT.RADIO);
@@ -279,7 +254,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 			public void widgetSelected(SelectionEvent e)
 			{
 				if(((Button)e.getSource()).getSelection())
-					checkboxTreeViewer.setInput(new WorkingSetRoot(wsManager.getWorkingSets()));
+					checkboxTableViewer.setInput(new WorkingSetRoot(wsManager.getWorkingSets()));
 			}
 		});
 		btnWorkingsets.setText(Messages.SelectExportDialog_btnWorkingsets_text);
@@ -291,25 +266,14 @@ public class ProjectExportDialog extends TitleAreaDialog
 			public void widgetSelected(SelectionEvent e)
 			{
 				if(((Button)e.getSource()).getSelection())				
-					checkboxTreeViewer.setInput(getAggregateSet());
+					checkboxTableViewer.setInput(getAggregateSet());
 			}
 		});
 		btnProjects.setText(Messages.SelectExportDialog_btnProjects_text);
+		new Label(container, SWT.NONE);
 		
-		textSeek = new Text(container, SWT.BORDER);		
-		textSeek.addModifyListener(new ModifyListener()
-		{
-			public void modifyText(ModifyEvent e)
-			{
-				stgFilter = textSeek.getText();
-				checkboxTreeViewer.refresh();
-			}
-		});
-		textSeek.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-		
-		//checkboxTableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
-		checkboxTreeViewer = new ContainerCheckedTreeViewer(container, SWT.BORDER);
-		checkboxTreeViewer
+		checkboxTableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
+		checkboxTableViewer
 				.addSelectionChangedListener(new ISelectionChangedListener()
 				{
 					public void selectionChanged(SelectionChangedEvent event)
@@ -317,12 +281,11 @@ public class ProjectExportDialog extends TitleAreaDialog
 						updateWidgets();
 					}
 				});
-		tree = checkboxTreeViewer.getTree();
-		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 3, 1));
-		checkboxTreeViewer.setLabelProvider(new WorkbenchLabelProvider());
-		checkboxTreeViewer.setContentProvider(new ExportSelectContentProvider());
-		checkboxTreeViewer.setComparator(new ViewerComparator());
-		checkboxTreeViewer.addFilter(new NameFilter());
+		table = checkboxTableViewer.getTable();
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 3, 1));
+		checkboxTableViewer.setLabelProvider(new WorkbenchLabelProvider());
+		checkboxTableViewer.setContentProvider(new WorkbenchContentProvider());
+		checkboxTableViewer.setComparator(new ViewerComparator());
 		
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
@@ -334,7 +297,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				checkboxTreeViewer.setAllChecked(true);
+				checkboxTableViewer.setAllChecked(true);
 				updateWidgets();
 			}
 		});
@@ -347,74 +310,14 @@ public class ProjectExportDialog extends TitleAreaDialog
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				checkboxTreeViewer.setAllChecked(false);
+				checkboxTableViewer.setAllChecked(false);
 				updateWidgets();
 			}
 		});
 		btnNoSelect.setBounds(0, 0, 68, 23);
 		btnNoSelect.setText(Messages.SelectExportDialog_btnNoSelect_text);
 		new Label(container, SWT.NONE);
-		
-		Group grpOptionen = new Group(container, SWT.NONE);
-		grpOptionen.setLayout(new GridLayout(2, false));
-		grpOptionen.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
-		grpOptionen.setText(Messages.SelectExportDialog_grpOptionen_text);
-		
-		Button btnRadioXML = new Button(grpOptionen, SWT.RADIO);
-		btnRadioXML.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				exportOption = EXPORTOPTION_XMLFORMAT;
-				comboDestDir.setEnabled(true);
-			}
-		});
-		btnRadioXML.setSelection(true);
-		btnRadioXML.setText(Messages.SelectExportDialog_btnRadioButton_text);
-		optionradios.add(EXPORTOPTION_XMLFORMAT, btnRadioXML);
-		
-		btnCheckButton = new Button(grpOptionen, SWT.CHECK);
-		btnCheckButton.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				archivState = btnCheckButton.getSelection();
-			}
-		});
-		btnCheckButton.setToolTipText(Messages.SelectExportDialog_btnCheckButton_toolTipText);
-		btnCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		btnCheckButton.setText(Messages.SelectExportDialog_btnCheckButton_text);
-		
-		Button btnRadioOO = new Button(grpOptionen, SWT.RADIO);
-		btnRadioOO.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				exportOption = EXPORTOPTION_OOFORMAT;
-				comboDestDir.setEnabled(false);
-			}
-		});
-		btnRadioOO.setText(Messages.SelectExportDialog_btnRadioOO_text);
-		optionradios.add(EXPORTOPTION_OOFORMAT, btnRadioOO);
-		new Label(grpOptionen, SWT.NONE);
-		
-		Button btnRadioExcel = new Button(grpOptionen, SWT.RADIO);
-		btnRadioExcel.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				exportOption = EXPORTOPTION_MSFORMAT;
-				comboDestDir.setEnabled(false);
-			}
-		});
-		btnRadioExcel.setText(Messages.SelectExportDialog_btnRadioExcel_text);
-		optionradios.add(EXPORTOPTION_MSFORMAT, btnRadioExcel);
-		new Label(grpOptionen, SWT.NONE);
-		
+
 		init();
 		updateWidgets();
 		
@@ -423,52 +326,27 @@ public class ProjectExportDialog extends TitleAreaDialog
 	
 	private void init()
 	{
-		// Zielverzeichnis		
-		String [] sourcePaths = settings.getArray(EXPORT_DESTDIRS_SETTINGS);				
+		// Zielverzeichnis
+		String [] sourcePaths = settings.getArray(EXPORT_DESTDIRS_SETTINGS);
 		if(sourcePaths != null)
 		{
 			for(String path : sourcePaths)
 				comboDestDir.add(path);
 			setExportDir(sourcePaths[0]);			
 		}
-		else
-		{
-			// temporaeres Verzeichnis ist Defaultverzeichnis
-			IEclipsePreferences instancePreferenceNode = InstanceScope.INSTANCE
-					.getNode(
-							IPreferenceAdapter.ROOT_APPLICATION_PREFERENCES_NODE);
-			String drawFile = instancePreferenceNode.get(IPreferenceAdapter.PREFERENCE_APPLICATION_TEMPDIR_KEY,null);			
-			setExportDir(drawFile);
-		}
+		else setExportDir(SystemUtils.getUserDir().getPath());
 		
-		// Projekte oder Workingsets einlesen
-		final boolean btnState = settings.getBoolean(EXPORT_DEST_SETTINGS);
-		
-		// DialogButtons entsprechend dis-/enablen
+		// Projeke/Workingsets einlesen
+		boolean btnState = settings.getBoolean(EXPORT_DEST_SETTINGS);
 		btnProjects.setSelection(btnState);
 		btnWorkingsets.setSelection(!btnState);
-
+		
 		if(!btnState)
-			checkboxTreeViewer.setInput(new WorkingSetRoot(wsManager.getWorkingSets()));
-		else checkboxTreeViewer.setInput(getAggregateSet());			
-
-		// Optionsettings
-		int option;
-		try
-		{
-			option = settings.getInt(EXPORT_OPTION_SETTINGS);
-			exportOption = option;
-			for(Button button : optionradios)
-				button.setSelection(false);
-			optionradios.get(exportOption).setSelection(true);	
-			comboDestDir.setEnabled(exportOption == EXPORTOPTION_XMLFORMAT);
-		} catch (NumberFormatException e)
-		{
-		}
-			
+			checkboxTableViewer.setInput(new WorkingSetRoot(wsManager.getWorkingSets()));
+		else checkboxTableViewer.setInput(getAggregateSet());
 	}
 	
-	static IWorkingSet aggregateResourceSet = null;	
+	static IWorkingSet aggregateResourceSet = null;
 	private IWorkingSet getAggregateSet()
 	{
 		if(aggregateResourceSet == null)
@@ -481,7 +359,20 @@ public class ProjectExportDialog extends TitleAreaDialog
 		
 		return aggregateResourceSet;
 	}
+	
+	
+	private void initSourceTable(String sourceDir)
+	{
+		// alle direkten Unterverzeichnisse auflisten
 		
+		/*
+		File dir = new File(sourceDir);
+		File[] childDirs = dir
+				.listFiles(projectFileFilter);
+		checkboxTableViewer.setInput(childDirs);
+		*/
+	}
+
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -509,7 +400,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 	private void updateWidgets()
 	{
 		boolean directorydefined = !controlDecoration.isVisible();
-		boolean itemsSelected = checkboxTreeViewer.getCheckedElements().length > 0;
+		boolean itemsSelected = checkboxTableViewer.getCheckedElements().length > 0;
 		
 		if(okButton != null)
 			okButton.setEnabled(directorydefined && itemsSelected);
@@ -520,16 +411,10 @@ public class ProjectExportDialog extends TitleAreaDialog
 	protected void okPressed()
 	{	
 		resultExportProjects = null;
-		Object[] result = checkboxTreeViewer.getCheckedElements();
+		Object[] result = checkboxTableViewer.getCheckedElements();
 		
-		// das ausgewaehlte Zielverzeichnis fuer spaetere Verwendung sichern
 		resultDestDir = new File(exportDestDirectory.destDir);
-		
-		String exportDirName = getAutoFileName(resultDestDir, "exportDirectory");
-		resultDestDir = new File(resultDestDir,exportDirName);
-				
-		//if(!resultDestDir.exists() || !resultDestDir.isDirectory())
-		if(!resultDestDir.mkdir())
+		if(!resultDestDir.exists() || !resultDestDir.isDirectory())
 		{
 			MessageDialog
 					.openError(
@@ -541,28 +426,32 @@ public class ProjectExportDialog extends TitleAreaDialog
 			return;
 		}
 
-		// die ausgewaehlten Projekte fuer spaetere Verwendung sichern
 		if (ArrayUtils.isNotEmpty(result))
 		{
-			List<IProject>projects = new ArrayList<IProject>();
-			for (Object obj : result)
+			if (result[0] instanceof IWorkingSet)
 			{
-				if (obj instanceof IProject)
-					projects.add((IProject) obj);
+				for (Object obj : result)
+				{
+					IWorkingSet workingSet = (IWorkingSet) obj;
+					IAdaptable[] adaptables = workingSet.getElements();
+					for (IAdaptable iAdaptable : adaptables)
+						resultExportProjects = (IProject[]) ArrayUtils.add(
+								resultExportProjects,
+								iAdaptable.getAdapter(IProject.class));
+				}
 			}
-			resultExportProjects = projects.toArray(new IProject[projects.size()]);
+			else
+			{
+				resultExportProjects = new IProject[result.length];
+				System.arraycopy(result, 0, resultExportProjects, 0,
+						result.length);
+			}
 		}
 		
 		storeSettings();
 		super.okPressed();
 	}
 
-	/*
-	 * einige Einstellungen und Selektionen im DialogSetting speichern
-	 * - Status Projekt/Workingset
-	 * - Zielverzeichnis (es wird nur eine maximale Anzahl (n=5) gespeichert
-	 * - ZielOptionen (Filesystem, Zip-Datei)
-	 */
 	private void storeSettings()
 	{		
 		List<String>destPaths = new ArrayList<String>();
@@ -585,9 +474,6 @@ public class ProjectExportDialog extends TitleAreaDialog
 		}
 		
 		settings.put(EXPORT_DEST_SETTINGS, btnProjects.getSelection());
-		
-		// Exportoptionen
-		settings.put(EXPORT_OPTION_SETTINGS, exportOption);
 	}
 
 	public IProject [] getResultExportSource()
@@ -595,19 +481,9 @@ public class ProjectExportDialog extends TitleAreaDialog
 		return resultExportProjects;
 	}
 	
-	public boolean isArchivState()
-	{
-		return archivState;
-	}
-
 	public File getResultDestDir()
 	{
 		return resultDestDir;
-	}
-	
-	public int getExportOption()
-	{
-		return exportOption;
 	}
 
 	private void setExportDir(String exportDir)
@@ -631,36 +507,5 @@ public class ProjectExportDialog extends TitleAreaDialog
 		bindingContext.bindValue(observeTextComboDestDirObserveWidget, destDirExportDestDirectoryObserveValue, strategy_1, strategy);
 		//
 		return bindingContext;
-	}
-	
-	/*
-	 * Gibt es bereits eine Datei mit diesem Name wird ein zaehlerbasierende Erweiterung hinzugefuegt.
-	 */
-	private static String getAutoFileName(File dir, String originalFileName)
-	{
-		String autoFileName;
-
-		if (dir == null)
-			return ""; //$NON-NLS-1$
-
-		int counter = 1;
-		while (true)
-		{
-			if (counter > 1)
-			{
-				autoFileName = FilenameUtils.getBaseName(originalFileName)
-						+ new Integer(counter) + "." //$NON-NLS-1$
-						+ FilenameUtils.getExtension(originalFileName);
-			}
-			else
-			{
-				autoFileName = originalFileName;
-			}
-			File res = new File(dir, autoFileName);
-			if (!res.exists())
-				return autoFileName;
-
-			counter++;
-		}
 	}
 }

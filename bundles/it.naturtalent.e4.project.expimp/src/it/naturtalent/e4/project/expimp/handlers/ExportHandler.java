@@ -1,6 +1,7 @@
 package it.naturtalent.e4.project.expimp.handlers;
 
 import it.naturtalent.e4.project.expimp.dialogs.ExportDialog;
+import it.naturtalent.e4.project.expimp.dialogs.SelectExportDialog;
 
 import javax.inject.Inject;
 
@@ -24,15 +25,13 @@ public class ExportHandler
 	@Execute
 	public void execute(Shell shell, MPart part)
 	{
-		ExportDialog dialog = ContextInjectionFactory.make(ExportDialog.class, context);
-		dialog.open();
+		ExportDialog exportDialog = ContextInjectionFactory.make(ExportDialog.class, context);
+		exportDialog.open();
 		
-		/*
-		SelectExportDialog dialog = new SelectExportDialog(shell, part);
-		if(dialog.open() == SelectImportDialog.OK)
+	/*
+		SelectExportDialog selectExportDialog = new SelectExportDialog(shell, part);
+		if(selectExportDialog.open() == SelectExportDialog.OK)
 		{
-		*/
-			/*
 			IResource [] resources = dialog.getResultImportSource();
 			File destDir = dialog.getResultDestDir();
 			Path destinationPath = new Path(destDir.getPath());
@@ -43,18 +42,16 @@ public class ExportHandler
 			
 			ExportResources exportResource = new ExportResources(shell);
 			exportResource.export(shell, lResources, destDir.getPath());
-			*/
-	
-			/*
+			
 			for(IResource resource : resources)
 				writeResource(resource, destinationPath);
-				*/
 			
-			/*
 			CopyFilesAndFoldersOperation operation = new CopyFilesAndFoldersOperation(shell);
-			operation.copyFiles(resourceData, path);
-			*/
-		//}
+			operation.copyFiles(resourceData, path);			
+		}
+		*/
+	
+		
 	}
 	
 

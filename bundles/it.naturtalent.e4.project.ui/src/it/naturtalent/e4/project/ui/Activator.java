@@ -175,17 +175,32 @@ public class Activator implements BundleActivator
 	 */
 	public static NtProjects getNtProjects()
 	{		
-		if(ntProjects == null)
-		{
-			EList<Object> childs = getECPProject().getContents();
-			// Model 'NtProjects' im ECPProject suchen
-			for (Object child : childs)
+			EList<Object> childs = null;
+			try
 			{
-				if (child instanceof NtProjects)
+				childs = getECPProject().getContents();
+			} catch (Exception e)
+			{
+				log.error("keine Projekte im EMF Modell vorhanden");
+				
+				boolean b = getECPProject().hasDirtyContents();
+				
+				//return ntProjects;
+			}
+			
+			
+			// Model 'NtProjects' im ECPProject suchen
+			if (childs != null)
+			{
+				for (Object child : childs)
 				{
-					// Modell 'NtProjects' gefunden, statisch zwischenspeichern
-					ntProjects = (NtProjects) child;
-					break;
+					if (child instanceof NtProjects)
+					{
+						// Modell 'NtProjects' gefunden, statisch
+						// zwischenspeichern
+						ntProjects = (NtProjects) child;
+						break;
+					}
 				}
 			}
 
@@ -193,14 +208,13 @@ public class Activator implements BundleActivator
 			{
 				// Modell noch nicht vorhanden, neu anlegen, zum ECPProject
 				// hinzufuegen und speichern
-				EClass ntProjectsClass = ProjectPackage.eINSTANCE
-						.getNtProjects();
+				EClass ntProjectsClass = ProjectPackage.eINSTANCE.getNtProjects();
 				ntProjects = (NtProjects) EcoreUtil.create(ntProjectsClass);
 				ecpProject.getContents().add(ntProjects);
 				ecpProject.saveContents();
 			}
 
-		}
+	
 		
 		return ntProjects;
 	}
@@ -232,8 +246,11 @@ public class Activator implements BundleActivator
 	{
 		NtProjects ntProjects = getNtProjects();		
 		if(ntProjects != null)
-		{
+		{			
 			EList<NtProject>projects = ntProjects.getNtProject();
+			
+			System.out.println(projects.size());
+			
 			for(NtProject project : projects)
 			{
 				if(StringUtils.equals(project.getId(), ntProjectID))

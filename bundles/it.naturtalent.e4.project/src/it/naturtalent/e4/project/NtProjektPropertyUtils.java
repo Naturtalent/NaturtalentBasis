@@ -8,10 +8,27 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+/**
+ * Utilities in Verbindung mit dem neuen ProjectProperty Mechanismus auf Basis der EMF-Model Komponenten.
+ * 
+ * Im Datenbereich des NtProjekts (.projectdata) wird in der Datei (propertyData.xml) die PropertyFactory-Klassenamen
+ * der dem NtProjekt zugeordneten Eigenschaft gespeichert. 
+ * Die Eigenschaft 'it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory' ist obligatorisch jedem NtProjekt
+ * zugeordnet und beinhaltet die grundlegenden Daten (Name, Description,...)
+ * 
+ * Diese Utilities unterstuetzen das Handling.
+ * 
+ * @author dieter
+ *
+ */
 public class NtProjektPropertyUtils
 {
 	//private static String obligateProjectFactoryName = "it.naturtalent.e4.project.ui.NtProjectPropertyFactory";
 	
+	/**
+	 * @param projectID
+	 * @param propertyFactories
+	 */
 	public static void saveProjectPropertyFactories(String projectID, List<INtProjectPropertyFactory>propertyFactories)
 	{
 		String [] settingPropertyFactoryNames = null;
@@ -23,6 +40,10 @@ public class NtProjektPropertyUtils
 		saveProjectPropertyFactories(projectID, settingPropertyFactoryNames);
 	}
 	
+	/**
+	 * @param projectID
+	 * @param settingPropertyFactoryNames
+	 */
 	public static void saveProjectPropertyFactories(String projectID, String [] settingPropertyFactoryNames)
 	{
 		/*
@@ -52,11 +73,11 @@ public class NtProjektPropertyUtils
 		
 		for(INtProjectPropertyFactory propertyFactory : propertyFactories)
 		{
-			settingPropertyFactoryNames = ArrayUtils.add(
-					settingPropertyFactoryNames,
-					propertyFactory.getClass().getName());
+			// alle FactoryNamen in einem Array zusammenfassen
+			settingPropertyFactoryNames = ArrayUtils.add(settingPropertyFactoryNames,propertyFactory.getClass().getName());
 		}
 		
+		// Die Namen in eine 'ProjectPropertyData' Klasse uebernehmen und die
 		if(ArrayUtils.isNotEmpty(settingPropertyFactoryNames))
 		{
 			ProjectPropertyData projectPropertyData = new ProjectPropertyData();

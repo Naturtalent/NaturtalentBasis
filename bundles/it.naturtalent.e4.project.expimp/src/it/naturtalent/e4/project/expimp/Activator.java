@@ -13,7 +13,7 @@ public class Activator implements BundleActivator
 {
 	private static BundleContext context;
 	
-	public static Logger logger = null;
+	//public static Logger logger = null;
 	
 	public static IProjectDataFactory projectDataFactory;
 	

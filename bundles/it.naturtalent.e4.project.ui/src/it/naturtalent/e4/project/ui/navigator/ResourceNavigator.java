@@ -408,17 +408,20 @@ public class ResourceNavigator implements IResourceNavigator
 			public void selectionChanged(SelectionChangedEvent event)
 			{		
 				if (selectionService != null)
-				{
-					
+				{					
 					autocommit();
 					
 					IStructuredSelection selection = ((IStructuredSelection) event.getSelection());
-					Object selObj = selection.getFirstElement();					
-					selectionService.setSelection(selObj);	
-					// @see SystemOpenHandler
-					
-					if(eventBroker != null)
-						eventBroker.send(NAVIGATOR_EVENT_SELECTED, selection.toList());
+					Object selObj = selection.getFirstElement();
+					if (selObj != null)
+					{
+						selectionService.setSelection(selObj);
+						// @see SystemOpenHandler
+
+						if (eventBroker != null)
+							eventBroker.send(NAVIGATOR_EVENT_SELECTED,
+									selection.toList());
+					}
 				}					
 			}
 		});

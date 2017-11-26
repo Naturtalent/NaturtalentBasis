@@ -40,7 +40,10 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import it.naturtalent.e4.project.expimp.Messages;
 
 /**
- * Zentraler Import Dialog
+ * Zentraler Export Dialog
+ * 
+ * Ermoeglicht eine Auswahl aus der im 'exportAdapterRepository' gespeicherten Adapter. 
+ * 
  * 
  * @author apel.dieter
  *

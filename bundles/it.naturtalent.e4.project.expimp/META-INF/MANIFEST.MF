@@ -37,7 +37,8 @@ Require-Bundle: org.eclipse.jface;bundle-version="3.8.0",
  org.eclipse.emf.ecp.ui.rcp,
  org.eclipse.emf.edit,
  org.eclipse.emf.edit.ui,
- it.naturtalent.e4.project.model;bundle-version="1.0.0"
+ it.naturtalent.e4.project.model;bundle-version="1.0.0",
+ it.naturtalent.application
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: javax.annotation;version="1.1.0",
  org.eclipse.e4.ui.di,

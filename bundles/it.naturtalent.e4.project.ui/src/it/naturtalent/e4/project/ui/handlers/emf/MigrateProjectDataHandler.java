@@ -4,6 +4,8 @@ package it.naturtalent.e4.project.ui.handlers.emf;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.xml.bind.JAXB;
@@ -51,6 +53,9 @@ public class MigrateProjectDataHandler
 	public boolean canExecute()
 	{
 		NtProjects ntProjects = Activator.getNtProjects();
+		if(ntProjects == null)
+			return true;
+		
 		EList<NtProject>projects = ntProjects.getNtProject();
 		return (projects.size() == 0);
 	}
@@ -59,6 +64,8 @@ public class MigrateProjectDataHandler
 	private void doMigrate()
 	{		
 		// Funktion gesperrt, wenn bereits Propertys existieren
+		
+		/*
 		NtProjects ntProjects = Activator.getNtProjects();
 		EList<NtProject>projects = ntProjects.getNtProject();
 		if(projects.size() > 0)
@@ -66,48 +73,96 @@ public class MigrateProjectDataHandler
 			System.out.println("Migration gesperrt - es exisieren bereits Properties");
 			return;
 		}
+		*/
 		
 		System.out.println("Migration");
 		
 		IProject[] iProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		ProjectData projectData;
+		ProjectData projectData = null;
 		NtProject ntProject;
 		String id;
 		String name;
-		String desc;
-				
+		String desc = null;
+		
 		for (IProject iProject : iProjects)
 		{
-			// Property (alt ProjektData) aus der Datendatei lesen
-			Object obj = getProjectPropertyData(iProject);
-			if (obj instanceof ProjectData)
-			{
-				projectData = (ProjectData) obj;
+			Object objNEW = getProjectProperty(iProject);
+			if (objNEW instanceof ProjectPropertyData)
+			{		
 				id = iProject.getName();
-				desc = projectData.getDescription();
-				try
+				ntProject = Activator.findNtProject(id);
+				if(ntProject == null)
 				{
-					name = iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
-				} catch (CoreException e)
-				{
-					name = projectData.getName();
+					// 'alte' Daten lesen
+					Object objOLD = getProjectData(iProject);
+					if (objOLD instanceof ProjectData)
+					{
+						projectData = (ProjectData) objOLD;						
+						desc = projectData.getDescription();
+					}
+					
+					try
+					{
+						name = iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
+					} catch (CoreException e)
+					{
+						continue;
+					}
+
+					// ProjektProperty erstellen
+					ntProject = ProjectFactory.eINSTANCE.createNtProject();
+					ntProject.setId(id);
+					ntProject.setName(name);
+					ntProject.setDescription(desc);
+					Activator.getNtProjects().getNtProject().add(ntProject);
+
+	
 				}
 				
-				// ProjektProperty erstellen
-				ntProject = ProjectFactory.eINSTANCE.createNtProject();
-				ntProject.setId(id);
-				ntProject.setName(name);
-				ntProject.setDescription(desc);
-				Activator.getNtProjects().getNtProject().add(ntProject);
 				
-				// Property in Datei speichern
-				storeProjectProperty(iProject);
+				System.out.println("Property exist fuer: "+iProject.getName());
+				
+			}	
+			else
+			{
+				// Property (alt ProjektData) aus der Datendatei lesen
+				/*
+				Object objOLD = getProjectData(iProject);
+				if (objOLD instanceof ProjectData)
+				{
+					projectData = (ProjectData) objOLD;
+					id = iProject.getName();
+					desc = projectData.getDescription();
+					try
+					{
+						name = iProject.getPersistentProperty(
+								INtProject.projectNameQualifiedName);
+					} catch (CoreException e)
+					{
+						name = projectData.getName();
+					}
 
+					// ProjektProperty erstellen
+					ntProject = ProjectFactory.eINSTANCE.createNtProject();
+					ntProject.setId(id);
+					ntProject.setName(name);
+					ntProject.setDescription(desc);
+					Activator.getNtProjects().getNtProject().add(ntProject);
+
+					// Property in Datei speichern
+					storeProjectProperty(iProject);
+					*/
+				}
 			}
-		}
+		
 		
 		// gesamte ECP-Projekt wird gespeichert
-		ECPHandlerHelper.saveProject(Activator.getECPProject());	
+		//ECPHandlerHelper.saveProject(Activator.getECPProject());
+		
+
+		
+		
+		
 	}
 	
 	private void storeProjectProperty(IProject iProject)
@@ -143,6 +198,47 @@ public class MigrateProjectDataHandler
 		}
 	}
 	
+	protected Object getProjectProperty(IProject iProject)
+	{
+		InputStream in = getProjectPropertyInputStream(iProject);
+		if (in != null)
+			return (ProjectPropertyData) JAXB.unmarshal(in, ProjectPropertyData.class);		
+		return null;
+	}
+	
+	/**
+	 * Inputstream auf die 'neue' PropertyDatei
+	 * @param iProject
+	 * @return
+	 */
+	private InputStream getProjectPropertyInputStream(IProject iProject)
+	{
+		File propertyFile = projectPropertyFile(iProject);		
+		try
+		{
+			if(propertyFile != null)
+				return new FileInputStream(propertyFile);
+			else
+			{
+				System.out.println("Kein PropertyFile fuer: "+iProject.getName());
+			}
+				
+		} catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+		
+	/**
+	 * Rueckgabe des ProjektPropertyFile (neue Version)
+	 * 
+	 * @param iProject
+	 * @return
+	 */
 	private File projectPropertyFile(IProject iProject)
 	{
 		ProjectPropertySettings projectPropertySettings = new ProjectPropertySettings();
@@ -157,12 +253,12 @@ public class MigrateProjectDataHandler
 	}
 	
 	/**
-	 * Rueckgabe der fuer dieses Projekt gespeicherten ProjektDaten
+	 * Rueckgabe der fuer dieses Projekt gespeicherten ProjektDaten (fruehere Version)
 	 * 
 	 * @param iProject
 	 * @return
 	 */
-	protected Object getProjectPropertyData(IProject iProject)
+	protected Object getProjectData(IProject iProject)
 	{
 		InputStream in = getProjectDataInputStream(iProject);
 		if (in != null)
@@ -171,6 +267,11 @@ public class MigrateProjectDataHandler
 		return null;
 	}
 	
+	/**
+	 * Inputstream auf die 'alte' Datendatei
+	 * @param iProject
+	 * @return
+	 */
 	private InputStream getProjectDataInputStream(IProject iProject)
 	{		
 		if ((iProject != null) && (iProject.isOpen()))
@@ -194,7 +295,10 @@ public class MigrateProjectDataHandler
 		return null;
 	}
 	
-	private void deletePropertyFile()
+	/**
+	 * Die 'alten' Datendateien loeschen
+	 */
+	private void deleteProjectDataFile()
 	{
 		ProjectPropertySettings projectPropertySettings = new ProjectPropertySettings();
 		IProject[] iProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();

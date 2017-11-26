@@ -72,6 +72,8 @@ public class CheckPropertyToProject
 	public boolean canExecute()
 	{
 		NtProjects ntProjects = Activator.getNtProjects();
+		if(ntProjects == null)
+			return false;
 		EList<NtProject>projects = ntProjects.getNtProject();
 		IProject[] iProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		
