@@ -6,10 +6,12 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -25,7 +27,9 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-
+import org.eclipse.emf.ecp.core.ECPProject;
+import org.eclipse.emf.ecp.core.ECPProjectManager;
+import org.eclipse.emf.ecp.core.util.ECPUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.DialogMessageArea;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -169,11 +173,17 @@ public class ExportAction extends Action
 				MessageDialog.openInformation(shell,"Projekteigenschaften","fehlerhafte Projekte (s. Logdatei");
 			}
 			
+			Set<String>propertyFatoryNames = mapProjectFactories.keySet();
+			for(String propertyFatoryName : propertyFatoryNames)
+			{
+				ECPProject ecpProject = ECPUtil.getECPProjectManager().getProject("ECPProject");
+				System.out.println(ecpProject);
+			}
+				
+			
 			System.out.println(mapProjectFactories);
 			
-			// export der ProjektPropertyDaten
-			//exportProjectProperties(destDir.getPath(), lResources);
-
+			
 			
 		}		
 	}

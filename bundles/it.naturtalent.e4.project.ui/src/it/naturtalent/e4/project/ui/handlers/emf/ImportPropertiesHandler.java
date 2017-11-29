@@ -33,19 +33,23 @@ public class ImportPropertiesHandler
 		}
 		*/
 		
-		Activator.deleteNtProjects();
+		//Activator.deleteNtProjects();
 		
 		ECPProject ecpProject = Activator.getECPProject();
 		ECPImportHandlerHelper.importElement(ahell, ecpProject);
+		ecpProject.saveContents();
 		
 	}
 	
 	@CanExecute
 	public boolean canExecute()
 	{
+		return true;
+		/*
 		NtProjects ntProjects = Activator.getNtProjects();
 		if(ntProjects == null)
 			return false;
 		return (ntProjects.getNtProject().size() == 0);
+		*/
 	}
 }
