@@ -11,6 +11,7 @@ Bundle-Localization: plugin
 Export-Package: it.naturtalent.e4.project.ui,
  it.naturtalent.e4.project.ui.datatransfer,
  it.naturtalent.e4.project.ui.dialogs,
+ it.naturtalent.e4.project.ui.emf,
  it.naturtalent.e4.project.ui.filters,
  it.naturtalent.e4.project.ui.handlers,
  it.naturtalent.e4.project.ui.model,

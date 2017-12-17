@@ -11,7 +11,8 @@ public interface IProjectData
 	
 	public static final String PROJECTDATA_FOLDER = ".projectdata";
 	
-	public static final String PROJECTDATAFILE = "projectData.xml";
+	//public static final String PROJECTDATAFILE = "projectData.xml"; deprecated
+	public static final String PROJECTDATAFILE = "propertyData.xml";
 	
 	public String getId();
 	

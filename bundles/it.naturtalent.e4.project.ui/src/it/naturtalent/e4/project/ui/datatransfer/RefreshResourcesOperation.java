@@ -34,23 +34,19 @@ public class RefreshResourcesOperation implements IRunnableWithProgress
 		{
 			totalWork = iResources.size(); 
 			monitor.beginTask(REFRESHOPERATION_TITLE,totalWork);
-			
 			for(IResource iResource : iResources)
 			{
 				try
 				{
-					iResource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+					iResource.refreshLocal(IResource.DEPTH_INFINITE, null);
 					monitor.worked(1);
 				} catch (CoreException e)
 				{							
 					errorTable.add(new Status(IStatus.ERROR, PlatformUI.PLUGIN_ID, 0,"Resourcename",e));
-				}
-				
+				}				
 			}
-			
-			
 		}
-		monitor.done();;		
+		monitor.done();	
 	}
 
 }

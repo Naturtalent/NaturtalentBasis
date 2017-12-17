@@ -77,14 +77,27 @@ public class NtProjectProperty implements INtProjectProperty
 	@Override
 	public String getNtProjectID()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return (ntPropertyData != null) ? ntPropertyData.getId() : null; 		
+	}
+
+	@Override
+	public void setNtPropertyData(Object eObject)
+	{
+		if(eObject instanceof NtProject)
+			ntPropertyData = (NtProject) eObject;
+		
 	}
 
 	@Override
 	public Object getNtPropertyData()
 	{		
 		return ntPropertyData;
+	}
+
+	@Override
+	public Object getPropertyContainer()
+	{		
+		return Activator.getNtProjects();
 	}
 
 	@Override
@@ -209,7 +222,7 @@ public class NtProjectProperty implements INtProjectProperty
 	}
 	
 	
-
+/*
 	@Override
 	public void exportProperty()
 	{
@@ -233,6 +246,7 @@ public class NtProjectProperty implements INtProjectProperty
 		
 		return false;
 	}
+	*/
 
 	/**
 	 * aus der NtProjectID das Erstellungsdatum generieren

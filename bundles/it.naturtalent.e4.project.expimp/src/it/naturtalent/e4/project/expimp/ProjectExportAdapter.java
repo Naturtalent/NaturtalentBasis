@@ -14,6 +14,12 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
+/**
+ * Ueber diesen Adapter wird der ExportTask (NtProjekte exportieren) ausgefuehrt.
+ * 
+ * @author dieter
+ *
+ */
 public class ProjectExportAdapter implements IExportAdapter
 {
 	@Override
@@ -35,6 +41,10 @@ public class ProjectExportAdapter implements IExportAdapter
 		return null;
 	}
 
+	/* 
+	 * NtProjekte exportieren
+	 * @see it.naturtalent.e4.project.IExportAdapter#getExportAction()
+	 */
 	@Override
 	public Action getExportAction()
 	{		

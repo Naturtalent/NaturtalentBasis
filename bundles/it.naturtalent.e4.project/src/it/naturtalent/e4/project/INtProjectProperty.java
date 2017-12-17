@@ -5,7 +5,10 @@ import org.eclipse.jface.wizard.IWizardPage;
 
 
 /**
- * Interface definiert eine Eigenschaft des Projekts
+ * Adapter Interface 
+ * 
+ * Mit diesem Adapter werden die ProjektProperties angepasst. Die konkreten Daten sind ohnehin alle vom
+ * Typ EObject und werden in einem ECPProject persistent gespeichert. 
  * 
  * @author dieter
  *
@@ -37,14 +40,29 @@ public interface INtProjectProperty
 	public String getNtProjectID();
 
 	/**
-	 * Die konkreten Daten der jeweiligen Eigenschaft.
+	 * Die konkreten Daten (EObject) zurueckgeben
 	 *  
 	 * @return
 	 */
 	public Object getNtPropertyData();
 	
 	/**
-	 * Die konkreten Daten der jeweiligen Eigenschaft vom peristenten Speicher laden.
+	 * Die konkreten Daten setzen
+	 *  
+	 * @return
+	 */
+	public void setNtPropertyData(Object eObject);
+
+	/**
+	 * Rueckgabe des Containers, indem alle Objecte gespeichert werden
+	 *  
+	 * @return
+	 */
+	public Object getPropertyContainer();
+
+	
+	/**
+	 * Die konkreten Daten der jeweiligen Eigenschaft vom persistenten Speicher laden.
 	 * 
 	 * @return
 	 */
@@ -76,13 +94,13 @@ public interface INtProjectProperty
 	/**
 	 * Eigenschaft exportieren
 	 */
-	public void exportProperty();
+	//public void exportProperty();
 
 	/**
 	 * Eigenschaft importieren
 	 * @return 
 	 */
-	public boolean importProperty(Object importData);
+	//public boolean importProperty(Object importData);
 
 	
 	/**

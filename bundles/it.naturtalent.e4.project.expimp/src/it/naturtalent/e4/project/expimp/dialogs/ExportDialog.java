@@ -180,14 +180,22 @@ public class ExportDialog extends TitleAreaDialog
 				StructuredSelection selection = (StructuredSelection) event.getSelection();
 				Object selObj = selection.getFirstElement();
 				if(selObj instanceof IExportAdapter)
+				{
+					// eine bestimmter Exporttask (Export Projekte, Export Kontakte, ...) ist selektiert 
 					setMessage(((IExportAdapter)selObj).getMessage());
-				else setMessage(Messages.ExportDialog_this_message);					
+				}
+				else
+				{
+					// Rootnode - Exportvariante auswahlen
+					setMessage(Messages.ExportDialog_this_message);
+				}
 			}
 		});
 		treeViewer.addDoubleClickListener(new IDoubleClickListener()
 		{
 			public void doubleClick(DoubleClickEvent event)
 			{
+				// den selektierten ExportTask ausfuehren
 				okPressed();
 			}
 		});
@@ -202,6 +210,7 @@ public class ExportDialog extends TitleAreaDialog
 		return area;
 	}
 	
+	// der selektierte ExportTask wird ueber seinen Adapter ausgefuehrt
 	private void executeHandler()
 	{
 		IStructuredSelection selection = (IStructuredSelection) treeViewer.getSelection();

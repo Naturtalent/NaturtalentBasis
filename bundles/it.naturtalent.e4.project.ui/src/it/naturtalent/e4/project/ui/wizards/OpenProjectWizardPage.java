@@ -17,7 +17,7 @@ public class OpenProjectWizardPage extends DefaultProjectWizardPage
 				{
 					// Modell mit den ProjektDaten laden
 					projectProperty.setNtProjectID(iProject.getName());
-					projectProperty.init();
+					//projectProperty.init();
 					
 					// die ProjectDaten explizit (wg. Databinding) 
 					setProjectData((ProjectData) projectProperty.getNtPropertyData());

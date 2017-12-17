@@ -18,12 +18,20 @@ public interface INtProjectPropertyFactoryRepository
 	public List<INtProjectPropertyFactory> getAllProjektDataFactories();
 	
 	/**
-	 * Factory ueber den Klassennamen im Repository suchen und zureuckgeben:
+	 * Factory ueber die Klasse im Repository suchen und zureuckgeben:
 	 *   
 	 * @param factoryClass
 	 * @return
 	 */
 	public INtProjectPropertyFactory getFactory(Class<? extends INtProjectPropertyFactory>factoryClass);
+	
+	
+	/**
+	 * Factory ueber den Klassennamen im Repository suchen und zureuckgeben:
+	 * @param factoryClassName
+	 * @return
+	 */
+	public INtProjectPropertyFactory getFactoryByName(String factoryClassName);
 	
 	/**
 	 * Zunaechst Factory Ueber den Klassennamen suchen und dann den 'NtProjectProperty' ueber die 
@@ -33,4 +41,5 @@ public interface INtProjectPropertyFactoryRepository
 	 * @return
 	 */
 	public INtProjectProperty createNtProjectData(Class<? extends INtProjectPropertyFactory>factoryClass);
+	
 }

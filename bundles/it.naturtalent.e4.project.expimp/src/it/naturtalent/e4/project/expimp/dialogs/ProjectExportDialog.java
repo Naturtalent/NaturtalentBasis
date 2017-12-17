@@ -68,6 +68,8 @@ import it.naturtalent.icons.core.IconSize;
 public class ProjectExportDialog extends TitleAreaDialog
 {
 	
+	public static final String EXPORT_DIRECTORY = "exportDirectory"; //$NON-NLS-1$
+	
 	// Exportoptionen
 	public static final int EXPORTOPTION_XMLFORMAT = 0;
 	public static final int EXPORTOPTION_OOFORMAT = 1;
@@ -227,6 +229,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 		Label lblSource = new Label(container, SWT.NONE);
 		lblSource.setText(Messages.SelectExportDialog_lblSource_text);
 		
+		// Zielverzeichnis
 		comboDestDir = new Combo(container, SWT.BORDER);
 		comboDestDir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
@@ -234,7 +237,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 		controlDecoration.setImage(Icon.OVERLAY_ERROR.getImage(IconSize._7x8_OverlayIconSize)); 
 		controlDecoration.setDescriptionText(Messages.SelectExportDialog_controlDecoration_descriptionText);
 		
-		// Browse
+		// Button Zielverzeichnis
 		Button btnBrowse = new Button(container, SWT.NONE);
 		btnBrowse.addSelectionListener(new SelectionAdapter()
 		{
@@ -267,11 +270,13 @@ public class ProjectExportDialog extends TitleAreaDialog
 		});
 		btnBrowse.setText(Messages.SelectExportDialog_btnBrowse_text);
 		
+		// Group Radiobutton (WorkingSet/Projekte
 		Group group = new Group(container, SWT.NONE);
 		group.setLayout(new FillLayout(SWT.HORIZONTAL));
 		group.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
 		group.setText(Messages.SelectExportDialog_group_text);
 		
+		// Radiobutton WorkingSet
 		btnWorkingsets = new Button(group, SWT.RADIO);
 		btnWorkingsets.addSelectionListener(new SelectionAdapter()
 		{
@@ -284,6 +289,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 		});
 		btnWorkingsets.setText(Messages.SelectExportDialog_btnWorkingsets_text);
 		
+		// Radiobutton Projekte
 		btnProjects = new Button(group, SWT.RADIO);
 		btnProjects.addSelectionListener(new SelectionAdapter()
 		{
@@ -429,16 +435,25 @@ public class ProjectExportDialog extends TitleAreaDialog
 		{
 			for(String path : sourcePaths)
 				comboDestDir.add(path);
-			setExportDir(sourcePaths[0]);			
+			setExportDir(sourcePaths[0]);
+			
+			// falls Zielverzeichnis nicht existiert, temporaeres Verzeichnis benutzen
+			if(!new File(sourcePaths[0]).exists())
+			{
+				// temporaeres Verzeichnis ist Defaultverzeichnis
+				IEclipsePreferences instancePreferenceNode = InstanceScope.INSTANCE
+						.getNode(
+								IPreferenceAdapter.ROOT_APPLICATION_PREFERENCES_NODE);
+				setExportDir(instancePreferenceNode.get(IPreferenceAdapter.PREFERENCE_APPLICATION_TEMPDIR_KEY,null));
+			}
 		}
 		else
 		{
 			// temporaeres Verzeichnis ist Defaultverzeichnis
 			IEclipsePreferences instancePreferenceNode = InstanceScope.INSTANCE
 					.getNode(
-							IPreferenceAdapter.ROOT_APPLICATION_PREFERENCES_NODE);
-			String drawFile = instancePreferenceNode.get(IPreferenceAdapter.PREFERENCE_APPLICATION_TEMPDIR_KEY,null);			
-			setExportDir(drawFile);
+							IPreferenceAdapter.ROOT_APPLICATION_PREFERENCES_NODE);			
+			setExportDir(instancePreferenceNode.get(IPreferenceAdapter.PREFERENCE_APPLICATION_TEMPDIR_KEY,null));
 		}
 		
 		// Projekte oder Workingsets einlesen
@@ -525,7 +540,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 		// das ausgewaehlte Zielverzeichnis fuer spaetere Verwendung sichern
 		resultDestDir = new File(exportDestDirectory.destDir);
 		
-		String exportDirName = getAutoFileName(resultDestDir, "exportDirectory");
+		String exportDirName = getAutoFileName(resultDestDir, EXPORT_DIRECTORY); 
 		resultDestDir = new File(resultDestDir,exportDirName);
 				
 		//if(!resultDestDir.exists() || !resultDestDir.isDirectory())
@@ -649,8 +664,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 			if (counter > 1)
 			{
 				autoFileName = FilenameUtils.getBaseName(originalFileName)
-						+ new Integer(counter) + "." //$NON-NLS-1$
-						+ FilenameUtils.getExtension(originalFileName);
+						+ new Integer(counter);
 			}
 			else
 			{

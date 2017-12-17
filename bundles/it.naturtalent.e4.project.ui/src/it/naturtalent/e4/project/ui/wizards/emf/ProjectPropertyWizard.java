@@ -120,7 +120,7 @@ public class ProjectPropertyWizard extends Wizard
 			{
 				INtProjectProperty projectProperty = propertyFactory.createNtProjektData();
 				projectProperty.setNtProjectID((iProject != null) ? iProject.getName() : null);				
-				projectProperty.init();
+				//projectProperty.init();
 				
 				// das obligatorische Property soll als erste Page im Wizard gezeigt werden
 				if(projectProperty instanceof NtProjectProperty)

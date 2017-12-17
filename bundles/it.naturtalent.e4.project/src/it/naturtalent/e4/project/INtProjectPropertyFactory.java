@@ -16,4 +16,12 @@ public interface INtProjectPropertyFactory
 	 */
 	public String getLabel();
 	
+	/**
+	 * Gibt den Namen des ECPProjects zurueck, indem diese Eigenschaft gespeichert ist.
+	 * 
+	 * @return
+	 */
+	public String getParentContainerName();
+
+	
 }

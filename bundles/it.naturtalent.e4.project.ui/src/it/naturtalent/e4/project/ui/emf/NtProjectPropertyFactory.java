@@ -22,6 +22,8 @@ public class NtProjectPropertyFactory implements INtProjectPropertyFactory
 {
 	public final static String NTPROJECTPROPERTYLABEL = "NtProjectProperties";
 	
+	public final static String ECPNTPROJECTNAME = "ECPProject";
+	
 	/**
 	 * Konstrukor
 	 */
@@ -43,6 +45,12 @@ public class NtProjectPropertyFactory implements INtProjectPropertyFactory
 	public String getLabel()
 	{		
 		return NTPROJECTPROPERTYLABEL;
+	}
+
+	@Override
+	public String getParentContainerName()
+	{		
+		return ECPNTPROJECTNAME;
 	}
 
 

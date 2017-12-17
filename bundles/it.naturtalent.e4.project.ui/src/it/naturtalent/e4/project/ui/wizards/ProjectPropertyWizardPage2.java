@@ -298,7 +298,7 @@ public class ProjectPropertyWizardPage2 extends WizardPage
 				{
 					// die Projektdaten des selektierten Projekts laden				
 					projectProperty.setNtProjectID(selectedIProject.getName());
-					projectProperty.init();
+					//projectProperty.init();
 					projectData = (ProjectData) projectProperty.getNtPropertyData();
 					
 					// Projektname und Notizen ausgeben

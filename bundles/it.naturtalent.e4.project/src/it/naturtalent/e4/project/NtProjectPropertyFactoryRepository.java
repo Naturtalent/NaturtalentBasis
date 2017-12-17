@@ -3,6 +3,8 @@ package it.naturtalent.e4.project;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Realisierung des Speichers aller PropertyFactories.
  * Der Zugriff wird ueber den OSGI-Service zur Verfuegung gestellt.
@@ -33,6 +35,19 @@ public class NtProjectPropertyFactoryRepository implements INtProjectPropertyFac
 
 		return null;
 	}
+	
+	@Override
+	public INtProjectPropertyFactory getFactoryByName(String factoryClassName)
+	{
+		for(INtProjectPropertyFactory factory : ntProjektPropertyFactories)
+		{
+			if(StringUtils.equals(factory.getClass().getName(), factoryClassName))
+				return factory;
+		}
+
+		return null;
+	}
+
 
 	@Override
 	public INtProjectProperty createNtProjectData(

@@ -60,7 +60,7 @@ public class ECPExportHandlerHelper
 		progressDialog.getProgressMonitor().done();
 		progressDialog.close();
 
-		MessageDialog.openInformation(null, "Export", "Exported modelelement to file " + file.getName()); //$NON-NLS-1$ //$NON-NLS-2$
+		//MessageDialog.openInformation(null, "Export", "Exported modelelement to file " + file.getName()); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	/**

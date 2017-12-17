@@ -67,6 +67,13 @@ public class DefaultNtProjectProperty implements INtProjectProperty
 		this.ntProjectID = ntProjectID;
 	}
 	
+	@Override
+	public void setNtPropertyData(Object eObject)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 	public EObject getNtPropertyData()
 	{
 		return ntPropertyData;
@@ -152,6 +159,13 @@ public class DefaultNtProjectProperty implements INtProjectProperty
 		return null;
 	}
 
+	@Override
+	public Object getPropertyContainer()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/*
 	public void setUndoEventKey(String undoEventKey)
 	{
@@ -166,6 +180,7 @@ public class DefaultNtProjectProperty implements INtProjectProperty
 	}
 	*/
 
+	/*
 	@Override
 	public void exportProperty()
 	{
@@ -179,6 +194,7 @@ public class DefaultNtProjectProperty implements INtProjectProperty
 		// TODO Auto-generated method stub
 		return false;
 	}
+	*/
 	
 	
 	/*
