@@ -285,7 +285,7 @@ public class ProjectImportDialogOLD extends TitleAreaDialog
 	
 	private String stgFilter;
 
-
+	public static final String IMPEXPORTFILE_NAME = "impexpprojectproperty.xmi"; //$NON-NLS-1$
 	private FilenameFilter projectFileFilter = new FilenameFilter()
 	{		
 		@Override
@@ -294,7 +294,7 @@ public class ProjectImportDialogOLD extends TitleAreaDialog
 			File checkDir = new File(dir,name);
 			checkDir = new File(checkDir, IProjectData.PROJECTDATA_FOLDER);
 			//return (new File(checkDir,IProjectData.PROJECTDATAFILE).exists());
-			return (new File(checkDir,ExportAction.IMPEXPORTFILE_NAME).exists());
+			return (new File(checkDir,IMPEXPORTFILE_NAME).exists());
 		}
 	};
 	private Text txtSeek;

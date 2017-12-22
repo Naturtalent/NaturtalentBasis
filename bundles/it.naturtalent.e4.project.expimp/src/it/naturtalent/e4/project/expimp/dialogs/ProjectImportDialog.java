@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.beans.PojoProperties;
@@ -74,6 +76,7 @@ import it.naturtalent.e4.project.expimp.Messages;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.dialogs.ConfigureWorkingSetDialog;
 import it.naturtalent.e4.project.ui.dialogs.SelectWorkingSetDialog;
+import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
@@ -95,7 +98,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 	
 	private DataBindingContext m_bindingContext;
 	
-	//private EList<EObject>projectProperties;
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	/*
 	 * Filter nach einem String in 'stgFilter'
@@ -389,12 +392,6 @@ public class ProjectImportDialog extends TitleAreaDialog
 				
 				if(checkboxTableViewer.getGrayed(element))
 					checkboxTableViewer.setChecked(element, false);
-
-				
-				//Widget w = checkboxTableViewer.testFindItem(element);
-				
-				System.out.println(element);
-				
 			}
 		});
 		
@@ -587,7 +584,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		}
 		
 		if(exists)
-			setErrorMessage("nicht alle Projekte können importiert werden");
+			setErrorMessage("nicht alle Projekte können importiert werden, da sie bereits existieren");
 		
 		checkboxTableViewer.refresh();
 	}
@@ -610,7 +607,28 @@ public class ProjectImportDialog extends TitleAreaDialog
 			Resource resource = resourceSet.getResource(fileURI, true);
 			projectProperties = resource.getContents();
 		}
+
+		// fehlerhafte NtProjekte (fehlende ID) aussortieren
+		List<EObject>errorProjectProperties = new ArrayList<EObject>();		
+		if (projectProperties != null)
+		{
+			for (EObject projectProperty : projectProperties)
+			{
+				if (projectProperty instanceof NtProject)
+				{
+					NtProject ntProject = (NtProject) projectProperty;
+					String id = ntProject.getName();
+					if (StringUtils.isEmpty(id))
+						errorProjectProperties.add(projectProperty);
+				}
+			}			
+			for(EObject eObject : errorProjectProperties)
+				projectProperties.remove(eObject);
+		}
 		
+		if((projectProperties == null) || (projectProperties.isEmpty()))
+			log.error("keine Importdaten in "+ECP_NTPROJECT_PROPERTYFILE+" defniert");
+			
 		return projectProperties;
 	}
 

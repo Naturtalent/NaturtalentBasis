@@ -59,8 +59,10 @@ public class CreateNewProject
 									.getRoot().getProject(key);
 							
 							Activator.creatProjectAuxiliaryFlag = true;
-							iProject.create(new SubProgressMonitor(monitor, 1));
-							iProject.open(new SubProgressMonitor(monitor, 1));
+							//iProject.create(new SubProgressMonitor(monitor, 1));
+							//iProject.open(new SubProgressMonitor(monitor, 1));
+							iProject.create(monitor);
+							iProject.open(monitor);
 						}
 					}
 					

@@ -8,131 +8,176 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Shell;
 
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
+import it.naturtalent.e4.project.ProjectPropertyData;
+import it.naturtalent.e4.project.ProjectPropertySettings;
 import it.naturtalent.e4.project.expimp.ecp.ECPExportHandlerHelper;
 
-/**
- * Exportiert die NtProjekteigenschaften
- *
- * @author dieter
- *
- */
 public class ExportProjectPropertyOperation implements IRunnableWithProgress
 {
-	private final static String EXPORTOBJECTOPERATION_TITLE = "Export Eigenschaften"; 
-	private int totalWork = IProgressMonitor.UNKNOWN;	
-	
-	// Map mit Key(FactoryClassName) Value(Liste mit den IProjectIDs)
-	private Map<String,List<String>>mapProjectFactories = new HashMap<String, List<String>>();	
-	
-	// Repository mit allen verfuegbaren PropertyFactories
-	private INtProjectPropertyFactoryRepository projektDataFactoryRepository;
-		
-	private List<EObject>eObjectExportListe = new ArrayList<EObject>();
-	
-	private File exportDestDir;
-	
-	// Name des ECPProjects
-	private String ecpProjectName = null;
-	
+	private final static String SAVEPROPERTY_OPERATION_TITLE = "Speichern der Projekteigenschaft";
+	private int totalWork = IProgressMonitor.UNKNOWN;
+
 	private Shell shell;
+	private File exportDestDir;
+	private IResource [] exportProjects;
 	
+	// Zuordnung der NtProjekte zu den PropertyFactories
+	private Map<String,List<String>>mapProjectFactories = new HashMap<String, List<String>>();	
+	private INtProjectPropertyFactoryRepository projektDataFactoryRepository;
+	
+	private List<String>noPropertyData = new ArrayList<String>(); 	
 	
 	/**
-	 * Konstruktion
-	 * 
-	 * @param exportDestDir - in diesem Verzeichnis werden die Daten gespeichert
-	 * @param projektDataFactoryRepository - Repository mit allen verfuegbaren Factories (Klassennamen der Factories)
-	 * @param mapProjectFactories - die zuexportierenden Eigenschaften
+	 * @param exportProjects
 	 */
-	public ExportProjectPropertyOperation(Shell shell, File exportDestDir,
-			INtProjectPropertyFactoryRepository projektDataFactoryRepository,
-			Map<String, List<String>> mapProjectFactories)
-	{	
+	public ExportProjectPropertyOperation(Shell shell, File exportDestDir, IResource[] exportProjects,
+			INtProjectPropertyFactoryRepository projektDataFactoryRepository)
+	{
+		super();
 		this.shell = shell;
 		this.exportDestDir = exportDestDir;
+		this.exportProjects = exportProjects;
 		this.projektDataFactoryRepository = projektDataFactoryRepository;
-		this.mapProjectFactories = mapProjectFactories;
 	}
 
-
-
 	@Override
-	public void run(IProgressMonitor monitor)throws InvocationTargetException, InterruptedException
+	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
 	{
-		if((mapProjectFactories != null) && (!mapProjectFactories.isEmpty()))
-		{
-			totalWork = mapProjectFactories.size(); 
-			monitor.beginTask(EXPORTOBJECTOPERATION_TITLE,totalWork);
+		if(ArrayUtils.isNotEmpty(exportProjects))
+		{			
+			totalWork = exportProjects.length; 
+			totalWork = totalWork + projektDataFactoryRepository.getAllProjektDataFactories().size();
+			monitor.beginTask(SAVEPROPERTY_OPERATION_TITLE,totalWork);
 			
+			// Im ersten Schritt wird eine Hilsmap erzeugt.
+			// Die PropertyDataFiles der NtProjekte werden gelesen und die Zuordnung NtProjekte zu PropertyFactory aufgelistet.
+			// 'mapProjectFactories' besitzt fuer jede PropertyFactory (key) eine Liste (value) mit den  NtProjekten 
+			// die die jeweilige Eigenschaft besitzen. 						
+			ProjectPropertySettings projectPropertySettings = new ProjectPropertySettings();
+			for(IResource exportProject : exportProjects)
+			{
+				if (exportProject instanceof IProject)
+				{
+					IProject iProject = (IProject) exportProject;
+					ProjectPropertyData projectPropertyData = projectPropertySettings.get(iProject);
+					
+					if (projectPropertyData != null)
+					{
+						String[] factoryNames = projectPropertyData.getPropertyFactories();
+						for (String factoryName : factoryNames)
+						{
+							List<String> projectIds = mapProjectFactories.get(factoryName);
+							if (projectIds == null)
+							{
+								projectIds = new ArrayList<String>();
+								mapProjectFactories.put(factoryName,projectIds);
+							}
+							projectIds.add(iProject.getName());
+						}
+					}
+					else
+					{
+						// Project mit fehlenden PropertyDaten registrieren
+						noPropertyData.add(iProject.getName());
+					}
+				}
+				monitor.worked(1);
+			}
+			
+			// im zweiten Schritt werden die Properties exportiert)				
 			Set<String>propertyFatoryNames = mapProjectFactories.keySet();
 			for(String propertyFatoryName : propertyFatoryNames)
 			{
-				INtProjectProperty ntProjectProperty = getProjectPropertyFactory(propertyFatoryName);
-				if(ntProjectProperty != null)
-				{
-					List<EObject>exportListe = new ArrayList<EObject>();
-					if(ecpProjectName != null)
-					{
-						// alle Propertydaten laden und in einer Liste sammeln 
-						List<String>projectIDs = mapProjectFactories.get(propertyFatoryName);
-						for(String projectID : projectIDs)
-						{
-							// Propertydaten ueber den Adapter laden 
-							ntProjectProperty.setNtProjectID(projectID);
-							Object obj = ntProjectProperty.getNtPropertyData();
-							if (obj instanceof EObject)
-							{
-								EObject eObject = (EObject) obj;
-								exportListe.add(eObject);
-							}				
-						}
-						
-						// Dateiname des Properties generieren und daten exportieren
-						File exportFile = new File(exportDestDir,ecpProjectName+".xmi");
-						ECPExportHandlerHelper.export(shell, exportListe, exportFile.getPath());			
-					}
-				}
+				exportProjectProperty(propertyFatoryName);
+				monitor.worked(1);
 			}
-			monitor.worked(1);			
-		}		
-		monitor.done();		
+			
+			monitor.done();
+		}
 	}
 	
 	/*
-	 * Ueber den Namen 'factoryName' wird das entsprechende Factory aus dem Repository entnommen und der
-	 * PropertyDataAdapter erzeugt und Zurueckgegeben. Gleichzeitig wird der ECPProjectname, der ebenfalls
-	 * im Factory gespeichert ist modulglobal verfuegbar gemacht.
-	 * 
+	 * Die jeweiligen PropjectProperties werden in ECPProjectFiles (.xmi) gespeichert.
+	 * Der Name dieses Files wird vom jeweiligen ContainerObject (ECPProject) abgeleitet.
 	 */
-	private INtProjectProperty getProjectPropertyFactory(String factoryName)
+	public void exportProjectProperty(String propertyFactoryName)
 	{
-		INtProjectProperty property = null; 
+		// Containername (ECPProject) des PropertyObjects
+		String ecpProjectName = null;
 		
+		// der Propertyadapter
+		INtProjectProperty ntProjectProperty = null;
+		
+		// Name des Containers und den Adapter mit ProjectPropertyFactory ermitteln
 		List<INtProjectPropertyFactory>projectFactories = projektDataFactoryRepository.getAllProjektDataFactories();
 		for(INtProjectPropertyFactory projectFactory : projectFactories)
 		{
-			if(StringUtils.equals(projectFactory.getClass().getName(),factoryName))
+			if(StringUtils.equals(projectFactory.getClass().getName(),propertyFactoryName))
 			{
-				// ECPProjectname fuer spaetere Verwendung aus dem Factory laden
 				ecpProjectName = projectFactory.getParentContainerName();
-				
-				// der eigentliche Adaprter durch das Factory erzeugen
-				property = projectFactory.createNtProjektData();
+				ntProjectProperty = projectFactory.createNtProjektData();
 				break;				
 			}
 		}
+		
+		final List<EObject>exportListe = new ArrayList<EObject>();
+		if(ecpProjectName != null)
+		{
+			// alle Propertydaten laden und in einer Liste 'exportListe' sammeln 
+			List<String>projectIDs = mapProjectFactories.get(propertyFactoryName);
+			for(String projectID : projectIDs)
+			{
+				// ueber den Adapter laden 
+				ntProjectProperty.setNtProjectID(projectID);
+				Object obj = ntProjectProperty.getNtPropertyData();
+				if (obj instanceof EObject)
+				{
+					EObject eObject = (EObject) obj;
+					exportListe.add(EcoreUtil.copy(eObject));
+				}				
+			}
+			
+			// Dateiname des Properties generieren und daten exportieren
+			final File exportFile = new File(exportDestDir,ecpProjectName+".xmi");
 
-		return property;
+			shell.getDisplay().syncExec(new Runnable()
+			{
+				public void run()
+				{
+					ECPExportHandlerHelper.export(shell, exportListe, exportFile.getPath());
+				}
+			});
+		}
 	}
+
+	
+	// Ruekgabe der Fehlerliste
+	public List<String> getNoPropertyData()
+	{
+		return noPropertyData;
+	}
+
+	/*
+	public Map<String, List<String>> getMapProjectFactories()
+	{
+		return mapProjectFactories;
+	}
+	*/
+	
 
 }

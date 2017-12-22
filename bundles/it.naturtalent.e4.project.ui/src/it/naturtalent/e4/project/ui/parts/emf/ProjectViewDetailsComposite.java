@@ -205,22 +205,27 @@ public class ProjectViewDetailsComposite extends DefaultDetailsComposite
 		assignedWorkingSets.clear();	
 		IResourceNavigator navigator = Activator.findNavigator();
 		IWorkingSet[] workingSets = navigator.getWindowWorkingSets();
-		for (IWorkingSet workingSet : workingSets)
+		if (ArrayUtils.isNotEmpty(workingSets))
 		{
-			IAdaptable[] adaptables = workingSet.getElements();
-			if (ArrayUtils.contains(adaptables, selectedAdaptable))
+			for (IWorkingSet workingSet : workingSets)
 			{
-				String wsName = workingSet.getName();
-				if (!StringUtils.equals(wsName,IWorkingSetManager.OTHER_WORKINGSET_NAME))
+				IAdaptable[] adaptables = workingSet.getElements();
+				if (ArrayUtils.contains(adaptables, selectedAdaptable))
 				{
-					assignedWorkingSets.add(workingSet);
-					if (wsLabel == null)
-						wsLabel = new StringBuilder("WorkingSet: "+wsName);
-					else
-						wsLabel.append(","+wsName);					
+					String wsName = workingSet.getName();
+					if (!StringUtils.equals(wsName,
+							IWorkingSetManager.OTHER_WORKINGSET_NAME))
+					{
+						assignedWorkingSets.add(workingSet);
+						if (wsLabel == null)
+							wsLabel = new StringBuilder(
+									"WorkingSet: " + wsName);
+						else
+							wsLabel.append("," + wsName);
+					}
 				}
 			}
-		}		
+		}
 			
 		return (wsLabel != null) ? wsLabel.toString() : null;
 	}

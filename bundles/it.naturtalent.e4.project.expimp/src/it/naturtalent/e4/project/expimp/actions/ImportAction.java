@@ -1,27 +1,16 @@
 package it.naturtalent.e4.project.expimp.actions;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-import javax.xml.bind.JAXB;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -41,20 +30,15 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkingSet;
 
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
-import it.naturtalent.e4.project.IProjectData;
-import it.naturtalent.e4.project.ProjectPropertyData;
 import it.naturtalent.e4.project.expimp.dialogs.ProjectImportDialog;
-import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.datatransfer.CopyFilesAndFoldersOperation;
-import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
-import it.naturtalent.e4.project.ui.utils.CreateNewProject;
 
 /**
  * @author dieter
@@ -95,97 +79,43 @@ public class ImportAction extends Action
 			// Verzeichnis indem die zu importierenden Projekte exportiert wurden
 			final File importDir = new File(dialog.getImportSourceDirectory());
 			
-			// Mapped die selektierten ImportProjektIDs mit den in den Projekten gespeicherten Resourcen
-			Map<String, String[]>mapImportFiles = prepareProjectResourceMap(importDir, selectedImportObjects);
-						
-			//Mapped ProjektId u. Name der seletierten ImportProjekte
-			Map<String,String>createProjectMap = new HashMap<String, String>();
-			for(EObject eObject : selectedImportObjects)
+			// Import vorbereiten (NtProjekte und diverse Hilfskonstruktionen (Maps) erzeugen)
+			final ImportProjectPrepareOperation importProjectPrepareOperation = new ImportProjectPrepareOperation(
+					shell, importDir, selectedImportObjects, dialog.getAssignedWorkingSets());
+			try
 			{
-				if (eObject instanceof NtProject)
-				{
-					NtProject ntProject = (NtProject) eObject;
-					String projectID = ntProject.getId();
-					String projectName = ntProject.getName();
-					createProjectMap.put(projectID, projectName);
-				}
-			}
-			final Set<String>selectedImportProjectIDs = createProjectMap.keySet();
-			
-			// die zuimportierenden NtProjekte erzeugen
-			List<IWorkingSet> selectedWorkingSets = dialog.getAssignedWorkingSets();
-			if((selectedWorkingSets != null) && (!selectedWorkingSets.isEmpty()))
-				WorkbenchContentProvider.newAssignedWorkingSets = selectedWorkingSets.toArray(new IWorkingSet[selectedWorkingSets.size()]);					
-			CreateNewProject.createProject(shell, createProjectMap);
-			WorkbenchContentProvider.newAssignedWorkingSets = null;
-			
-			// IProject und zugehoerige Resourcen in einer Map zusammenfassen
-			IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-			final Map<IProject,String[]>importProjectMap = new HashMap<IProject, String[]>();
-			for(EObject eObject : selectedImportObjects)
+				new ProgressMonitorDialog(shell).run(true, false, importProjectPrepareOperation);
+			} catch (InvocationTargetException e)
 			{
-				NtProject ntProject = (NtProject) eObject;
-				IProject iProject = workspaceRoot.getProject(ntProject.getId());
-				String [] importResources = mapImportFiles.get(ntProject.getId());
-				importProjectMap.put(iProject, importResources);
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
+
+			// Map mit IProjecten und den zugeorigen Resourcen
+			final Map<IProject, String[]>importProjectMap = importProjectPrepareOperation.getImportProjectMap();
 			BusyIndicator.showWhile(shell.getDisplay(), new Runnable()
 			{
 				@Override
 				public void run()
 				{
-
 					// Die Resourcen in das Project kopieren
 					CopyFilesAndFoldersOperation copyFileAndFolder = new CopyFilesAndFoldersOperation(shell);
 					copyFileAndFolder.copyFileStores(shell, importProjectMap);
 
 					// die Properties importieren
-					Map<String, List<String>> propertyFactoryMap = getPropertyFactoriesMap(
-							importDir, selectedImportProjectIDs);
+					
+					//Map<String, List<String>> propertyFactoryMap = getPropertyFactoriesMap(importDir, selectedImportProjectIDs);
+					Map<String, List<String>> propertyFactoryMap = importProjectPrepareOperation.getPropertyFactoryMap();
+					
 					for (String factoryName : propertyFactoryMap.keySet())
-						importProjectProperty(importDir, factoryName,
-								propertyFactoryMap.get(factoryName));
+						importProjectProperty(importDir, factoryName,propertyFactoryMap.get(factoryName));
 				}
 			});
 		}
-	}
-	
-	/*
-	 * In einer Map werden alle zu einem NtProjekt (key = ProjectID) gehoerenden Resourcen (value = Dateien und Verzeichnisse)
-	 * zusammengefasst.
-	 */
-	private Map<String, String[]> prepareProjectResourceMap(File sourceImportDir, EObject [] importObjects)
-	{
-		// zu importierende und vorhandene Projekte separieren
-		Map<String, String[]>mapImportFiles = new HashMap<String, String[]>();
-		
-		for(EObject eObject : importObjects)
-		{
-			if (eObject instanceof NtProject)
-			{
-				String projectID = ((NtProject) eObject).getId();
-				File importProjectFile = new File(sourceImportDir, projectID);
-				if (importProjectFile.exists())
-				{
-					String [] srcFiles = importProjectFile.list(new FilenameFilter()
-					{						
-						@Override
-						public boolean accept(File dir, String name)
-						{							
-							return !name.equals(".project");
-						}
-					});
-					
-					// das Projektverzeichnis wird vorangestellt
-					for(int i = 0;i < srcFiles.length;i++)
-						srcFiles[i] = importProjectFile.getPath()+File.separator+srcFiles[i];
-					
-					mapImportFiles.put(projectID, srcFiles);
-				}				
-			}
-		}
-		return mapImportFiles;
 	}
 	
 	/*
@@ -193,6 +123,7 @@ public class ImportAction extends Action
 	 * ausgewaehlten ImportProjekte zusammengefasst.
 	 * 
 	 */
+	/*
 	private Map<String,List<String>> getPropertyFactoriesMap(File importDir, final Set<String>selectedImportProjectIDs)
 	{
 		Map<String,List<String>>propertyFactories = new HashMap<String, List<String>>();
@@ -250,6 +181,7 @@ public class ImportAction extends Action
 		
 		return propertyFactories;
 	}
+	*/
 	
 	/*
 	 * Die exportierten Properties mit Hilfe der EMFProperty-Datei '.xmi' importieren.   
@@ -346,6 +278,7 @@ public class ImportAction extends Action
 	/*
 	 * Alle PropertyFactoryNamen der zuimportierenden Objecte in einer Liste aufsammeln.
 	 */
+	/*
 	private Map<String,List<EObject>> pickUpPropertyFactories(File importDir, EObject [] importObjects)
 	{
 		Map<String,List<EObject>>propertyFactories = new HashMap<String, List<EObject>>();
@@ -391,65 +324,6 @@ public class ImportAction extends Action
 		
 		return propertyFactories;
 	}
-	
-	
-	private Map<String,String>getImportedAliasNames(File [] importFiles)
-	{
-		Map<String, String> mapImportProjectNames = new HashMap<String, String>();
-
-		for (File impFile : importFiles)
-		{			
-			String projectName = getProjektName(impFile);
-			if(StringUtils.isNotEmpty(projectName))
-				mapImportProjectNames.put(impFile.getName(),projectName);
-			else
-				log.error("ungueltige Importdatei " + impFile.getName());
-		}
-
-		return mapImportProjectNames;
-	}
-	
-	private List<EObject> getImportProperty(File file)
-	{
-		// Path zur ImportExport-Datei vervollstaendigen 
-		File projectFile = new File(file, IProjectData.PROJECTDATA_FOLDER);
-		projectFile = new File(projectFile, ExportAction.IMPEXPORTFILE_NAME);
-
-		// Resource laden
-		URI fileURI = URI.createFileURI(projectFile.getPath());
-		ResourceSet resourceSet = new ResourceSetImpl();
-		Resource resource = resourceSet.getResource(fileURI, true);
-
-		return resource.getContents();
-	}
-	
-	/**
-	 * Ermittelt ueber die ImportExport Datei den Namen des Projekts.
-	 * Filtert die PopertyDaten von NtProject und gibt den dort gespeicherten Namen zurueck.
-	 *  
-	 * @param file - Verzeichnis des IProjects im Importverzeichnis 
-	 * @return - Name des Projekts
-	 */
-	private String getProjektName(File file)
-	{
-		// Path zur ImportExport-Datei vervollstaendigen 
-		File projectFile = new File(file, IProjectData.PROJECTDATA_FOLDER);
-		projectFile = new File(projectFile, ExportAction.IMPEXPORTFILE_NAME);
-
-		// Resource laden
-		URI fileURI = URI.createFileURI(projectFile.getPath());
-		ResourceSet resourceSet = new ResourceSetImpl();
-		Resource resource = resourceSet.getResource(fileURI, true);
-
-		// NtProject filtern
-		for(EObject eObject : resource.getContents())
-		{
-			if (eObject instanceof it.naturtalent.e4.project.model.project.NtProject)
-				return ((it.naturtalent.e4.project.model.project.NtProject) eObject).getName();	
-		}
-		
-		return null;
-	}
-	
+	*/
 	
 }
