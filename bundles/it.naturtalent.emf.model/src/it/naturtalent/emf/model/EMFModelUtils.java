@@ -20,7 +20,7 @@ import org.eclipse.emf.ecp.core.util.ECPUtil;
 public class EMFModelUtils
 {
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private static Log log = LogFactory.getLog(EMFModelUtils.class);
 	
 	/**
 	 * Ein neues Projekt erzeugen.
@@ -28,7 +28,7 @@ public class EMFModelUtils
 	 * @param projectName
 	 * @return
 	 */
-	public ECPProject createProject(String projectName)
+	public static ECPProject createProject(String projectName)
 	{
 		ECPProject project = null;
 		

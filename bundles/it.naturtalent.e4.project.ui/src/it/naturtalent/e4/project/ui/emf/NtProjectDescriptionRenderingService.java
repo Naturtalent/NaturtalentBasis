@@ -36,12 +36,25 @@ public class NtProjectDescriptionRenderingService
 	private EMFFormsDatabinding databindingService;
 	private ReportService reportService;
 	
-	
-	protected void setEMFFormsDatabinding(
-			EMFFormsDatabinding databindingService)
+	/**
+	 * Called by the initializer to set the EMFFormsDatabinding.
+	 *
+	 * @param databindingService The EMFFormsDatabinding
+	 */
+	protected void setEMFFormsDatabinding(EMFFormsDatabinding databindingService)
 	{
 		this.databindingService = databindingService;
 	}
+	
+	/**
+	 * Called by the initializer to set the ReportService.
+	 *
+	 * @param reportService The ReportService
+	 */
+	protected void setReportService(ReportService reportService) {
+		this.reportService = reportService;
+	}
+
 
 	@Override
 	public double isApplicable(VElement vElement,

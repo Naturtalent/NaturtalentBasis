@@ -29,18 +29,26 @@ import it.naturtalent.e4.project.model.project.ProjectPackage;
  * und gibt die gewuenschte Rendererklasse ueber 'getRendererClass()' zurueck.
  * 
  */
-public class NtProjectNameRenderingService
-		implements EMFFormsDIRendererService<VControl>
+public class NtProjectNameRenderingService implements EMFFormsDIRendererService<VControl>
 {
 
 	private EMFFormsDatabinding databindingService;
 	private ReportService reportService;
 	
 	
-	protected void setEMFFormsDatabinding(
-			EMFFormsDatabinding databindingService)
+	protected void setEMFFormsDatabinding(EMFFormsDatabinding databindingService)
 	{
 		this.databindingService = databindingService;
+	}
+	
+	/**
+	 * Called by the initializer to set the ReportService.
+	 *
+	 * @param reportService The ReportService
+	 */
+	protected void setReportService(ReportService reportService)
+	{
+		this.reportService = reportService;
 	}
 
 	@Override
