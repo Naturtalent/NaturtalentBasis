@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Display;
 /**
  * @author dieter
  *
- * Ueberwacht Aktionen im ECPProjekt und reagiert entsprechen.
+ * Ueberwacht Aktionen im ECPProjekt und reagiert entsprechen. (@see Activator)
  * 
  * - wird ein Element geloescht, dann wird auch das entsprechende Editorfenster geschlossen
  * 

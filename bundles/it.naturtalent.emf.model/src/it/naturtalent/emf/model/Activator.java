@@ -18,8 +18,8 @@ public class Activator implements BundleActivator
 {
 
 	private static BundleContext context;
-		
 
+	
 	static BundleContext getContext()
 	{
 		return context;
@@ -35,10 +35,13 @@ public class Activator implements BundleActivator
 	{
 		Activator.context = bundleContext;
 		
-		// Initialisierung ECPProjectManager 	
+		// Initialisierung eines ECPProjectManager 	
 		ECPProjectManager ecbProjectManager = ECPUtil.getECPProjectManager();
+		
+		// ECPProject aller NtProject - Elemente
 		Collection<ECPProject>projects = ecbProjectManager.getProjects();
 		
+		// Listener beobachtet Aendereungen am Modell
 		ECPUtil.getECPObserverBus().register(new NtECPProjectContentTouchedObserver());
 	
 
