@@ -1,15 +1,9 @@
 package it.naturtalent.e4.project.expimp.dialogs;
 
 
-import it.naturtalent.e4.project.expimp.ExpImportData;
-import it.naturtalent.e4.project.expimp.ExpImportDataModel;
-import it.naturtalent.icons.core.Icon;
-import it.naturtalent.icons.core.IconSize;
-
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,9 +12,13 @@ import org.eclipse.core.databinding.beans.BeanProperties;
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
-import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.workbench.IWorkbench;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -43,16 +41,21 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
+
+import it.naturtalent.e4.project.expimp.ExpImportData;
+import it.naturtalent.e4.project.expimp.ExpImportDataModel;
+import it.naturtalent.e4.project.expimp.ecp.ECPExportHandlerHelper;
+import it.naturtalent.icons.core.Icon;
+import it.naturtalent.icons.core.IconSize;
 
 
-public abstract class AbstractExportDialog extends TitleAreaDialog implements EventHandler
+
+public abstract class AbstractExportDialog extends TitleAreaDialog //implements EventHandler
 {
 	private DataBindingContext m_bindingContext;	
 	
 	public static final String EXPORTPATH_SETTING = "exportpathsetting"; //$NON-NLS-N$ 
-	private String exportSettingKey = EXPORTPATH_SETTING;
+	protected String exportSettingKey = EXPORTPATH_SETTING;
 	
 	private IDialogSettings dialogSettings;
 	
@@ -71,16 +74,9 @@ public abstract class AbstractExportDialog extends TitleAreaDialog implements Ev
 	protected String exportPath;
 	
 	
+	protected static Shell shell;
 	
-	@Inject
-	@Optional
-	private static Shell shell;
-	
-	@Inject
-	@Optional
-	private IEventBroker eventBroker;
-	
-	
+		
 	private Table table;
 	private Composite compositeButton;
 	private Button btnSelectAll;
@@ -90,22 +86,12 @@ public abstract class AbstractExportDialog extends TitleAreaDialog implements Ev
 	/**
 	 * Create the dialog.
 	 * @param parentShell
-	 * @wbp.parser.constructor
-	 */
-	public AbstractExportDialog()
-	{
-		super(shell);
-	}
-		
-	/**
-	 * Create the dialog.
-	 * @param parentShell
 	 */
 	public AbstractExportDialog(Shell parentShell)
 	{
 		super(parentShell);		
 	}
-
+	
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
@@ -174,13 +160,12 @@ public abstract class AbstractExportDialog extends TitleAreaDialog implements Ev
 		});
 		btnNoSelect.setText("keine auswaehlen");
 		
+	
 		// ab jetzt ueberwacht der Broker Eingaben in 'ExportDestinationComposite'
+		MApplication currentApplication = E4Workbench.getServiceContext().get(IWorkbench.class).getApplication();
+		IEventBroker eventBroker = currentApplication.getContext().get(IEventBroker.class);
 		if (eventBroker != null)
-		{
-			eventBroker.subscribe(
-					ExportDestinationComposite.EXPORTDESTINATION_EVENT, this);
 			exportDestinationComposite.setEventBroker(eventBroker);
-		}
 			
 		m_bindingContext = initDataBindings();
 		init();
@@ -195,13 +180,11 @@ public abstract class AbstractExportDialog extends TitleAreaDialog implements Ev
 	@Override
 	protected void createButtonsForButtonBar(Composite parent)
 	{
-		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
+		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
 		okButton.setEnabled(false);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);				
+		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);				
 	}
-
+	
 	private void update()
 	{
 		if(tableViewer.getCheckedElements().length == 0)
@@ -238,14 +221,6 @@ public abstract class AbstractExportDialog extends TitleAreaDialog implements Ev
 
 	public abstract void doExport();
 	
-
-	@Override
-	public void handleEvent(Event event)
-	{
-		exportPath = (String) event.getProperty(IEventBroker.DATA);
-		update();
-	}
-
 	/**
 	 * Return the initial size of the dialog.
 	 */
@@ -278,15 +253,34 @@ public abstract class AbstractExportDialog extends TitleAreaDialog implements Ev
 				
 		super.okPressed();
 	}
-
-	@Override
-	public boolean close()
+	
+	/**
+	 * Export EMF Modeldata 'eObjects' in die ausgewaehlte Datei. 
+	 * 	  
+	 * @param exportPath
+	 * @param eObjects
+	 */
+	public void exportEMFModeData()
 	{
-		if (eventBroker != null)
-			eventBroker.unsubscribe(this);
-		
-		return super.close();
+		// die zum Export selektioerten EObjects auflisten
+		final List<EObject>eObjects = new LinkedList<EObject>();				
+		for(ExpImportData expImpData : selectedData)
+		{
+			Object obj = expImpData.getData();
+			if (obj instanceof EObject)				
+				eObjects.add(EcoreUtil.copy((EObject) obj));				
+		}	
+				
+		// Dateiname des Properties generieren und Daten exportieren
+		shell.getDisplay().syncExec(new Runnable()
+		{
+			public void run()
+			{
+				ECPExportHandlerHelper.export(shell, eObjects, exportPath);
+			}
+		});
 	}
+
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
 		//

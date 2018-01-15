@@ -47,7 +47,7 @@ public class NtProjectDescriptionRendering extends TextControlSWTRenderer
 		GridLayoutFactory.fillDefaults().numColumns(1).equalWidth(true).applyTo(composite);
 		
 		// Textfeld
-		final Text text = new Text(composite, SWT.BORDER | SWT.WRAP);
+		final Text text = new Text(composite, SWT.BORDER | SWT.WRAP | SWT.V_SCROLL);
 		GridData gd_txtDescription = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 		gd_txtDescription.heightHint = 224;
 		text.setLayoutData(gd_txtDescription);

@@ -24,6 +24,12 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+/**
+ * UI des Exportverzeichnisses und der Exportdatei.
+ * 
+ * @author dieter
+ *
+ */
 public class ExportDestinationComposite extends Composite
 {
 	private Text textDestFile;
@@ -126,8 +132,10 @@ public class ExportDestinationComposite extends Composite
 				String expFile = textDestFile.getText();								
 				if(StringUtils.isNotEmpty(expFile))
 				{
-					expFile = FilenameUtils.removeExtension(expFile)+"."+"xml";
-					exportPath = expDir+File.separator+expFile;
+					File dir = new File(expDir);
+					expFile = FilenameUtils.removeExtension(expFile)+".xmi";
+					File path = new File(dir,expFile);
+					exportPath = path.getPath();
 				}
 			}			
 			eventBroker.post(EXPORTDESTINATION_EVENT, exportPath);
@@ -157,6 +165,7 @@ public class ExportDestinationComposite extends Composite
 		if(StringUtils.isNotEmpty(exportPath))
 		{
 			comboDestDir.setText(FilenameUtils.getFullPath(exportPath));
+			comboDestDir.add(comboDestDir.getText());
 			textDestFile.setText(FilenameUtils.getName(exportPath));
 		}	
 	}

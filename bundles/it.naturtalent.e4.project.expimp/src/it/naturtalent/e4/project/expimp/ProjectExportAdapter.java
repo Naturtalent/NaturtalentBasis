@@ -1,18 +1,12 @@
 package it.naturtalent.e4.project.expimp;
 
-import java.io.File;
+import org.eclipse.jface.action.Action;
+import org.eclipse.swt.graphics.Image;
 
 import it.naturtalent.e4.project.IExportAdapter;
 import it.naturtalent.e4.project.expimp.actions.ExportAction;
-import it.naturtalent.e4.project.expimp.actions.ImportAction;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.wb.swt.ResourceManager;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * Ueber diesen Adapter wird der ExportTask (NtProjekte exportieren) ausgefuehrt.

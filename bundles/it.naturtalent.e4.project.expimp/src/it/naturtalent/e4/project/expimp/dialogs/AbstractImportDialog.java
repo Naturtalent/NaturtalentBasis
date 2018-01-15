@@ -1,12 +1,14 @@
 package it.naturtalent.e4.project.expimp.dialogs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.naturtalent.e4.project.expimp.ExpImportData;
 import it.naturtalent.e4.project.expimp.ExpImportDataModel;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
+
 
 import javax.inject.Inject;
 
@@ -16,6 +18,8 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -58,7 +62,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	@Inject @Optional protected IEventBroker eventBroker;
 
 	public static final String IMPORTPATH_SETTING = "importpathsetting"; //$NON-NLS-N$ 
-	private String importSettingKey = IMPORTPATH_SETTING;
+	protected String importSettingKey = IMPORTPATH_SETTING;
 
 	private IDialogSettings dialogSettings;
 		
@@ -201,6 +205,8 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		btnCheckOverwrite.setSelection(true);
 		btnCheckOverwrite.setText(Messages.AbstractImportDialog_btnCheckOverwrite_text);
 		
+		init();
+		
 		return area;
 	}
 
@@ -219,9 +225,12 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		
 	}
 	
+	// wird aufgerufen bei der Initialisierung und ImportFilePath-Definitionen
 	public abstract void readImportSource();
 	
 	public abstract void doImport();
+	
+	public abstract void removeExistedObjects(List<EObject>importObjects);
 	
 	public void setModelData(List<ExpImportData>expimpdata)
 	{
@@ -232,7 +241,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	}
 	
 	
-	public void init(String kontakteCollectionName, String importSettingKey)
+	protected void init()
 	{				
 		dialogSettings= WorkbenchSWTActivator.getDefault().getDialogSettings();		
 		if (dialogSettings != null)

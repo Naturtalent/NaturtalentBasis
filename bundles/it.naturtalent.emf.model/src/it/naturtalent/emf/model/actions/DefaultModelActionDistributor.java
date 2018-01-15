@@ -19,8 +19,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 
-import it.naturtalent.emf.model.parts.DefaultViewModelPart;
-
 
 
 public class DefaultModelActionDistributor

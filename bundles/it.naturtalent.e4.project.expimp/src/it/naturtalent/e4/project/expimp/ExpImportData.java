@@ -2,6 +2,12 @@ package it.naturtalent.e4.project.expimp;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * Allgemeine Datenstruktur zum Im- und Export.
+ * 
+ * @author dieter
+ *
+ */
 public class ExpImportData extends BaseBean
 {
 	public static final String PROP_EXPIMPORTITEM = "expimportitem";

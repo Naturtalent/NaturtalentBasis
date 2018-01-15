@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="ASCII"?>
-<org.eclipse.emf.ecp.view.model:View xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:org.eclipse.emf.ecp.view.model="http://org/eclipse/emf/ecp/view/model/170" xmi:id="_xl_mkBIxEeaifKlEqizjWQ" name="NtProject" ecorePath="/it.naturtalent.e4.project.model/model/ntproject.ecore">
+<org.eclipse.emf.ecp.view.model:View xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:org.eclipse.emf.ecp.view.group.model="http://org/eclipse/emf/ecp/view/group/model" xmlns:org.eclipse.emf.ecp.view.model="http://org/eclipse/emf/ecp/view/model/170" xmi:id="_xl_mkBIxEeaifKlEqizjWQ" name="NtProject" ecorePath="/it.naturtalent.e4.project.model/model/ntproject.ecore">
   <rootEClass href="http://www.example.org/project#//NtProject"/>
-  <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_yCShAhIxEeaifKlEqizjWQ" name="Control name">
-    <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_yCShAxIxEeaifKlEqizjWQ">
-      <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//NtProject/name"/>
-    </domainModelReference>
-  </children>
-  <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_yCShBBIxEeaifKlEqizjWQ" name="Control description">
-    <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_yCShBRIxEeaifKlEqizjWQ">
-      <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//NtProject/description"/>
-    </domainModelReference>
+  <children xsi:type="org.eclipse.emf.ecp.view.group.model:Group" xmi:id="_zJlrwPZREee02JukNeL1aw" groupType="Embedded" labelAlignment="InputAligned">
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_yCShAhIxEeaifKlEqizjWQ" name="Control name">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_yCShAxIxEeaifKlEqizjWQ">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//NtProject/name"/>
+      </domainModelReference>
+    </children>
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_yCShBBIxEeaifKlEqizjWQ" name="Control description">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_yCShBRIxEeaifKlEqizjWQ">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//NtProject/description"/>
+      </domainModelReference>
+    </children>
   </children>
 </org.eclipse.emf.ecp.view.model:View>
