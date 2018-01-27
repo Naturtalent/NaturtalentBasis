@@ -19,9 +19,6 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Display;
 
 import it.naturtalent.e4.project.INtProjectProperty;
-import it.naturtalent.emf.model.ModelEventKey;
-import it.naturtalent.emf.model.ModelEventKeys;
-
 
 
 /**
@@ -137,7 +134,7 @@ public class DefaultNtProjectProperty implements INtProjectProperty
 			System.out.println("ntProperty: "+ntPropertyData);
 			
 			ecpProject.deleteElements(delObjects);		
-			eventBroker.send(ModelEventKey.DEFAULT_DELETE_MODELEVENT, ntPropertyData);
+			//eventBroker.send(ModelEventKey.DEFAULT_DELETE_MODELEVENT, ntPropertyData);
 			
 			ECPHandlerHelper.saveProject(ecpProject);
 			eventBroker.send(deleteEventKey, ntPropertyData);

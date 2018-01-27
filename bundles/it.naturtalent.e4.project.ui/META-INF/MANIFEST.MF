@@ -51,7 +51,6 @@ Require-Bundle: org.eclipse.core.runtime,
  it.naturtalent.icons,
  org.eclipse.core.expressions,
  org.eclipse.core.net;bundle-version="1.2.300",
- org.eclipse.emf.ecp.core,
  it.naturtalent.e4.project.model,
  org.eclipse.emf.ecp.ui.view.swt,
  org.eclipse.emfforms.swt.core.di,
@@ -59,7 +58,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecp.view.template.model,
  org.eclipse.emfforms.core.services.editsupport,
  org.eclipse.emf.ecp.ui,
- it.naturtalent.emf.model;bundle-version="1.0.0"
+ it.naturtalent.emf.model
 Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  javax.inject;version="1.0.0"
 Service-Component: OSGI-INF/ntprojectdescriptionrendererservice.xml,OSGI-INF/ntprojectnamerendererservice.xml

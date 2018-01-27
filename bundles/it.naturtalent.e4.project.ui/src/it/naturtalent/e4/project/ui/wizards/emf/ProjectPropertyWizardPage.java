@@ -44,8 +44,6 @@ import it.naturtalent.e4.project.ui.dialogs.SelectWorkingSetDialog;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
 import it.naturtalent.e4.project.ui.emf.ProjectModelEventKey;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
-import it.naturtalent.emf.model.ModelEventKey;
-import it.naturtalent.emf.model.ModelEventKeys;
 
 /**
  * Standardseite als Einstieg in die ProjektPropertyWizards.

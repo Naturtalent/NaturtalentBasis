@@ -1,9 +1,7 @@
 package it.naturtalent.e4.project.ui.parts.emf;
 
 import java.util.Collection;
-import java.util.EventObject;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +9,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
@@ -28,7 +25,6 @@ import org.eclipse.emf.ecp.core.ECPProject;
 import org.eclipse.emf.ecp.core.util.ECPUtil;
 import org.eclipse.emf.ecp.core.util.observer.ECPObserverBus;
 import org.eclipse.emf.ecp.core.util.observer.ECPProjectContentChangedObserver;
-import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
@@ -42,24 +38,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
 
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
-import it.naturtalent.e4.project.IResourceNavigator;
 import it.naturtalent.e4.project.model.project.NtProject;
-import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.ui.Activator;
-import it.naturtalent.e4.project.ui.actions.emf.CopyClipboardProjectPathAction;
 import it.naturtalent.e4.project.ui.actions.emf.DeleteProjectAction;
-import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.actions.emf.SaveProjectAction;
 import it.naturtalent.e4.project.ui.actions.emf.SyncNavigatorAction;
 import it.naturtalent.e4.project.ui.actions.emf.UndoProjectAction;
-import it.naturtalent.e4.project.ui.emf.ProjectModelEventKey;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
-import it.naturtalent.emf.model.actions.DefaultModelAction;
-import it.naturtalent.emf.model.actions.DefaultModelActionDistributor;
+
 
 
 

@@ -58,6 +58,7 @@ import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.registry.ProjectImageRegistry;
 import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSetRoot;
+import it.naturtalent.emf.model.EMFModelUtils;
 
 
 
@@ -76,7 +77,7 @@ public class Activator implements BundleActivator
 	// Name des ECP Projekts indem alle NtProjekte gespeichert werden
 	public final static String ECPNTPROJECTNAME = "ECPProject";
 	
-	private static ECPProject ecpProject = null;
+	//private static ECPProject ecpProject = null;
 	private static NtProjects ntProjects;
 	
 	public static final String ICONS_RESOURCE_FOLDER = "/icons"; //$NON-NLS-1$
@@ -143,27 +144,169 @@ public class Activator implements BundleActivator
 		initProjectImageRegistry();
 		NtPreferences.initialize();
 		initPluginProperties();
-		initService();
+		initService();		
 	}
 	
 	
+	/*
+	private static ECPProject createProject(String projectName)
+	{
+		ECPProject project = null;
+		
+		final List<ECPProvider> providers = new ArrayList<ECPProvider>();		
+		for (final ECPProvider provider : ECPUtil.getECPProviderRegistry().getProviders())
+		{
+			if (provider.hasCreateProjectWithoutRepositorySupport())			
+				providers.add(provider);			
+		}
+		
+		if (providers.size() == 0)
+		{
+			log.error("kein Provider installiert"); 
+			return null;
+		}
+	
+		try
+		{
+			project = ECPUtil.getECPProjectManager()
+					.createProject(providers.get(0), projectName, ECPUtil.createProperties());
+		} catch (ECPProjectWithNameExistsException e)
+		{
+			log.error("es wurde kein ECPProject istalliert"); 
+		}
+		
+		return project;
+	}
+	*/
+	
+	
+	/**
+	 * Sucht im ECP-Project 'ECPNTPROJECTNAME' nach dem EMFModell 'NtProjects' und gibt dieses zurueck.
+	 * NtProjects ist das Containerelement indem alle NtProjekte gesoeichert sind.
+	 * 
+	 * Bei Erstaufruf sicherstellen, dass alle erforderlichen Resourcen angelegt werden. 
+	 * 
+	 * @return
+	 */
+	public static NtProjects getNtProjects()
+	{
+		if (ntProjects != null)
+			return ntProjects;
+		
+		ECPProject ecpProject = getECPProject();
+		if(ecpProject != null)
+		{
+			// im ECPProject das Modell 'NtProjects" suchen 		
+			EList<Object>projectContents = getECPProject().getContents();
+			if(!projectContents.isEmpty())
+			{
+				for(Object projectContent : projectContents)
+				{
+					if (projectContent instanceof NtProjects)
+					{
+						ntProjects = (NtProjects) projectContent; 
+						break;
+					}
+				}			
+			}
+			else
+			{
+				// das Modell Designs erzeugen und im ECPProject speichern
+				EClass designsClass = ProjectPackage.eINSTANCE.getNtProjects();
+				ntProjects = (NtProjects)EcoreUtil.create(designsClass);
+				projectContents.add(ntProjects);
+				ecpProject.saveContents();			
+			}
+			
+		}
+		
+		
+		
+	
+		
+		/*
+		
+	
+		EList<Object> childs = null;
+		try
+		{
+			childs = getECPProject().getContents();
+		} catch (Exception e)
+		{
+			log.error("keine Projekte im EMF Modell vorhanden");
+	
+			boolean b = getECPProject().hasDirtyContents();
+	
+			// return ntProjects;
+		}
+	
+		// Model 'NtProjects' im ECPProject suchen
+		if (childs != null)
+		{
+			for (Object child : childs)
+			{
+				if (child instanceof NtProjects)
+				{
+					// Modell 'NtProjects' gefunden, statisch
+					// zwischenspeichern
+					ntProjects = (NtProjects) child;
+					break;
+				}
+			}
+		}
+	
+		if (ntProjects == null)
+		{
+			// Modell noch nicht vorhanden, neu anlegen, zum ECPProject
+			// hinzufuegen und speichern
+			EClass ntProjectsClass = ProjectPackage.eINSTANCE.getNtProjects();
+			ntProjects = (NtProjects) EcoreUtil.create(ntProjectsClass);
+			try
+			{
+				List<Object> test = ecpProject.getContents();
+	
+				ecpProject.getContents().add(ntProjects);
+				ecpProject.saveContents();
+			} catch (Exception e)
+			{
+				log.error("Fehler beim Laden des Projektinhalts");
+	
+				//
+				// final List<ECPContainer> toBeDeleted = new
+				// ArrayList<ECPContainer>(); toBeDeleted.add(ecpProject);
+				// ECPHandlerHelper.deleteHandlerHelper(toBeDeleted,
+				// Display.getCurrent().getActiveShell()); ecpProject = null;
+				// log.info("korruptes ECPProjekt wurde gesloescht");
+				//
+			}
+	
+		}
+		*/
+	
+		return ntProjects;
+	}
+
 	/**
 	 * ECP-Projekt in dem alle EMF Modelle (ProjektProperty-Daten) gehalten werden zurueckgeben
 	 *   
 	 * @return
 	 */
-	public static  ECPProject getECPProject()
+	public static ECPProject getECPProject()
 	{
-		if(ecpProject == null)
-			ecpProject = ECPUtil.getECPProjectManager().getProject(ECPNTPROJECTNAME);
+		ECPProject ecpNtProject = null; 
 		
-		// neues Projekt erzeugen
-		if(ecpProject == null)
-			ecpProject = createProject(ECPNTPROJECTNAME);
+		ecpNtProject = ECPUtil.getECPProjectManager().getProject(ECPNTPROJECTNAME);
+		if(ecpNtProject == null)
+		{
+			ecpNtProject = EMFModelUtils.createProject(ECPNTPROJECTNAME);
+			if(ecpNtProject == null)
+				log.error("es konnte kein ECPProject erzeugt werden");
+		}
 		
-		return ecpProject;
+		return ecpNtProject;
 	}
 	
+	/*
 	private static ECPProject createProject(String projectName)
 	{
 		ECPProject project = null;
@@ -192,108 +335,9 @@ public class Activator implements BundleActivator
 		
 		return project;
 	}
+	*/
 
 
-	/**
-	 * Sucht im ECP-Project 'ECPNTPROJECTNAME' nach dem EMFModell 'NtProjects' und gibt dieses zurueck.
-	 * NtProjects ist das Containerelement indem alle NtProjekte gesoeichert sind.
-	 * 
-	 * Bei Erstaufruf sicherstellen, dass alle erforderlichen Resourcen angelegt werden. 
-	 * 
-	 * @return
-	 */
-	public static NtProjects getNtProjects()
-	{
-		if (ntProjects != null)
-			return ntProjects;
-		
-		// im ECPProject das Modell 'NtProjects" suchen 		
-		EList<Object>projectContents = getECPProject().getContents();
-		if(!projectContents.isEmpty())
-		{
-			for(Object projectContent : projectContents)
-			{
-				if (projectContent instanceof NtProjects)
-				{
-					ntProjects = (NtProjects) projectContent; 
-					break;
-				}
-			}			
-		}
-		else
-		{
-			// das Modell Designs erzeugen und im ECPProject speichern
-			EClass designsClass = ProjectPackage.eINSTANCE.getNtProjects();
-			ntProjects = (NtProjects)EcoreUtil.create(designsClass);
-			projectContents.add(ntProjects);
-			ecpProject.saveContents();			
-		}
-		
-		
-
-		
-		/*
-		
-
-		EList<Object> childs = null;
-		try
-		{
-			childs = getECPProject().getContents();
-		} catch (Exception e)
-		{
-			log.error("keine Projekte im EMF Modell vorhanden");
-
-			boolean b = getECPProject().hasDirtyContents();
-
-			// return ntProjects;
-		}
-
-		// Model 'NtProjects' im ECPProject suchen
-		if (childs != null)
-		{
-			for (Object child : childs)
-			{
-				if (child instanceof NtProjects)
-				{
-					// Modell 'NtProjects' gefunden, statisch
-					// zwischenspeichern
-					ntProjects = (NtProjects) child;
-					break;
-				}
-			}
-		}
-
-		if (ntProjects == null)
-		{
-			// Modell noch nicht vorhanden, neu anlegen, zum ECPProject
-			// hinzufuegen und speichern
-			EClass ntProjectsClass = ProjectPackage.eINSTANCE.getNtProjects();
-			ntProjects = (NtProjects) EcoreUtil.create(ntProjectsClass);
-			try
-			{
-				List<Object> test = ecpProject.getContents();
-
-				ecpProject.getContents().add(ntProjects);
-				ecpProject.saveContents();
-			} catch (Exception e)
-			{
-				log.error("Fehler beim Laden des Projektinhalts");
-
-				//
-				// final List<ECPContainer> toBeDeleted = new
-				// ArrayList<ECPContainer>(); toBeDeleted.add(ecpProject);
-				// ECPHandlerHelper.deleteHandlerHelper(toBeDeleted,
-				// Display.getCurrent().getActiveShell()); ecpProject = null;
-				// log.info("korruptes ECPProjekt wurde gesloescht");
-				//
-			}
-	
-		}
-		*/
-
-		return ntProjects;
-	}
-	
 	/**
 	 * loescht das Conteinerelement NtProjects
 	 */
@@ -303,7 +347,7 @@ public class Activator implements BundleActivator
 		{
 			List<Object>lNtObjects = new ArrayList<Object>();
 			lNtObjects.add(ntProjects);
-			ecpProject.deleteElements(lNtObjects);
+			getECPProject().deleteElements(lNtObjects);
 			ntProjects = null;
 		}		
 	}

@@ -132,7 +132,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 
 				// Change the title bar text
 				dlg.setText("Importverzeichnis");
-				dlg.setFilterExtensions(new String[]{"*.xml"}); //$NON-NLS-1$
+				dlg.setFilterExtensions(new String[]{"*.xmi","*.xml"}); //$NON-NLS-1$
 				dlg.setFilterPath(importPath);
 				
 				String importFile = dlg.open();

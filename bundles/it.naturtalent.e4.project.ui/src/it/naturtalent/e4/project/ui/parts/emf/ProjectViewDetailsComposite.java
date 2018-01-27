@@ -41,6 +41,7 @@ import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
 import it.naturtalent.emf.model.parts.DefaultDetailsComposite;
 
+
 public class ProjectViewDetailsComposite extends DefaultDetailsComposite
 {
 

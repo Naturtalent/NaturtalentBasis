@@ -43,11 +43,11 @@ public class E4Util
 	 *            the new selected element
 	 */
 	public static void setWindowSelectedElement(MUIElement element)
-	{
+	{		
 		MElementContainer<MUIElement> parent = element.getParent();
 		parent.setSelectedElement(element);
 		if (!((MUIElement) parent instanceof MWindow))
-			setWindowSelectedElement(parent);
+			setWindowSelectedElement(parent);		
 	}
 
 	/**
