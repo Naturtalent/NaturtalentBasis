@@ -26,6 +26,9 @@ public class NtProjektPropertyUtils
 	//private static String obligateProjectFactoryName = "it.naturtalent.e4.project.ui.NtProjectPropertyFactory";
 	
 	/**
+	 * Speichert eine Liste mit PropertyFatories im Datenbereich des Projekts 'projectID'.
+	 * Die Liste beinhaltet alle PropertyFactories die dem Projekt mit der ID 'projectID' 
+	 * zugeordnet sind.
 	 * @param projectID
 	 * @param propertyFactories
 	 */
@@ -41,6 +44,10 @@ public class NtProjektPropertyUtils
 	}
 	
 	/**
+	 * Speichert ein Array mit PropertyFatoryNames im Datenbereich des Projekts 'projectID'.
+	 * Das Array beinhaltet alle PropertyFactory Namen die dem Projekt mit der ID 'projectID'
+	 * zugeordnet sind. 
+	 * 
 	 * @param projectID
 	 * @param settingPropertyFactoryNames
 	 */
@@ -66,7 +73,16 @@ public class NtProjektPropertyUtils
 		}
 	}
 	
-	public static void setProjectPropertyFactories(IProject iProject, List<INtProjectPropertyFactory>propertyFactories) 
+	/**
+	 * Die ProjectPropertyInformationen (PropertyFactories) werden in einem Datenmodell 'ProjectPropertyData'
+	 * gespeichert das selbst wiederum Grundlage fuer das Speichern via ProjectPropertySettings 
+	 * im Property-File des Projekts dient.
+	 * 
+	 * @param iProject
+	 * @param propertyFactories
+	 */
+	public static void setProjectPropertyFactories(IProject iProject,
+			List<INtProjectPropertyFactory> propertyFactories) 
 	{
 		// Namen der dem Projekt zugeordneten PropertyFactories
 		String [] settingPropertyFactoryNames = null;

@@ -44,7 +44,7 @@ public class Activator implements BundleActivator
 		//Collection<ECPProject>projects = ecbProjectManager.getProjects();
 		
 		// Listener beobachtet Aendereungen am Modell
-		//ECPUtil.getECPObserverBus().register(new NtECPProjectContentTouchedObserver());
+		ECPUtil.getECPObserverBus().register(new NtECPProjectContentTouchedObserver());
 	
 
 	}

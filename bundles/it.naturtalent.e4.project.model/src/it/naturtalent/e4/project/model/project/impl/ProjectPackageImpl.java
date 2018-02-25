@@ -2,6 +2,7 @@
  */
 package it.naturtalent.e4.project.model.project.impl;
 
+import it.naturtalent.e4.project.model.project.DynPropertyItem;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EGenericType;
@@ -14,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.model.project.NtProjects;
+import it.naturtalent.e4.project.model.project.NtProperty;
 import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.model.project.ProjectPackage;
 import it.naturtalent.e4.project.model.project.util.ProjectValidator;
@@ -39,6 +41,20 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * @generated
 	 */
 	private EClass ntProjectsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass dynPropertyItemEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass ntPropertyEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -189,6 +205,86 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDynPropertyItem()
+	{
+		return dynPropertyItemEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDynPropertyItem_Name()
+	{
+		return (EAttribute)dynPropertyItemEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDynPropertyItem_ClassName()
+	{
+		return (EAttribute)dynPropertyItemEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNtProperty()
+	{
+		return ntPropertyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNtProperty_Workingset()
+	{
+		return (EAttribute)ntPropertyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNtProperty_Id()
+	{
+		return (EAttribute)ntPropertyEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNtProperty_Created()
+	{
+		return (EAttribute)ntPropertyEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getNtProperty_Properties()
+	{
+		return (EReference)ntPropertyEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ProjectFactory getProjectFactory()
 	{
 		return (ProjectFactory)getEFactoryInstance();
@@ -222,6 +318,16 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 
 		ntProjectsEClass = createEClass(NT_PROJECTS);
 		createEReference(ntProjectsEClass, NT_PROJECTS__NT_PROJECT);
+
+		dynPropertyItemEClass = createEClass(DYN_PROPERTY_ITEM);
+		createEAttribute(dynPropertyItemEClass, DYN_PROPERTY_ITEM__NAME);
+		createEAttribute(dynPropertyItemEClass, DYN_PROPERTY_ITEM__CLASS_NAME);
+
+		ntPropertyEClass = createEClass(NT_PROPERTY);
+		createEAttribute(ntPropertyEClass, NT_PROPERTY__WORKINGSET);
+		createEAttribute(ntPropertyEClass, NT_PROPERTY__ID);
+		createEAttribute(ntPropertyEClass, NT_PROPERTY__CREATED);
+		createEReference(ntPropertyEClass, NT_PROPERTY__PROPERTIES);
 	}
 
 	/**
@@ -271,6 +377,16 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 
 		initEClass(ntProjectsEClass, NtProjects.class, "NtProjects", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNtProjects_NtProject(), this.getNtProject(), null, "NtProject", null, 0, -1, NtProjects.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(dynPropertyItemEClass, DynPropertyItem.class, "DynPropertyItem", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDynPropertyItem_Name(), ecorePackage.getEString(), "name", null, 0, 1, DynPropertyItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getDynPropertyItem_ClassName(), ecorePackage.getEString(), "className", null, 0, 1, DynPropertyItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(ntPropertyEClass, NtProperty.class, "NtProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNtProperty_Workingset(), ecorePackage.getEString(), "workingset", null, 0, 1, NtProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNtProperty_Id(), ecorePackage.getEString(), "id", null, 0, 1, NtProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNtProperty_Created(), ecorePackage.getEString(), "created", null, 0, 1, NtProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNtProperty_Properties(), this.getDynPropertyItem(), null, "properties", null, 0, -1, NtProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

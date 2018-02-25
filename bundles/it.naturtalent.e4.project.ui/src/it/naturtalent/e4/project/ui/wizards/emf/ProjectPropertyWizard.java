@@ -12,20 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.IWorkbench;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkingSet;
@@ -35,17 +29,13 @@ import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.IResourceNavigator;
 import it.naturtalent.e4.project.NtProjektPropertyUtils;
-import it.naturtalent.e4.project.ProjectPropertyData;
-import it.naturtalent.e4.project.ProjectPropertySettings;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
-import it.naturtalent.e4.project.ui.emf.ProjectModelEventKey;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
-import it.naturtalent.e4.project.ui.parts.emf.ProjectView;
+import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
 import it.naturtalent.e4.project.ui.utils.CreateNewProject;
-import it.naturtalent.e4.project.ui.wizards.ProjectWizardPage;
 import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
 
 /**
@@ -59,17 +49,18 @@ public class ProjectPropertyWizard extends Wizard
 	
 	private ProjectPropertyWizardPage propertyWizardPage;
 	
-	private List<INtProjectProperty>projectProperties;
+	private List<INtProjectProperty>projectPropertyAdapters;
 	
 	protected IProject iProject;
 	
 	private IEclipseContext context;
 	
-	@Optional @Inject private INtProjectPropertyFactoryRepository ntProjektDataFactoryRepository;
-	
 	// vordefinierter Projektname
 	private String predefinedProjectName = null;
 
+	/**
+	 * Konstruktion
+	 */
 	public ProjectPropertyWizard()
 	{
 		super();
@@ -113,27 +104,26 @@ public class ProjectPropertyWizard extends Wizard
 
 	public void setPropertyFactories(List<INtProjectPropertyFactory> propertyFactories)
 	{		
-		projectProperties = new ArrayList<INtProjectProperty>();
+		projectPropertyAdapters = new ArrayList<INtProjectProperty>();
 		if(!propertyFactories.isEmpty())
 		{
 			for(INtProjectPropertyFactory propertyFactory : propertyFactories)
 			{
 				INtProjectProperty projectProperty = propertyFactory.createNtProjektData();
-				projectProperty.setNtProjectID((iProject != null) ? iProject.getName() : null);				
-				//projectProperty.init();
+				projectProperty.setNtProjectID((iProject != null) ? iProject.getName() : null);	
 				
 				// das obligatorische Property soll als erste Page im Wizard gezeigt werden
 				if(projectProperty instanceof NtProjectProperty)
-					projectProperties.add(0,projectProperty);
+					projectPropertyAdapters.add(0,projectProperty);
 				else
-					projectProperties.add(projectProperty);				
+					projectPropertyAdapters.add(projectProperty);				
 			}
 		}
 	}
 	
 	/* 
-	 * Es werden alle Property-WizardPages hinzugefuegt, die ueber die ProjectProperties definiert sind und
-	 * erzeugt werden.
+	 * Es werden alle Property-WizardPages hinzugefuegt, die ueber die ProjectPropertyAdapter 
+	 * definiert sind und erzeugt werden.
 	 * 
 	 * (non-Javadoc)
 	 * @see org.eclipse.jface.wizard.Wizard#addPages()
@@ -141,12 +131,12 @@ public class ProjectPropertyWizard extends Wizard
 	@Override
 	public void addPages()
 	{
-		if((projectProperties != null) && (!projectProperties.isEmpty()))
+		if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 		{
 			// spezifische WizardPages erzeugen und dem Wizard hinzufuegen
-			for(INtProjectProperty projectProperty : projectProperties)
+			for(INtProjectProperty projectPropertyAdapter : projectPropertyAdapters)
 			{
-				IWizardPage page = projectProperty.createWizardPage();
+				IWizardPage page = projectPropertyAdapter.createWizardPage();
 				if (page != null)
 				{
 					addPage(page);
@@ -159,9 +149,9 @@ public class ProjectPropertyWizard extends Wizard
 						if(StringUtils.isNotEmpty(predefinedProjectName))
 						{
 							// gibt es einen vordefinierten Projektnamen, wird dieser uebernommen
-							NtProject ntProject = (NtProject)projectProperty.getNtPropertyData();
+							NtProject ntProject = (NtProject)projectPropertyAdapter.getNtPropertyData();
 							ntProject.setName(predefinedProjectName);
-						}								
+						}						
 					}
 							
 				}
@@ -201,11 +191,11 @@ public class ProjectPropertyWizard extends Wizard
 			
 			
 			String projectName = null;
-			if((projectProperties != null) && (!projectProperties.isEmpty()))
+			if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 			{
 				// ProjectProperties via 'INtProjectProperty' abspeichern
 				String [] settingPropertyFactoryNames = null;
-				for(INtProjectProperty projectProperty : projectProperties)
+				for(INtProjectProperty projectProperty : projectPropertyAdapters)
 				{
 					EObject propertyData = (EObject) projectProperty.getNtPropertyData();					
 					if (propertyData instanceof NtProject)
@@ -264,18 +254,26 @@ public class ProjectPropertyWizard extends Wizard
 		}
 
 		// ProjectPropertydata abspeichern
-		if((projectProperties != null) && (!projectProperties.isEmpty()))
+		if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 		{
 			// ProjectProperties via 'INtProjectProperty' abspeichern
 			String [] settingPropertyFactoryNames = null;
-			for(INtProjectProperty projectProperty : projectProperties)
+			for(INtProjectProperty projectProperty : projectPropertyAdapters)
 			{				
 				projectProperty.setNtProjectID(ntProjectID);
 				projectProperty.commit();
 				
+				// in die Liste der FactoryNamen eintragen
 				settingPropertyFactoryNames = ArrayUtils.add(settingPropertyFactoryNames,
-						projectProperty.getClass().getName());
+						projectProperty.getClass().getName()
+								+ INtProjectPropertyFactory.PROJECTPROPERTYFACTORY_EXTENSION);
 			}
+		
+			// PropertyFactoryNames in Datei speichern und UpdateRequest an ProjectView
+			NtProjektPropertyUtils.saveProjectPropertyFactories(ntProjectID, settingPropertyFactoryNames);
+			MApplication currentApplication = E4Workbench.getServiceContext().get(IWorkbench.class).getApplication();
+			IEventBroker eventBroker = currentApplication.getContext().get(IEventBroker.class);
+			eventBroker.post(NtProjectView.UPDATE_PROJECTVIEW_REQUEST, null);
 		}
 
 		return true;
@@ -284,9 +282,9 @@ public class ProjectPropertyWizard extends Wizard
 	@Override
 	public boolean performCancel()
 	{
-		if((projectProperties != null) && (!projectProperties.isEmpty()))
+		if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 		{
-			for(INtProjectProperty projectProperty : projectProperties)		
+			for(INtProjectProperty projectProperty : projectPropertyAdapters)		
 				projectProperty.undo();		
 		}
 		return super.performCancel();

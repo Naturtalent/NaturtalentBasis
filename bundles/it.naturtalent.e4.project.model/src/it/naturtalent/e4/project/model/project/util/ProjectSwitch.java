@@ -86,6 +86,20 @@ public class ProjectSwitch<T> extends Switch<T>
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case ProjectPackage.DYN_PROPERTY_ITEM:
+			{
+				DynPropertyItem dynPropertyItem = (DynPropertyItem)theEObject;
+				T result = caseDynPropertyItem(dynPropertyItem);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case ProjectPackage.NT_PROPERTY:
+			{
+				NtProperty ntProperty = (NtProperty)theEObject;
+				T result = caseNtProperty(ntProperty);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -118,6 +132,38 @@ public class ProjectSwitch<T> extends Switch<T>
 	 * @generated
 	 */
 	public T caseNtProjects(NtProjects object)
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Dyn Property Item</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Dyn Property Item</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDynPropertyItem(DynPropertyItem object)
+	{
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Nt Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Nt Property</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNtProperty(NtProperty object)
 	{
 		return null;
 	}

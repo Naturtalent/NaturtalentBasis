@@ -24,6 +24,8 @@ import org.eclipse.emfforms.spi.core.services.editsupport.EMFFormsEditSupport;
 import org.eclipse.emfforms.spi.core.services.label.EMFFormsLabelProvider;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -49,12 +51,25 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		{
 			text.selectAll();
 			
-			// Selektiion soll nur beim ersten Mal erfolgen
+			// Textselektion soll nur einmal erfolgen (Listener und Contexteintrag entfernen)
 			text.removeModifyListener(firstTimeSelection);
-			E4Workbench.getServiceContext().remove(ProjectModelEventKey.PROJECT_VALIDATION_MODELEVENT);
+			E4Workbench.getServiceContext().remove(NewProjectAction.PREDIFINED_PROJECTNAME);
 		}
 	};
 	
+	
+	
+	/**
+	 * Konstruktion
+	 * 
+	 * @param vElement
+	 * @param viewContext
+	 * @param reportService
+	 * @param emfFormsDatabinding
+	 * @param emfFormsLabelProvider
+	 * @param vtViewTemplateProvider
+	 * @param emfFormsEditSupport
+	 */
 	@Inject
 	public NtProjectNameRendering(VControl vElement,
 			ViewModelContext viewContext, ReportService reportService,
@@ -74,7 +89,7 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		eventBroker = E4Workbench.getServiceContext().get(IEventBroker.class);
 
 		
-		// Listener reagiert auf Aenderungen am Modell
+		// Listener reagiert auf Aenderungen am Modell	
 		viewContext.registerViewChangeListener(new ModelChangeListener()
 		{			
 			@Override
@@ -89,7 +104,9 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 				}
 			}
 		});
+	
 	}
+	
 	
 	@Override
 	protected Control createSWTControl(Composite parent)
@@ -98,7 +115,7 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		boolean validationStatus = new ProjectValidator().validateNtProject(ntObject, new BasicDiagnostic(), null);		
 		eventBroker.send(ProjectModelEventKey.PROJECT_VALIDATION_MODELEVENT, validationStatus);		
 		
-		// soll der Projektname selektiert werden - (vordefinierte Projektname)
+		// soll der Projektname selektiert werden - (vordefinierte Projektname)		
 		if(StringUtils.isNotEmpty((String)E4Workbench.getServiceContext().get(NewProjectAction.PREDIFINED_PROJECTNAME)))
 		{
 			Control control = super.createSWTControl(parent);		
@@ -106,20 +123,19 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 			Control [] controls = composite.getChildren();
 			for(Control child : controls)
 			{
-				if(child instanceof Text)
+				if(child instanceof Text)	
 				{
-					text = (Text) child;
+					text = (Text)child;
 					text.addModifyListener(firstTimeSelection);
+					break;
 				}
 			}
 			
 			return control;	
 		}
-				
+						
 		return super.createSWTControl(parent);
 	}
-	
-	
 
 	/*
 	 * Durch 'WidgetProperties.text(SWT.Modify)' findet eine Validierung nach jeder Eingabe statt.

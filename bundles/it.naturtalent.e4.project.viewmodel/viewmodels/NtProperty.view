@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ASCII"?>
+<org.eclipse.emf.ecp.view.model:View xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:org.eclipse.emf.ecp.view.model="http://org/eclipse/emf/ecp/view/model/170" xmi:id="_Z6bbMAeVEei1-Ov9xNcBhA" name="NtProperty" ecorePath="/it.naturtalent.e4.project.model/model/ntproject.ecore">
+  <rootEClass href="http://www.example.org/project#//NtProperty"/>
+  <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Z6dQYgeVEei1-Ov9xNcBhA" name="Control id">
+    <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Z6dQYweVEei1-Ov9xNcBhA">
+      <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//NtProperty/id"/>
+    </domainModelReference>
+  </children>
+  <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Z6dQZAeVEei1-Ov9xNcBhA" name="Control created">
+    <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Z6dQZQeVEei1-Ov9xNcBhA">
+      <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//NtProperty/created"/>
+    </domainModelReference>
+  </children>
+  <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Z6dQYAeVEei1-Ov9xNcBhA" name="Control workingset">
+    <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Z6dQYQeVEei1-Ov9xNcBhA">
+      <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//NtProperty/workingset"/>
+    </domainModelReference>
+  </children>
+  <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Z6dQZgeVEei1-Ov9xNcBhA" name="Control properties">
+    <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Z6dQZweVEei1-Ov9xNcBhA">
+      <domainModelEFeature xsi:type="ecore:EReference" href="http://www.example.org/project#//NtProperty/properties"/>
+    </domainModelReference>
+  </children>
+</org.eclipse.emf.ecp.view.model:View>

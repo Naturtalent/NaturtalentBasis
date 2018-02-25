@@ -85,6 +85,16 @@ public class ProjectAdapterFactory extends AdapterFactoryImpl
 				return createNtProjectsAdapter();
 			}
 			@Override
+			public Adapter caseDynPropertyItem(DynPropertyItem object)
+			{
+				return createDynPropertyItemAdapter();
+			}
+			@Override
+			public Adapter caseNtProperty(NtProperty object)
+			{
+				return createNtPropertyAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object)
 			{
 				return createEObjectAdapter();
@@ -132,6 +142,36 @@ public class ProjectAdapterFactory extends AdapterFactoryImpl
 	 * @generated
 	 */
 	public Adapter createNtProjectsAdapter()
+	{
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link it.naturtalent.e4.project.model.project.DynPropertyItem <em>Dyn Property Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see it.naturtalent.e4.project.model.project.DynPropertyItem
+	 * @generated
+	 */
+	public Adapter createDynPropertyItemAdapter()
+	{
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link it.naturtalent.e4.project.model.project.NtProperty <em>Nt Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see it.naturtalent.e4.project.model.project.NtProperty
+	 * @generated
+	 */
+	public Adapter createNtPropertyAdapter()
 	{
 		return null;
 	}

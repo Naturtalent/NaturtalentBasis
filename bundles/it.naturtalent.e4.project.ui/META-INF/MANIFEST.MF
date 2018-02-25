@@ -4,21 +4,21 @@ Bundle-Name: Navigator Ui
 Bundle-SymbolicName: it.naturtalent.e4.project.ui;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .,
- swing2swt.jar,
- org.eclipse.ui_3.103.0.v20120705-114351.jar
+  swing2swt.jar,
+  org.eclipse.ui_3.103.0.v20120705-114351.jar
 Bundle-Activator: it.naturtalent.e4.project.ui.Activator
 Bundle-Localization: plugin
 Export-Package: it.naturtalent.e4.project.ui,
- it.naturtalent.e4.project.ui.datatransfer,
- it.naturtalent.e4.project.ui.dialogs,
- it.naturtalent.e4.project.ui.emf,
- it.naturtalent.e4.project.ui.filters,
- it.naturtalent.e4.project.ui.handlers,
- it.naturtalent.e4.project.ui.model,
- it.naturtalent.e4.project.ui.navigator,
- it.naturtalent.e4.project.ui.parts.emf,
- it.naturtalent.e4.project.ui.utils,
- it.naturtalent.e4.project.ui.ws
+  it.naturtalent.e4.project.ui.datatransfer,
+  it.naturtalent.e4.project.ui.dialogs,
+  it.naturtalent.e4.project.ui.emf,
+  it.naturtalent.e4.project.ui.filters,
+  it.naturtalent.e4.project.ui.handlers,
+  it.naturtalent.e4.project.ui.model,
+  it.naturtalent.e4.project.ui.navigator,
+  it.naturtalent.e4.project.ui.parts.emf,
+  it.naturtalent.e4.project.ui.utils,
+  it.naturtalent.e4.project.ui.ws
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.di,
  org.eclipse.e4.core.di.extensions,
@@ -58,9 +58,18 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecp.view.template.model,
  org.eclipse.emfforms.core.services.editsupport,
  org.eclipse.emf.ecp.ui,
- it.naturtalent.emf.model
+ it.naturtalent.emf.model,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecp.edit;bundle-version="1.14.0",
+ org.eclipse.emf.emfstore.client,
+ org.eclipse.emfforms.localization,
+ org.eclipse.emf.ecp.view.util.swt,
+ org.eclipse.emf.ecp.view.control.multireference,
+ org.eclipse.swt,
+ org.eclipse.e4.core.di.annotations
 Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
- javax.inject;version="1.0.0"
-Service-Component: OSGI-INF/ntprojectdescriptionrendererservice.xml,OSGI-INF/ntprojectnamerendererservice.xml
+  javax.inject;version="1.0.0"
+Service-Component: OSGI-INF/ntprojectdescriptionrendererservice.xml,OSGI-INF/ntprojectnamerendererservice.xml,OSGI-INF/ntdynpropertynamerenderer.xml,
+ OSGI-INF/ntdynpropertyrenderer.xml
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

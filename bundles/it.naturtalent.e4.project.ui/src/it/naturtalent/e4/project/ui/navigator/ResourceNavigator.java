@@ -483,24 +483,31 @@ public class ResourceNavigator implements IResourceNavigator
 	{
 		// wird im 'ProjectView' momentan die Eigenschaft eines Projekts angezeigt 
 		ProjectView projectView = (ProjectView) partService.findPart(ProjectView.ID).getObject();
-		NtProject ntProject = (NtProject) projectView.getNtProject();
-		if(ntProject != null)
+		if (projectView != null)
 		{
-			IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(ntProject.getId());				
-			List<INtProjectPropertyFactory> propertyFactories = NtProjektPropertyUtils
-					.getProjectPropertyFactories(ntProjektDataFactoryRepository,iProject);
-			
-			if(propertyFactories != null)
+			NtProject ntProject = (NtProject) projectView.getNtProject();
+			if (ntProject != null)
 			{
-				for (INtProjectPropertyFactory propertyFactory : propertyFactories)
+				IProject iProject = ResourcesPlugin.getWorkspace().getRoot()
+						.getProject(ntProject.getId());
+				List<INtProjectPropertyFactory> propertyFactories = NtProjektPropertyUtils
+						.getProjectPropertyFactories(
+								ntProjektDataFactoryRepository, iProject);
+
+				if (propertyFactories != null)
 				{
-					INtProjectProperty projectProperty = propertyFactory.createNtProjektData();
-					projectProperty.setNtProjectID(iProject.getName());							
-					projectProperty.commit();
-					
-					// 'altes' Project im Navigator aktualisieren (Name koennte ja geandert worden sein)
-					if (projectProperty instanceof NtProjectProperty)											
-						treeViewer.refresh(iProject);					
+					for (INtProjectPropertyFactory propertyFactory : propertyFactories)
+					{
+						INtProjectProperty projectProperty = propertyFactory
+								.createNtProjektData();
+						projectProperty.setNtProjectID(iProject.getName());
+						projectProperty.commit();
+
+						// 'altes' Project im Navigator aktualisieren (Name
+						// koennte ja geandert worden sein)
+						if (projectProperty instanceof NtProjectProperty)
+							treeViewer.refresh(iProject);
+					}
 				}
 			}
 		}

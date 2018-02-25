@@ -31,6 +31,7 @@ import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
 import it.naturtalent.e4.project.ui.handlers.SelectedResourcesUtils;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizard;
 
+@Deprecated
 public class PropertyHandler extends SelectedResourcesUtils
 {
 	

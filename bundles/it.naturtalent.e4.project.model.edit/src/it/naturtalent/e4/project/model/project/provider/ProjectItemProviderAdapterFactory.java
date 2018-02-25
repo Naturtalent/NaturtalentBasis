@@ -124,6 +124,56 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link it.naturtalent.e4.project.model.project.DynPropertyItem} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DynPropertyItemItemProvider dynPropertyItemItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link it.naturtalent.e4.project.model.project.DynPropertyItem}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDynPropertyItemAdapter()
+	{
+		if (dynPropertyItemItemProvider == null)
+		{
+			dynPropertyItemItemProvider = new DynPropertyItemItemProvider(this);
+		}
+
+		return dynPropertyItemItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link it.naturtalent.e4.project.model.project.NtProperty} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NtPropertyItemProvider ntPropertyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link it.naturtalent.e4.project.model.project.NtProperty}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNtPropertyAdapter()
+	{
+		if (ntPropertyItemProvider == null)
+		{
+			ntPropertyItemProvider = new NtPropertyItemProvider(this);
+		}
+
+		return ntPropertyItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -236,6 +286,8 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	{
 		if (ntProjectItemProvider != null) ntProjectItemProvider.dispose();
 		if (ntProjectsItemProvider != null) ntProjectsItemProvider.dispose();
+		if (dynPropertyItemItemProvider != null) dynPropertyItemItemProvider.dispose();
+		if (ntPropertyItemProvider != null) ntPropertyItemProvider.dispose();
 	}
 
 }

@@ -5,6 +5,8 @@ import it.naturtalent.emf.model.ModelEventKey;
 public interface ProjectModelEventKey
 {
 	public static final String PROJECT_UNDO_MODELEVENT = ModelEventKey.PREFIX_MODELEVENT+"projectUndoModelEvent"; //$NON-NLS-N$
+	
+	// see@ProjectPropertyWizardPage - steuert WizardPageComlete
 	public static final String PROJECT_VALIDATION_MODELEVENT = ModelEventKey.PREFIX_MODELEVENT+"projectValidationDetailsModelEvent"; //$NON-NLS-N$
 	
 	/*

@@ -162,6 +162,116 @@ public interface ProjectPackage extends EPackage
 
 
 	/**
+	 * The meta object id for the '{@link it.naturtalent.e4.project.model.project.impl.DynPropertyItemImpl <em>Dyn Property Item</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see it.naturtalent.e4.project.model.project.impl.DynPropertyItemImpl
+	 * @see it.naturtalent.e4.project.model.project.impl.ProjectPackageImpl#getDynPropertyItem()
+	 * @generated
+	 */
+	int DYN_PROPERTY_ITEM = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYN_PROPERTY_ITEM__NAME = 0;
+
+	/**
+	 * The feature id for the '<em><b>Class Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYN_PROPERTY_ITEM__CLASS_NAME = 1;
+
+	/**
+	 * The number of structural features of the '<em>Dyn Property Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYN_PROPERTY_ITEM_FEATURE_COUNT = 2;
+
+	/**
+	 * The number of operations of the '<em>Dyn Property Item</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DYN_PROPERTY_ITEM_OPERATION_COUNT = 0;
+
+	/**
+	 * The meta object id for the '{@link it.naturtalent.e4.project.model.project.impl.NtPropertyImpl <em>Nt Property</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see it.naturtalent.e4.project.model.project.impl.NtPropertyImpl
+	 * @see it.naturtalent.e4.project.model.project.impl.ProjectPackageImpl#getNtProperty()
+	 * @generated
+	 */
+	int NT_PROPERTY = 3;
+
+	/**
+	 * The feature id for the '<em><b>Workingset</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NT_PROPERTY__WORKINGSET = 0;
+
+	/**
+	 * The feature id for the '<em><b>Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NT_PROPERTY__ID = 1;
+
+	/**
+	 * The feature id for the '<em><b>Created</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NT_PROPERTY__CREATED = 2;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NT_PROPERTY__PROPERTIES = 3;
+
+	/**
+	 * The number of structural features of the '<em>Nt Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NT_PROPERTY_FEATURE_COUNT = 4;
+
+	/**
+	 * The number of operations of the '<em>Nt Property</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NT_PROPERTY_OPERATION_COUNT = 0;
+
+	/**
 	 * Returns the meta object for class '{@link it.naturtalent.e4.project.model.project.NtProject <em>Nt Project</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -234,6 +344,92 @@ public interface ProjectPackage extends EPackage
 	 * @generated
 	 */
 	EReference getNtProjects_NtProject();
+
+	/**
+	 * Returns the meta object for class '{@link it.naturtalent.e4.project.model.project.DynPropertyItem <em>Dyn Property Item</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Dyn Property Item</em>'.
+	 * @see it.naturtalent.e4.project.model.project.DynPropertyItem
+	 * @generated
+	 */
+	EClass getDynPropertyItem();
+
+	/**
+	 * Returns the meta object for the attribute '{@link it.naturtalent.e4.project.model.project.DynPropertyItem#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see it.naturtalent.e4.project.model.project.DynPropertyItem#getName()
+	 * @see #getDynPropertyItem()
+	 * @generated
+	 */
+	EAttribute getDynPropertyItem_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link it.naturtalent.e4.project.model.project.DynPropertyItem#getClassName <em>Class Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Class Name</em>'.
+	 * @see it.naturtalent.e4.project.model.project.DynPropertyItem#getClassName()
+	 * @see #getDynPropertyItem()
+	 * @generated
+	 */
+	EAttribute getDynPropertyItem_ClassName();
+
+	/**
+	 * Returns the meta object for class '{@link it.naturtalent.e4.project.model.project.NtProperty <em>Nt Property</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Nt Property</em>'.
+	 * @see it.naturtalent.e4.project.model.project.NtProperty
+	 * @generated
+	 */
+	EClass getNtProperty();
+
+	/**
+	 * Returns the meta object for the attribute '{@link it.naturtalent.e4.project.model.project.NtProperty#getWorkingset <em>Workingset</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Workingset</em>'.
+	 * @see it.naturtalent.e4.project.model.project.NtProperty#getWorkingset()
+	 * @see #getNtProperty()
+	 * @generated
+	 */
+	EAttribute getNtProperty_Workingset();
+
+	/**
+	 * Returns the meta object for the attribute '{@link it.naturtalent.e4.project.model.project.NtProperty#getId <em>Id</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Id</em>'.
+	 * @see it.naturtalent.e4.project.model.project.NtProperty#getId()
+	 * @see #getNtProperty()
+	 * @generated
+	 */
+	EAttribute getNtProperty_Id();
+
+	/**
+	 * Returns the meta object for the attribute '{@link it.naturtalent.e4.project.model.project.NtProperty#getCreated <em>Created</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Created</em>'.
+	 * @see it.naturtalent.e4.project.model.project.NtProperty#getCreated()
+	 * @see #getNtProperty()
+	 * @generated
+	 */
+	EAttribute getNtProperty_Created();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link it.naturtalent.e4.project.model.project.NtProperty#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see it.naturtalent.e4.project.model.project.NtProperty#getProperties()
+	 * @see #getNtProperty()
+	 * @generated
+	 */
+	EReference getNtProperty_Properties();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -318,6 +514,74 @@ public interface ProjectPackage extends EPackage
 		 * @generated
 		 */
 		EReference NT_PROJECTS__NT_PROJECT = eINSTANCE.getNtProjects_NtProject();
+
+		/**
+		 * The meta object literal for the '{@link it.naturtalent.e4.project.model.project.impl.DynPropertyItemImpl <em>Dyn Property Item</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see it.naturtalent.e4.project.model.project.impl.DynPropertyItemImpl
+		 * @see it.naturtalent.e4.project.model.project.impl.ProjectPackageImpl#getDynPropertyItem()
+		 * @generated
+		 */
+		EClass DYN_PROPERTY_ITEM = eINSTANCE.getDynPropertyItem();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DYN_PROPERTY_ITEM__NAME = eINSTANCE.getDynPropertyItem_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Class Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DYN_PROPERTY_ITEM__CLASS_NAME = eINSTANCE.getDynPropertyItem_ClassName();
+
+		/**
+		 * The meta object literal for the '{@link it.naturtalent.e4.project.model.project.impl.NtPropertyImpl <em>Nt Property</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see it.naturtalent.e4.project.model.project.impl.NtPropertyImpl
+		 * @see it.naturtalent.e4.project.model.project.impl.ProjectPackageImpl#getNtProperty()
+		 * @generated
+		 */
+		EClass NT_PROPERTY = eINSTANCE.getNtProperty();
+
+		/**
+		 * The meta object literal for the '<em><b>Workingset</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NT_PROPERTY__WORKINGSET = eINSTANCE.getNtProperty_Workingset();
+
+		/**
+		 * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NT_PROPERTY__ID = eINSTANCE.getNtProperty_Id();
+
+		/**
+		 * The meta object literal for the '<em><b>Created</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NT_PROPERTY__CREATED = eINSTANCE.getNtProperty_Created();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NT_PROPERTY__PROPERTIES = eINSTANCE.getNtProperty_Properties();
 
 	}
 

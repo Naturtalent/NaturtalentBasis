@@ -7,8 +7,8 @@ import org.eclipse.jface.wizard.IWizardPage;
 /**
  * Adapter Interface 
  * 
- * Mit diesem Adapter werden die ProjektProperties angepasst. Die konkreten Daten sind ohnehin alle vom
- * Typ EObject und werden in einem ECPProject persistent gespeichert. 
+ * Mit diesem Adapter werden die ProjektProperties angepasst. Die konkreten Daten sind ohnehin 
+ * alle vom Typ EObject und werden in einem ECPProject persistent gespeichert. 
  * 
  * @author dieter
  *

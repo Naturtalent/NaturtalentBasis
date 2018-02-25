@@ -66,6 +66,8 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 		{
 			case ProjectPackage.NT_PROJECT: return createNtProject();
 			case ProjectPackage.NT_PROJECTS: return createNtProjects();
+			case ProjectPackage.DYN_PROPERTY_ITEM: return createDynPropertyItem();
+			case ProjectPackage.NT_PROPERTY: return createNtProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -91,6 +93,28 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 	{
 		NtProjectsImpl ntProjects = new NtProjectsImpl();
 		return ntProjects;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DynPropertyItem createDynPropertyItem()
+	{
+		DynPropertyItemImpl dynPropertyItem = new DynPropertyItemImpl();
+		return dynPropertyItem;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NtProperty createNtProperty()
+	{
+		NtPropertyImpl ntProperty = new NtPropertyImpl();
+		return ntProperty;
 	}
 
 	/**

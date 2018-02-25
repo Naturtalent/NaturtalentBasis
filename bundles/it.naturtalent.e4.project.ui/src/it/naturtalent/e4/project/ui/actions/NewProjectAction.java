@@ -21,6 +21,9 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
 @Deprecated
+
+// @see it.naturtalent.e4.project.ui.actions.emf.NewProjectAction
+
 public class NewProjectAction extends Action
 {
 

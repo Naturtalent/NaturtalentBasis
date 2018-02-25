@@ -3,8 +3,12 @@ package it.naturtalent.e4.project.ui.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -18,10 +22,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
+import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
 
 /**
@@ -64,6 +70,15 @@ public class ProjectPropertyDialog extends TitleAreaDialog
 	}
 	
 	
+	/**
+	 * Create the dialog.
+	 * @param parentShell
+	 */
+	public ProjectPropertyDialog()
+	{
+		this(Display.getDefault().getActiveShell());
+	}
+		
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -221,5 +236,11 @@ public class ProjectPropertyDialog extends TitleAreaDialog
 	public String[] getSettingFactories()
 	{
 		return settingFactories;
+	}
+	
+	@PostConstruct
+	public void postConstruct(INtProjectPropertyFactoryRepository ntProjectPropertyFactoryRepostiory)
+	{
+		this.ntProjectPropertyFactories = ntProjectPropertyFactoryRepostiory.getAllProjektDataFactories();
 	}
 }

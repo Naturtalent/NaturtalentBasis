@@ -65,7 +65,7 @@ public class ProjectPropertyWizardPage extends WizardPage
 	
 	protected INtProjectPropertyFactoryRepository ntProjectPropertyFactoryRepository;
 	
-	//protected Text txtProjectName;
+	protected Text txtProjectName;
 	//protected Text txtDescription;
 	
 	private Button btnCheckWorkingset;
@@ -128,14 +128,17 @@ public class ProjectPropertyWizardPage extends WizardPage
 		try
 		{			
 			ECPSWTViewRenderer.INSTANCE.render(container, (EObject) projectProperty.getNtPropertyData());
+			
+			if(txtProjectName != null)
+				txtProjectName.selectAll();
+			
 		} catch (ECPRendererException e1)
 		{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
-				
-		// Workingsets
+		// Workingsets		
 		Group grpWorkingsets = new Group(container, SWT.NONE);
 		grpWorkingsets.setLayout(new GridLayout(3, false));
 		grpWorkingsets.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
@@ -217,12 +220,18 @@ public class ProjectPropertyWizardPage extends WizardPage
 		});
 		btnSelectWs.setText("select");
 		
+	
+		
 		// Eigenschaften und Workingsetinfo's des selektierten Projekts uebernehmen
 		//initProperties();
 		initWorkingSets();
 		
+	
+
 		
 	}
+	
+	
 	
 	@Override
 	public void dispose()
@@ -316,9 +325,9 @@ public class ProjectPropertyWizardPage extends WizardPage
 			String name = buildName.toString();
 			if (StringUtils.isNotEmpty(name))
 			{
-				comboWorkingsets.add(name);
 				comboWorkingsets.setText(name);
-				comboWorkingsets.setData(name, assignedWorkingSets.clone());			
+				comboWorkingsets.add(name);				
+				comboWorkingsets.setData(name, assignedWorkingSets.clone());
 			}			
 		}
 		else
@@ -336,8 +345,8 @@ public class ProjectPropertyWizardPage extends WizardPage
 					if (!StringUtils.equals(wsName,
 							IWorkingSetManager.OTHER_WORKINGSET_NAME))
 					{
-						comboWorkingsets.add(wsName);
 						comboWorkingsets.setText(wsName);
+						comboWorkingsets.add(wsName);
 						comboWorkingsets.setData(wsName,
 								assignedWorkingSets.clone());
 					}
@@ -388,6 +397,13 @@ public class ProjectPropertyWizardPage extends WizardPage
 	public void setProjectProperty(NtProjectProperty projectProperty)
 	{
 		this.projectProperty = projectProperty;
+	}
+	
+	@Inject
+	@Optional
+	public void handleModelChangedEvent(@UIEventTopic("PROJECTNAMEFIELD_CREATED") Text text)
+	{
+		txtProjectName = text;
 	}
 	
 }

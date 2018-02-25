@@ -1,6 +1,8 @@
  
 package it.naturtalent.e4.project.ui.handlers.emf;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.SystemUtils;
@@ -31,10 +33,9 @@ public class SystemOpenHandler
 		if (selObject instanceof IResource)
 		{
 			IResource iResource = (IResource) selObject;
+			String destPath = iResource.getLocation().toOSString();
 			try
 			{
-				String destPath = iResource.getLocation().toOSString();
-
 				// os = System.getProperty("os.name");
 				if (SystemUtils.IS_OS_LINUX)
 					Runtime.getRuntime().exec("nautilus " + destPath);
@@ -43,6 +44,17 @@ public class SystemOpenHandler
 
 			} catch (Exception exp)
 			{
+				if (SystemUtils.IS_OS_LINUX)
+					try
+					{
+						Runtime.getRuntime().exec("nemo " + destPath);
+						return;
+					} catch (IOException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
 				exp.printStackTrace();
 			}
 		}

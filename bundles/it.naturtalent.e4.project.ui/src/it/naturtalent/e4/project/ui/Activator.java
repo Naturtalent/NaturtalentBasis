@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -35,6 +36,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.core.ECPProject;
+import org.eclipse.emf.ecp.core.ECPProjectManager;
 import org.eclipse.emf.ecp.core.ECPProvider;
 import org.eclipse.emf.ecp.core.exceptions.ECPProjectWithNameExistsException;
 import org.eclipse.emf.ecp.core.util.ECPUtil;
@@ -291,11 +293,17 @@ public class Activator implements BundleActivator
 	 *   
 	 * @return
 	 */
+	private static ECPProject ecpNtProject;
 	public static ECPProject getECPProject()
 	{
-		ECPProject ecpNtProject = null; 
 		
-		ecpNtProject = ECPUtil.getECPProjectManager().getProject(ECPNTPROJECTNAME);
+		ECPProjectManager projectManager = ECPUtil.getECPProjectManager();
+		//Collection<ECPProject>projects = projectManager.getProjects();
+		projectManager = ECPUtil.getECPProjectManager();
+		
+		if(ecpNtProject == null)
+			ecpNtProject = ECPUtil.getECPProjectManager().getProject(ECPNTPROJECTNAME);
+		
 		if(ecpNtProject == null)
 		{
 			ecpNtProject = EMFModelUtils.createProject(ECPNTPROJECTNAME);

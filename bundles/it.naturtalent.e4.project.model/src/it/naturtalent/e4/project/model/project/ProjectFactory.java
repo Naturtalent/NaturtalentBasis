@@ -41,6 +41,24 @@ public interface ProjectFactory extends EFactory
 	NtProjects createNtProjects();
 
 	/**
+	 * Returns a new object of class '<em>Dyn Property Item</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Dyn Property Item</em>'.
+	 * @generated
+	 */
+	DynPropertyItem createDynPropertyItem();
+
+	/**
+	 * Returns a new object of class '<em>Nt Property</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Nt Property</em>'.
+	 * @generated
+	 */
+	NtProperty createNtProperty();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -12,6 +12,8 @@ import org.eclipse.e4.core.di.annotations.Creatable;
  * @author dieter
  *
  */
+@Deprecated
+// ersetzt durch NtProjectPropertyFactoryRepository
 
 @Creatable
 public class ProjectDataAdapterRegistry
