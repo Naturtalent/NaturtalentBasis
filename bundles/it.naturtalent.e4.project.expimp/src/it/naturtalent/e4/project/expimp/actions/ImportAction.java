@@ -8,13 +8,20 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.e4.ui.internal.workbench.E4Workbench;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.e4.ui.workbench.IWorkbench;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -24,6 +31,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.core.ECPProject;
+import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.ChangeCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -38,7 +46,13 @@ import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.expimp.dialogs.ProjectImportDialog;
+import it.naturtalent.e4.project.model.project.NtProject;
+import it.naturtalent.e4.project.model.project.NtProjects;
+import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.datatransfer.CopyFilesAndFoldersOperation;
+import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
+import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
+import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
 
 /**
  * @author dieter
@@ -74,16 +88,17 @@ public class ImportAction extends Action
 		if(dialog.open() == ProjectImportDialog.OK)
 		{
 			// die im Dialog selektierten ImportProjekte abfragen 
-			EObject [] selectedImportObjects = dialog.getResultImportSource();
+			final EObject [] selectedImportObjects = dialog.getResultImportSource();
 			
-			// Verzeichnis indem die zu importierenden Projekte exportiert wurden
+			// Verzeichnis in das die zu importierenden Projekte exportiert wurden
 			final File importDir = new File(dialog.getImportSourceDirectory());
 			
-			// Import vorbereiten (NtProjekte und diverse Hilfskonstruktionen (Maps) erzeugen)
+			// Operation Import vorbereiten (NtProjekte und diverse Hilfskonstruktionen (Maps) erzeugen)
 			final ImportProjectPrepareOperation importProjectPrepareOperation = new ImportProjectPrepareOperation(
 					shell, importDir, selectedImportObjects, dialog.getAssignedWorkingSets());
 			try
 			{
+				// mit der Operation 'importProjectPrepareOperation' den ImportProzess vorbereiten 
 				new ProgressMonitorDialog(shell).run(true, false, importProjectPrepareOperation);
 			} catch (InvocationTargetException e)
 			{
@@ -106,83 +121,34 @@ public class ImportAction extends Action
 					CopyFilesAndFoldersOperation copyFileAndFolder = new CopyFilesAndFoldersOperation(shell);
 					copyFileAndFolder.copyFileStores(shell, importProjectMap);
 
-					// die Properties importieren
+					// die ProjectProperties importieren
+					List<NtProject>ntProjects = Activator.getNtProjects().getNtProject();
+					for(EObject importObject : selectedImportObjects)
+						ntProjects.add((NtProject) importObject);
+					Activator.getECPProject().saveContents();
 					
-					//Map<String, List<String>> propertyFactoryMap = getPropertyFactoriesMap(importDir, selectedImportProjectIDs);
-					Map<String, List<String>> propertyFactoryMap = importProjectPrepareOperation.getPropertyFactoryMap();
-					
-					for (String factoryName : propertyFactoryMap.keySet())
-						importProjectProperty(importDir, factoryName,propertyFactoryMap.get(factoryName));
+					// im Nachgang alle Adapter aufrufen
+					List<INtProjectPropertyFactory> projectPropertyFactories = projektDataFactoryRepository
+							.getAllProjektDataFactories();
+					for(INtProjectPropertyFactory propertyFactory : projectPropertyFactories)
+					{
+						// koennen ueber den Adapter projectgekoppelte PropertyDaten geladen werden
+						INtProjectProperty propertyAdapter = propertyFactory.createNtProjektData();
+						
+						// alle betroffenen Projekte (Projekte mit der Eigenschaft 'factory'  durchlaufen
+						for(EObject importObject : selectedImportObjects)
+						{
+							// Importfunktion des Adapters aufrufen
+							NtProject ntProject = (NtProject) importObject;
+							propertyAdapter.setNtProjectID(ntProject.getId());
+							propertyAdapter.importProperty(importDir);							
+						}
+					}
 				}
 			});
 		}
 	}
-	
-	/*
-	 * In einer Map werden alle PropertyFactoryNamen als Key und die zugehoerigen NtProjekte als ValueListe fuer die
-	 * ausgewaehlten ImportProjekte zusammengefasst.
-	 * 
-	 */
-	/*
-	private Map<String,List<String>> getPropertyFactoriesMap(File importDir, final Set<String>selectedImportProjectIDs)
-	{
-		Map<String,List<String>>propertyFactories = new HashMap<String, List<String>>();
-		
-		// Filtert die fuer den Import ausgewahlten NtProjekt-Verzeichnisse
-		File [] ntProjects = importDir.listFiles(new FilenameFilter()
-		{						
-			@Override
-			public boolean accept(File dir, String name)
-			{	
-				if(!selectedImportProjectIDs.contains(name))
-					return false;
-					
-				return new File(dir, name).isDirectory();				
-			}
-		});
-		
-		if(ArrayUtils.isNotEmpty(ntProjects))
-		{
-			for(File ntProject : ntProjects)
-			{
-				File projectDataDir = new File(ntProject,IProjectData.PROJECTDATA_FOLDER);
-				File propertyFile = new File(projectDataDir, ProjectPropertyData.PROP_PROPERTYDATACLASS + ".xml");
-				if(propertyFile.exists())
-				{
-					try
-					{
-						// die PropertyFactoryNamen aus der PropertyData-Datei lesen
-						InputStream in = new FileInputStream(propertyFile);
-						ProjectPropertyData projectPropertyData = JAXB.unmarshal(in, ProjectPropertyData.class);
-						String [] factoryNames = projectPropertyData.getPropertyFactories();
-						for(String factoryName : factoryNames)
-						{
-							if(!propertyFactories.containsKey(factoryName))
-							{
-								// Key bisher noch nicht vorhanden - Value Liste neue anlegen
-								List<String> eObjectList = new ArrayList<String>();
-								eObjectList.add(ntProject.getName());
-								propertyFactories.put(factoryName, eObjectList);
-							}
-							else
-							{
-								List<String> eObjectList = propertyFactories.get(factoryName); 
-								eObjectList.add(ntProject.getName());
-							}
-						}						
-					} catch (FileNotFoundException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}		
-				}
-			}				
-		}
-		
-		return propertyFactories;
-	}
-	*/
-	
+
 	/*
 	 * Die exportierten Properties mit Hilfe der EMFProperty-Datei '.xmi' importieren.   
 	 * Mit der ProjectPropertyFactory 'projectPropertyFactory' kann der jeweilige ProjectPropertyAdapter generiert werden.
@@ -190,8 +156,11 @@ public class ImportAction extends Action
 	 * gefiltert und im jeweiligen Container gespeichert werden.
 	 * 
 	 */
-	private void importProjectProperty(File importDir, String projectPropertyFactory, List<String>selectedImportProjectIDs)
+	private void importProjectPropertyOLD(File importDir,
+			String projectPropertyFactory,
+			List<String> selectedImportProjectIDs)
 	{
+		// Factory ueber den Namen aus dem Repository laden
 		INtProjectPropertyFactory factory = projektDataFactoryRepository.getFactoryByName(projectPropertyFactory);
 		if(factory != null)
 		{

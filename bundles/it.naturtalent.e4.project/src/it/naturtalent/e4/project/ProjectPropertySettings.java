@@ -60,6 +60,44 @@ public class ProjectPropertySettings
 		
 		return null;
 	}
+
+	
+	/**
+	 * Die ProjectPropertyData in der 'propertyData' - Datei im Datenbereich des NrProjekts speichern.
+	 * 
+	 * @param iProject
+	 * @param propertyData
+	 * @throws CoreException
+	 */
+	public void putProperty(final IProject iProject,
+			final ProjectPropertyData propertyData) throws CoreException
+	{
+		// AdapterID bezeichnet die Datendatei
+		String name = ProjectPropertyData.PROP_PROPERTYDATACLASS;
+		if (StringUtils.isNotEmpty(name))
+		{
+			IFolder folder = iProject
+					.getFolder(IProjectData.PROJECTDATA_FOLDER);
+			if (!folder.exists())
+				folder.create(IFolder.FORCE, true, null);
+
+			// Extension der Datendatei
+			name = name + ".xml";
+			IFile iFile = folder.getFile(name);
+
+			// Projektdaten in Puffer
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			JAXB.marshal(propertyData, out);
+			ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+
+			// Puffer in die Datedatei ausgeben
+			if (iFile.exists())
+				iFile.setContents(in, IFile.FORCE, null);
+			else
+				iFile.create(in, IFile.FORCE, null);				
+		}		
+	}
+	
 	
 	/**
 	 * Die ProjectPropertyData in der 'propertyData' - Datei im Datenbereich des NrProjekts soeichern.
@@ -67,6 +105,44 @@ public class ProjectPropertySettings
 	 * @param iProject
 	 * @return
 	 */
+	public void put(final IProject iProject, final ProjectPropertyData propertyData)
+	{
+		// AdapterID bezeichnet die Datendatei
+		String name = ProjectPropertyData.PROP_PROPERTYDATACLASS;
+		if (StringUtils.isNotEmpty(name))
+		{
+			// Ordner, indem alle Projektdaten abgelegt werden
+			try
+			{
+				IFolder folder = iProject
+						.getFolder(IProjectData.PROJECTDATA_FOLDER);
+				if (!folder.exists())
+					folder.create(IFolder.FORCE, true, null);
+
+				// Extension der Datendatei
+				name = name + ".xml";
+				IFile iFile = folder.getFile(name);
+
+				// Projektdaten in Puffer
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				JAXB.marshal(propertyData, out);
+				ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+
+				// Puffer in die Datedatei ausgeben
+				if (iFile.exists())
+					iFile.setContents(in, IFile.FORCE, null);
+				else
+					iFile.create(in, IFile.FORCE, null);
+			} catch (CoreException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+	}
+	
+	/*
 	public void put(final IProject iProject, final ProjectPropertyData propertyData)
 	{
 		Shell shell = Display.getDefault().getActiveShell();		
@@ -129,6 +205,7 @@ public class ProjectPropertySettings
 					"Put Propertydata Error" + errmsg);
 		}
 	}
+	*/
 
 	public ProjectPropertyData addPropertyFactory(IProject iProject, String propertyFactoryName)
 	{

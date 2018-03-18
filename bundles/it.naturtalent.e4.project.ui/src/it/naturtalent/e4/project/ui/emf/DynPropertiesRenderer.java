@@ -25,11 +25,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import it.naturtalent.e4.project.INtProjectProperty;
+import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.NtProjektPropertyUtils;
 import it.naturtalent.e4.project.ProjectPropertyData;
 import it.naturtalent.e4.project.ProjectPropertySettings;
 import it.naturtalent.e4.project.model.project.DynPropertyItem;
+import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.model.project.NtProperty;
 
 
@@ -91,29 +93,32 @@ public class DynPropertiesRenderer extends MultiReferenceSWTRenderer
 			IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(ntProperty.getId());
 			if(iProject.exists())
 			{
-				List<INtProjectProperty> projectProperties = NtProjektPropertyUtils
-						.getProjectProperties(ntProjektDataFactoryRepository,iProject);
-				
-				for(INtProjectProperty projectProperty : projectProperties)
-				{
-					if(StringUtils.equals(projectProperty.getClass().getName(),dynProperty.getClassName()))
+				// alle verfuegbaren Adapter aufrufen
+				List<INtProjectPropertyFactory> projectPropertyFactories = ntProjektDataFactoryRepository.
+						getAllProjektDataFactories();
+				for(INtProjectPropertyFactory propertyFactory : projectPropertyFactories)
+				{					
+					INtProjectProperty propertyAdapter = propertyFactory.createNtProjektData();
+					if(StringUtils.equals(propertyAdapter.getClass().getName(),dynProperty.getClassName()))
 					{						
-						Action propertyAction = projectProperty.createAction();
-						try
+						propertyAdapter.setNtProjectID(iProject.getName());
+						if(propertyAdapter.getNtPropertyData() != null)
 						{
-							propertyAction.run();
-						} catch (Exception e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							Action propertyAction = propertyAdapter.createAction();
+							try
+							{
+								propertyAction.run();
+							} catch (Exception e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							break;
+
 						}
-						break;
 					}
 				}
 			}
 		}
 	}
-
-
-	
 }

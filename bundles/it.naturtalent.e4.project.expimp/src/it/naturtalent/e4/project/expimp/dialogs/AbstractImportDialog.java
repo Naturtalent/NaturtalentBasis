@@ -1,36 +1,35 @@
 package it.naturtalent.e4.project.expimp.dialogs;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
-import it.naturtalent.e4.project.expimp.ExpImportData;
-import it.naturtalent.e4.project.expimp.ExpImportDataModel;
-import it.naturtalent.icons.core.Icon;
-import it.naturtalent.icons.core.IconSize;
-
 
 import javax.inject.Inject;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.map.IObservableMap;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -38,20 +37,20 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.core.databinding.observable.map.IObservableMap;
-import org.eclipse.core.databinding.beans.BeansObservables;
-import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
-import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.core.databinding.beans.BeanProperties;
 
+import it.naturtalent.e4.project.expimp.ExpImportData;
+import it.naturtalent.e4.project.expimp.ExpImportDataModel;
 import it.naturtalent.e4.project.expimp.Messages;
+import it.naturtalent.icons.core.Icon;
+import it.naturtalent.icons.core.IconSize;
 
 
 public abstract class AbstractImportDialog extends TitleAreaDialog
@@ -68,9 +67,12 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		
 	private Text txtSource;
 	private Table table;
-	private CheckboxTableViewer tableViewer;
+	protected CheckboxTableViewer checkBoxTableViewer;
 
 	protected String importPath;
+	
+	// die eingelesenen Importdaten
+	protected List<ExpImportData>lexpimpdata;
 	
 	private ExpImportDataModel model = new ExpImportDataModel();	
 	protected ExpImportData [] selectedData;
@@ -79,6 +81,38 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	protected Button btnCheckOverwrite;
 
 
+	// Labelprovider mit der Moeglichkeit zum 'eingrauen' der Ordner 
+	protected class GrayedTableLabelProvider extends LabelProvider 
+	{
+		public GrayedTableLabelProvider()
+		{			
+		}
+
+		public Image getColumnImage(Object element, int columnIndex)
+		{
+			return Icon.ICON_PROJECT.getImage(IconSize._16x16_DefaultIconSize);
+		}
+
+		public String getText(Object element)
+		{
+			if(element instanceof ExpImportData)
+			{		
+				if(checkBoxTableViewer.getGrayed(element))
+				{
+					Display display = getShell().getDisplay();					
+					Color gray = display.getSystemColor(SWT.COLOR_GRAY);					
+					TableItem tableItem = (TableItem) checkBoxTableViewer.testFindItem(element);
+					tableItem.setForeground(gray);
+				}
+				
+				return ((ExpImportData)element).getLabel();
+			}
+			
+			return element.toString();
+		}
+	}
+
+	
 	/**
 	 * Create the dialog.
 	 * @wbp.parser.constructor
@@ -149,22 +183,35 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		});
 		btnSelect.setText(Messages.AbstractImportDialog_btnSelect_text);
 		
-		tableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
-		tableViewer.addCheckStateListener(new ICheckStateListener()
+		checkBoxTableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
+		checkBoxTableViewer.addCheckStateListener(new ICheckStateListener()
 		{
 			public void checkStateChanged(CheckStateChangedEvent event)
 			{
 				update();
 			}
 		});
-		table = tableViewer.getTable();
+		
+		checkBoxTableViewer.addCheckStateListener(new ICheckStateListener()
+		{			
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event)
+			{
+				Object element= event.getElement();
+				
+				if(checkBoxTableViewer.getGrayed(element))
+					checkBoxTableViewer.setChecked(element, false);
+			}
+		});
+
+		table = checkBoxTableViewer.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1);
 		gd_table.widthHint = 429;
 		table.setLayoutData(gd_table);
 		
-		TableViewerColumn tableViewerColumn = new TableViewerColumn(tableViewer, SWT.NONE);
+		TableViewerColumn tableViewerColumn = new TableViewerColumn(checkBoxTableViewer, SWT.NONE);
 		TableColumn tblclmnName = tableViewerColumn.getColumn();
 		tblclmnName.setWidth(422);
 		tblclmnName.setText(Messages.AbstractImportDialog_tblclmnName_text);
@@ -179,7 +226,16 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				tableViewer.setAllChecked(true);
+				//checkBoxTableViewer.setAllChecked(true);
+				// grayed Items werden nicht gecheckt
+				Table table = checkBoxTableViewer.getTable();
+				int n = table.getItemCount();
+				for(int i = 0;i < n;i++)
+				{
+					Object item = checkBoxTableViewer.getElementAt(i);
+					checkBoxTableViewer.setChecked(item, !checkBoxTableViewer.getGrayed(item));
+				}
+
 				update();
 			}
 		});
@@ -191,7 +247,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				tableViewer.setAllChecked(false);
+				checkBoxTableViewer.setAllChecked(false);
 				update();
 			}
 		});
@@ -225,13 +281,15 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		
 	}
 	
-	// wird aufgerufen bei der Initialisierung und ImportFilePath-Definitionen
+	// wird aufgerufen bei der Initialisierung und ImportFilePath-Selektion
 	public abstract void readImportSource();
 	
+	// Daten werden importiert
 	public abstract void doImport();
 	
 	public abstract void removeExistedObjects(List<EObject>importObjects);
 	
+	// Die ExpImportDaten in Modell einlesen
 	public void setModelData(List<ExpImportData>expimpdata)
 	{
 		if(m_bindingContext != null)
@@ -258,7 +316,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	private void update()
 	{
 		if(okButton != null)
-			okButton.setEnabled(tableViewer.getCheckedElements().length > 0);
+			okButton.setEnabled(checkBoxTableViewer.getCheckedElements().length > 0);
 	}
 	
 	@Override
@@ -267,7 +325,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		if ((dialogSettings != null) && (StringUtils.isNotEmpty(importPath)))
 			dialogSettings.put(importSettingKey, importPath);
 		
-		Object [] result = tableViewer.getCheckedElements();
+		Object [] result = checkBoxTableViewer.getCheckedElements();
 		if(ArrayUtils.isNotEmpty(result) && StringUtils.isNotEmpty(importPath))
 		{
 			selectedData = new ExpImportData[result.length];
@@ -294,11 +352,11 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		//
 		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
 		IObservableMap observeMap = BeansObservables.observeMap(listContentProvider.getKnownElements(), ExpImportData.class, "label");
-		tableViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
-		tableViewer.setContentProvider(listContentProvider);
+		checkBoxTableViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
+		checkBoxTableViewer.setContentProvider(listContentProvider);
 		//
 		IObservableList dataModelObserveList = BeanProperties.list("data").observe(model);
-		tableViewer.setInput(dataModelObserveList);
+		checkBoxTableViewer.setInput(dataModelObserveList);
 		//
 		return bindingContext;
 	}

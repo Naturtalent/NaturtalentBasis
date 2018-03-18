@@ -20,6 +20,7 @@ import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IWorkingSet;
@@ -48,7 +49,7 @@ public class ProjectPropertyWizard extends Wizard
 {
 	
 	private ProjectPropertyWizardPage propertyWizardPage;
-	
+		
 	private List<INtProjectProperty>projectPropertyAdapters;
 	
 	protected IProject iProject;
@@ -256,6 +257,16 @@ public class ProjectPropertyWizard extends Wizard
 		// ProjectPropertydata abspeichern
 		if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 		{
+			for(INtProjectProperty projectProperty : projectPropertyAdapters)
+			{
+				projectProperty.setNtProjectID(iProject.getName());
+				projectProperty.commit();
+			}
+		}
+		
+		/*
+		if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
+		{
 			// ProjectProperties via 'INtProjectProperty' abspeichern
 			String [] settingPropertyFactoryNames = null;
 			for(INtProjectProperty projectProperty : projectPropertyAdapters)
@@ -270,12 +281,21 @@ public class ProjectPropertyWizard extends Wizard
 			}
 		
 			// PropertyFactoryNames in Datei speichern und UpdateRequest an ProjectView
-			NtProjektPropertyUtils.saveProjectPropertyFactories(ntProjectID, settingPropertyFactoryNames);
+			//NtProjektPropertyUtils.saveProjectPropertyFactories(ntProjectID, settingPropertyFactoryNames);
+			
+			// Updateanforderung an ProjectView senden	
 			MApplication currentApplication = E4Workbench.getServiceContext().get(IWorkbench.class).getApplication();
 			IEventBroker eventBroker = currentApplication.getContext().get(IEventBroker.class);
-			eventBroker.post(NtProjectView.UPDATE_PROJECTVIEW_REQUEST, null);
+			NtProject ntProject = Activator.findNtProject(ntProjectID);
+			eventBroker.post(NtProjectView.UPDATE_PROJECTVIEW_REQUEST, ntProject);
+	
 		}
-
+		*/
+		
+		// IProject im Navigator selektieren
+		IResourceNavigator navigator = Activator.findNavigator();
+		navigator.getViewer().setSelection(new StructuredSelection(iProject), true);
+		
 		return true;
 	}
 

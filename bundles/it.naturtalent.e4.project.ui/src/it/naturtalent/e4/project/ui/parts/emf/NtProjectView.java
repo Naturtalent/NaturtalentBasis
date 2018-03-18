@@ -4,7 +4,9 @@ package it.naturtalent.e4.project.ui.parts.emf;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -57,6 +59,7 @@ import org.osgi.service.component.annotations.Deactivate;
 
 import it.naturtalent.e4.project.INtProject;
 import it.naturtalent.e4.project.INtProjectProperty;
+import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.IResourceNavigator;
 import it.naturtalent.e4.project.NtProjektPropertyUtils;
@@ -70,6 +73,7 @@ import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.actions.emf.SaveAction;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
+import it.naturtalent.e4.project.ui.ws.WorkingSet;
 
 public class NtProjectView
 {	
@@ -131,8 +135,7 @@ public class NtProjectView
 		
 		
 	}
-				
-	
+
 	/**
 	 * Die Selektion einer Resource im ResourceNavigator wurde empfangen.
 	 * Aenderungen den dem letzten selektierten NtProject werden festgeschrieben
@@ -141,36 +144,71 @@ public class NtProjectView
 	 */
 	@Inject
 	@Optional
-	public void setNtSelection(
-			@Named(IServiceConstants.ACTIVE_SELECTION) @Optional IResource selectedResource, 
-			EPartService partService, EModelService modelService)
-	{
-		if (selectedResource instanceof IProject)
+	public void handleWorkingSetSelection(
+			@Named(IServiceConstants.ACTIVE_SELECTION) @Optional WorkingSet workingSet)
+	{	
+		if (workingSet != null)
 		{
-			commit((IProject)selectedResource, partService, modelService);
+			EClass loginClass = ProjectPackage.eINSTANCE.getNtProject();
+			NtProject ntProject = (NtProject) EcoreUtil.create(loginClass);
+			showDetails(ntProject);
+		}
+	}
+
+	/**
+	 * Die Selektion einer Resource im ResourceNavigator wurde empfangen.
+	 * Aenderungen den dem letzten selektierten NtProject werden festgeschrieben
+	 * 
+	 * @param selectedResource
+	 */
+	@Inject
+	@Optional
+	public void handleResourceSelection(
+			@Named(IServiceConstants.ACTIVE_SELECTION) @Optional IResource resource, 
+			EPartService partService, EModelService modelService)
+	{	
+		if (resource instanceof IResource)
+		{
+			IProject iProject = ((IResource) resource).getProject();
 			
-			EObject eObject = Activator.findNtProject(((IProject)selectedResource).getName());
-			if(eObject != null)
+			// festschreiben der letzten Selektion
+			commitLastSelection(iProject, partService, modelService);
+			
+			EObject eObject = Activator.findNtProject(iProject.getName());
+			if (eObject != null)
 			{
-				selectedNtProject = eObject; 
+				selectedNtProject = eObject;
 				showDetails(selectedNtProject);
 			}
-		}		
+		}
 	}
-	
+
+	/**
+	 * Die Detailseite NtProjektView soll aktualisiert werden.
+	 * Parameter eObject == null zeigt ein 'leeres' Projekt an.
+	 * Parameter eObject != null zeigt das momentan selektierte Projekt an (eObject ist irrelevant)
+	 * @param eObject
+	 */
 	@Inject
 	@Optional
 	public void handleModelChangedEvent(@UIEventTopic(UPDATE_PROJECTVIEW_REQUEST) EObject eObject)
-	{
-		System.out.println(selectedNtProject);
-		showDetails(selectedNtProject);
+	{	
+		if(eObject == null)
+		{
+			// ein 'leeres' NtProject anzeigen
+			EClass loginClass = ProjectPackage.eINSTANCE.getNtProject();
+			NtProject ntProject = (NtProject) EcoreUtil.create(loginClass);
+			showDetails(ntProject);
+		}
+		
+		else showDetails(selectedNtProject);
 	}
 	
 	/*
 	 * Modellaenderungen festschreiben
 	 * 
 	 */
-	private void commit(IProject iProject, EPartService partService, EModelService modelService)
+	private void commitLastSelection(IProject iProject, EPartService partService, EModelService modelService)
 	{
 		EObject eObject = Activator.findNtProject(iProject.getName());
 		if(eObject != null)
@@ -235,23 +273,34 @@ public class NtProjectView
 			try
 			{		
 				// NtProjekt (Name und Beschreibung)
+				/*
 				ViewModelContext vmc = ViewModelContextFactory.INSTANCE.createViewModelContext(
 						ViewProviderHelper.getView(eObject, null),
 						eObject, new DefaultReferenceService());
 				
 				render = ECPSWTViewRenderer.INSTANCE.render(projectComposite,vmc);
+				*/
+				
+				render = ECPSWTViewRenderer.INSTANCE.render(projectComposite, eObject);
 				
 				projectComposite.setExpandHorizontal(true);
 				projectComposite.setExpandVertical(true);
 				projectComposite.setContent(render.getSWTControl());
 				//projectComposite.setMinSize(render.getSWTControl().computeSize(SWT.DEFAULT, SWT.DEFAULT));	
 				
-				
-				//Properties
+				// eine neues Modell 'NtProperty' anlegen
 				EClass propertyClass = ProjectPackage.eINSTANCE.getNtProperty();
 				NtProperty property = (NtProperty) EcoreUtil.create(propertyClass);
-				setPropertyData(property, eObject);
 				
+				//Properties
+				if(eObject instanceof NtProject)
+				{
+					String projectID = ((NtProject)eObject).getId();
+					if(StringUtils.isNotEmpty(projectID))
+						setPropertyData((NtProject) eObject, property);
+				}
+				
+				// NtProperties anzeigen
 				render = ECPSWTViewRenderer.INSTANCE.render(propertyComposite,property);
 				
 				propertyComposite.setExpandHorizontal(true);
@@ -269,10 +318,65 @@ public class NtProjectView
 	}
 	
 	/*
-	 * Die Properties ermitteln und in das Modell 'NtProperty' eintragen.
+	 * Die dynamischen Properties (werden ueber den jeweiligen Adapter geladen) 
+	 * des NtProjects erzeugen. 
 	 */
-	private void setPropertyData(NtProperty property, EObject eObject)
+	private void setPropertyData(NtProject ntProject, NtProperty property)
+	{		
+		// ProjectID
+		property.setId(ntProject.getId());
+		
+		// WorkingSet
+		IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(ntProject.getId());
+		String wsLabel = getWorkingSetLabel(iProject);
+		if(StringUtils.isNotEmpty(wsLabel))
+			property.setWorkingset(wsLabel);
+			
+		// Erstellungsdatum
+		String stgDate = iProject.getName().substring(0,iProject.getName().indexOf('-'));
+		Date date = new Date(NumberUtils.createLong(stgDate));
+		String labelText = DateFormatUtils.format(date, "dd.MM.yyyy");
+		property.setCreated(labelText);
+				
+		// dynamische Properties
+		EList<DynPropertyItem>dynProperties = property.getProperties();
+		
+		// verfuegbare Factories aus dem Repository laden
+		List<INtProjectPropertyFactory> projectPropertyFactories = ntProjektDataFactoryRepository
+				.getAllProjektDataFactories();
+		
+		// Adapter erzeugen und abchecken
+		for(INtProjectPropertyFactory propertyFactory : projectPropertyFactories)
+		{
+			// koennen ueber den Adapter projectgekoppelte PropertyDaten geladen werden
+			INtProjectProperty propertyAdapter = propertyFactory.createNtProjektData();
+			propertyAdapter.setNtProjectID(ntProject.getId());
+			if(propertyAdapter.getNtPropertyData() == null)
+				continue;
+			
+			// DynPropertyItem - Attribut erzeugen
+			EClass dynPropertyItemClass = ProjectPackage.eINSTANCE.getDynPropertyItem();
+			DynPropertyItem dynPropertyItem = (DynPropertyItem) EcoreUtil.create(dynPropertyItemClass);
+			
+			// PropertyString 'to.String()' und Factoryklasse uebernehmen			
+			dynPropertyItem.setName(propertyAdapter.toString());
+			dynPropertyItem.setClassName(propertyAdapter.getClass().getName());
+			
+			// DynPropertyItem zu den NtProjectProperties hinzufuegen
+			dynProperties.add(dynPropertyItem);
+		}		
+	}
+
+	
+	/*
+	 * Die Properties ermitteln und in das Modell 'NtProperty' eintragen.
+	 * Properties die aktuell nicht mehr gekoppelt sind werden in der Liste 
+	 * 'unlinkedProperties' gesammelt und dann aus der PropertyDatei entfernt. 
+	 */
+	private List<INtProjectProperty>unlinkedProperties = new ArrayList<INtProjectProperty>();
+	private void setPropertyDataOLD(NtProperty property, EObject eObject)
 	{
+		unlinkedProperties.clear();
 		NtProject ntProject = (NtProject) eObject;
 		
 		// ProjekcID
@@ -301,6 +405,13 @@ public class NtProjectView
 			// ProjectPropertyAdapter initialisieren
 			projectProperty.setNtProjectID(property.getId());
 			
+			if(projectProperty.getNtPropertyData() == null)
+			{
+				// diese Eigenschaft ist offensichtlich nicht mehr gekoppelt
+				unlinkedProperties.add(projectProperty);
+				continue;				
+			}
+			
 			// DynPropertyItem - Attribut erzeugen
 			EClass dynPropertyItemClass = ProjectPackage.eINSTANCE.getDynPropertyItem();
 			DynPropertyItem dynPropertyItem = (DynPropertyItem) EcoreUtil.create(dynPropertyItemClass);
@@ -312,7 +423,22 @@ public class NtProjectView
 			// DynPropertyItem zu den NtProjectProperties hinzufuegen
 			dynProperties.add(dynPropertyItem);
 		}
-
+		
+		// ProjectPropertyDatei bereinigen (nichtgekoppelte Eigenschaften entfernen)
+		if(!unlinkedProperties.isEmpty())
+		{
+			List<String> factoryNames = NtProjektPropertyUtils
+					.getProjectPropertyFactoryNames(
+							ntProjektDataFactoryRepository, iProject);
+			for(INtProjectProperty projectProperty : unlinkedProperties)
+			{
+				String factoryName = projectProperty.getPropertyFactoryName();
+				factoryNames.remove(factoryName);
+			}
+			
+			String [] factoryNameArray = factoryNames.toArray(new String[factoryNames.size()]);
+			NtProjektPropertyUtils.saveProjectPropertyFactories(iProject.getName(), factoryNameArray);
+		}
 	}
 	
 	/**

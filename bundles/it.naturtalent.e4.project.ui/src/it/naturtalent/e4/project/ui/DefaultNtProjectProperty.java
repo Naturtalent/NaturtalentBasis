@@ -19,6 +19,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.widgets.Display;
 
 import it.naturtalent.e4.project.INtProjectProperty;
+import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
 
 
 /**
@@ -161,6 +162,19 @@ public class DefaultNtProjectProperty implements INtProjectProperty
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getPropertyFactoryName()
+	{
+		return this.getClass().getName()+NtProjectPropertyFactory.PROJECTPROPERTYFACTORY_EXTENSION;
+	}
+
+	@Override
+	public boolean importProperty(Object importData)
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	/*

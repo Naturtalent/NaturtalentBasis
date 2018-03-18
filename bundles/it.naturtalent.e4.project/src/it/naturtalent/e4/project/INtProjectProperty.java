@@ -73,7 +73,13 @@ public interface INtProjectProperty
 	 * 
 	 */
 	public void commit();
-			
+
+	/**
+	 * Zurueckgegeben wird der Name der Factory-Klasse
+	 * 
+	 */
+	public String getPropertyFactoryName();
+
 	/**
 	 * Eine Wizardseite zur Bearbeitung der Eigenschaft erzeugen.
 	 * 
@@ -100,7 +106,7 @@ public interface INtProjectProperty
 	 * Eigenschaft importieren
 	 * @return 
 	 */
-	//public boolean importProperty(Object importData);
+	public boolean importProperty(Object importData);
 
 	
 	/**

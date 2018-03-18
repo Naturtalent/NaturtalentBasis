@@ -58,7 +58,7 @@ public class DeleteResourceHandler extends SelectedResourcesUtils
 	private IResourceNavigator resourceNavigator;
 	
 	
-	//@Optional @Inject private INtProjectPropertyFactoryRepository ntProjektDataFactoryRepository;
+	@Optional @Inject private INtProjectPropertyFactoryRepository ntProjektDataFactoryRepository;
 	
 	
 	@Execute
@@ -86,8 +86,8 @@ public class DeleteResourceHandler extends SelectedResourcesUtils
 						{ IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL },
 					0);
 			if(dialog.open() == MessageDialog.OK)
-			{				
-				DeleteResources.deleteResources(shell, selectedResources);				
+			{								
+				DeleteResources.deleteResources(shell, selectedResources, ntProjektDataFactoryRepository);				
 			}
 		}
 	}

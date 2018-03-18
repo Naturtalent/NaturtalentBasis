@@ -165,21 +165,6 @@ public class NtProjectProperty implements INtProjectProperty
 	@Override
 	public void delete()
 	{
-		if(ntProjectID != null)
-		{
-			NtProject ntProject = Activator.findNtProject(ntProjectID);
-			if(ntProject != null)
-			{
-				NtProjects ntProjects = Activator.getNtProjects();			
-				ntProjects.getNtProject().remove(ntProject);				
-				Activator.getECPProject().saveContents();
-				eventBroker.send(UndoProjectAction.PROJECTCHANGED_MODELEVENT, "delete");
-				eventBroker.send(DeleteProjectAction.DELETE_PROJECT_EVENT, ntProject.getName());				
-				return;
-			}			
-		}
-		
-		log.error("Fehler beim Löschen");
 	}
 
 	@Override
@@ -221,33 +206,6 @@ public class NtProjectProperty implements INtProjectProperty
 		return null;
 	}
 	
-	
-/*
-	@Override
-	public void exportProperty()
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean importProperty(Object importData)
-	{
-		if (importData instanceof NtProject)
-		{
-			ntPropertyData = (NtProject) importData;
-			Activator.getNtProjects().getNtProject().add(ntPropertyData);
-			//Activator.getECPProject().saveContents();
-			commit();
-			
-			
-			return true;
-		}
-		
-		return false;
-	}
-	*/
-
 	/**
 	 * aus der NtProjectID das Erstellungsdatum generieren
 	 * 
@@ -258,6 +216,19 @@ public class NtProjectProperty implements INtProjectProperty
 		String stgDate = ntProjectID.substring(0, ntProjectID.indexOf('-'));
 		Date date = new Date(NumberUtils.createLong(stgDate));
 		return (DateFormatUtils.format(date, "dd.MM.yyyy")); 
+	}
+
+	@Override
+	public String getPropertyFactoryName()
+	{
+		return this.getClass().getName()+NtProjectPropertyFactory.PROJECTPROPERTYFACTORY_EXTENSION;
+	}
+
+	@Override
+	public boolean importProperty(Object importData)
+	{		
+		return false;
+		
 	}
 
 	
