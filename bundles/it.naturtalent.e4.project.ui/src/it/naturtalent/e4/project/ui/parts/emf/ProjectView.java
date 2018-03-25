@@ -174,9 +174,11 @@ public class ProjectView
 			actionRegistry.put(ViewActionID.SAVE_ACTION, action);
 			
 			// SYNC Navigator
+			/*
 			action = ContextInjectionFactory.make(SyncNavigatorAction.class,context);
 			toolBarManager.add(action);
 			actionRegistry.put(ViewActionID.SYNC_NAVIGATOR_ACTION, action);
+			*/
 
 		}	
 

@@ -9,6 +9,10 @@ public interface ProjectModelEventKey
 	// see@ProjectPropertyWizardPage - steuert WizardPageComlete
 	public static final String PROJECT_VALIDATION_MODELEVENT = ModelEventKey.PREFIX_MODELEVENT+"projectValidationDetailsModelEvent"; //$NON-NLS-N$
 	
+	public static final String PROJECT_MODIFY_MODELEVENT = ModelEventKey.PREFIX_MODELEVENT+"projectModifyModelEvent"; //$NON-NLS-N$
+	
+	public static final String PROJECTNAME_WIZARDTEXTFIELD = ModelEventKey.PREFIX_MODELEVENT+"projectnamewizardtextfield"; //$NON-NLS-N$
+	
 	/*
 	public static final String DEFAULT_NEW_MODELEVENT = PREFIX_MODELEVENT+"defaultNewModelEvent"; //$NON-NLS-N$
 	public static final String DEFAULT_DELETE_MODELEVENT = PREFIX_MODELEVENT+"defaultDeleteModelEvent"; //$NON-NLS-N$

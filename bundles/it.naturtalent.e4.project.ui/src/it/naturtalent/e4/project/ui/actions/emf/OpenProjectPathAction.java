@@ -1,5 +1,7 @@
 package it.naturtalent.e4.project.ui.actions.emf;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -11,6 +13,7 @@ import it.naturtalent.icons.core.IconSize;
 
 /**
  * Selektierten Pfad mit dem System-Dateiexplorer oeffnen
+ * @see SystemOpenHandler
  * 
  * @author dieter
  *
@@ -32,11 +35,11 @@ public class OpenProjectPathAction extends DefaultModelAction
 		Object selObject = selection.getFirstElement();
 		if (selObject instanceof IResource)
 		{
+			IResource iResource = (IResource) selObject;
+			String destPath = iResource.getLocation().toOSString();
+
 			try
-			{
-				IResource iResource = (IResource) selObject;
-				String destPath = iResource.getLocation().toOSString();
-				
+			{				
 				//os = System.getProperty("os.name");
 				if (SystemUtils.IS_OS_LINUX)
 					Runtime.getRuntime().exec("nautilus " + destPath);
@@ -45,6 +48,17 @@ public class OpenProjectPathAction extends DefaultModelAction
 
 			} catch (Exception exp)
 			{
+				if (SystemUtils.IS_OS_LINUX)
+					try
+					{
+						Runtime.getRuntime().exec("nemo " + destPath);
+						return;
+					} catch (IOException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				
 				exp.printStackTrace();
 			}
 		}

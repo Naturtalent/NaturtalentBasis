@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkingSet;
 
 import it.naturtalent.e4.project.INtProjectProperty;
@@ -33,6 +34,7 @@ import it.naturtalent.e4.project.NtProjektPropertyUtils;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
+import it.naturtalent.e4.project.ui.emf.ProjectModelEventKey;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
 import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
@@ -145,16 +147,14 @@ public class ProjectPropertyWizard extends Wizard
 					if(page instanceof ProjectPropertyWizardPage)
 					{
 						// die ProjektWizardPage wird noch benoetigt (in performFinish())
-						propertyWizardPage = (ProjectPropertyWizardPage) page;
-						
+						propertyWizardPage = (ProjectPropertyWizardPage) page;						
 						if(StringUtils.isNotEmpty(predefinedProjectName))
 						{
 							// gibt es einen vordefinierten Projektnamen, wird dieser uebernommen
 							NtProject ntProject = (NtProject)projectPropertyAdapter.getNtPropertyData();
 							ntProject.setName(predefinedProjectName);
-						}						
-					}
-							
+						}												
+					}							
 				}
 				
 				/*
@@ -264,33 +264,11 @@ public class ProjectPropertyWizard extends Wizard
 			}
 		}
 		
-		/*
-		if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
-		{
-			// ProjectProperties via 'INtProjectProperty' abspeichern
-			String [] settingPropertyFactoryNames = null;
-			for(INtProjectProperty projectProperty : projectPropertyAdapters)
-			{				
-				projectProperty.setNtProjectID(ntProjectID);
-				projectProperty.commit();
-				
-				// in die Liste der FactoryNamen eintragen
-				settingPropertyFactoryNames = ArrayUtils.add(settingPropertyFactoryNames,
-						projectProperty.getClass().getName()
-								+ INtProjectPropertyFactory.PROJECTPROPERTYFACTORY_EXTENSION);
-			}
-		
-			// PropertyFactoryNames in Datei speichern und UpdateRequest an ProjectView
-			//NtProjektPropertyUtils.saveProjectPropertyFactories(ntProjectID, settingPropertyFactoryNames);
-			
-			// Updateanforderung an ProjectView senden	
-			MApplication currentApplication = E4Workbench.getServiceContext().get(IWorkbench.class).getApplication();
-			IEventBroker eventBroker = currentApplication.getContext().get(IEventBroker.class);
-			NtProject ntProject = Activator.findNtProject(ntProjectID);
-			eventBroker.post(NtProjectView.UPDATE_PROJECTVIEW_REQUEST, ntProject);
-	
-		}
-		*/
+		// Updateanforderung an ProjectView senden	
+		MApplication currentApplication = E4Workbench.getServiceContext().get(IWorkbench.class).getApplication();
+		IEventBroker eventBroker = currentApplication.getContext().get(IEventBroker.class);
+		NtProject ntProject = Activator.findNtProject(ntProjectID);
+		eventBroker.post(NtProjectView.UPDATE_PROJECTVIEW_REQUEST, ntProject);
 		
 		// IProject im Navigator selektieren
 		IResourceNavigator navigator = Activator.findNavigator();

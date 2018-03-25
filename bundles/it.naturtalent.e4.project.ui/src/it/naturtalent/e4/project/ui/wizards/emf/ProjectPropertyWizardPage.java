@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -13,12 +12,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecp.ui.view.ECPRendererException;
 import org.eclipse.emf.ecp.ui.view.swt.ECPSWTViewRenderer;
-import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -38,7 +35,6 @@ import org.osgi.service.event.EventHandler;
 
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.IResourceNavigator;
-import it.naturtalent.e4.project.ProjectData;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.dialogs.SelectWorkingSetDialog;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
@@ -46,7 +42,7 @@ import it.naturtalent.e4.project.ui.emf.ProjectModelEventKey;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 
 /**
- * Standardseite als Einstieg in die ProjektPropertyWizards.
+ * Standardseite des ProjektPropertyWizards.
  *  
  * @author dieter
  *
@@ -399,11 +395,13 @@ public class ProjectPropertyWizardPage extends WizardPage
 		this.projectProperty = projectProperty;
 	}
 	
+	/*
 	@Inject
 	@Optional
 	public void handleModelChangedEvent(@UIEventTopic("PROJECTNAMEFIELD_CREATED") Text text)
 	{
 		txtProjectName = text;
 	}
+	*/
 	
 }

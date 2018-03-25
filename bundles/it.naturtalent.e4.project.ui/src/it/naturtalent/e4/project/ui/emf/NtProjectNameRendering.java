@@ -114,27 +114,24 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		// Validation bei der Eroeffnung
 		boolean validationStatus = new ProjectValidator().validateNtProject(ntObject, new BasicDiagnostic(), null);		
 		eventBroker.send(ProjectModelEventKey.PROJECT_VALIDATION_MODELEVENT, validationStatus);		
-		
-		// soll der Projektname selektiert werden - (vordefinierte Projektname)		
-		if(StringUtils.isNotEmpty((String)E4Workbench.getServiceContext().get(NewProjectAction.PREDIFINED_PROJECTNAME)))
+
+		Control control = super.createSWTControl(parent);		
+		Composite composite = (Composite) control;
+		Control [] controls = composite.getChildren();
+		for(Control child : controls)
 		{
-			Control control = super.createSWTControl(parent);		
-			Composite composite = (Composite) control;
-			Control [] controls = composite.getChildren();
-			for(Control child : controls)
+			if(child instanceof Text)	
 			{
-				if(child instanceof Text)	
-				{
-					text = (Text)child;
-					text.addModifyListener(firstTimeSelection);
-					break;
-				}
+				text = (Text)child;
+				eventBroker.send(ProjectModelEventKey.PROJECTNAME_WIZARDTEXTFIELD, text);
+				break;
 			}
-			
-			return control;	
 		}
-						
-		return super.createSWTControl(parent);
+		
+		if(StringUtils.isNotEmpty((String)E4Workbench.getServiceContext().get(NewProjectAction.PREDIFINED_PROJECTNAME)))
+			text.addModifyListener(firstTimeSelection);				
+		
+		return control;		
 	}
 
 	/*

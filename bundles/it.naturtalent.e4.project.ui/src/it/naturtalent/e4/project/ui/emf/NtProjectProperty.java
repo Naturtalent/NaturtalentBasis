@@ -18,6 +18,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import it.naturtalent.e4.project.INtProject;
@@ -27,7 +28,9 @@ import it.naturtalent.e4.project.model.project.NtProjects;
 import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.actions.emf.DeleteProjectAction;
+import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.actions.emf.UndoProjectAction;
+import it.naturtalent.e4.project.ui.handlers.emf.SystemOpenHandler;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
 
 /**
@@ -150,11 +153,16 @@ public class NtProjectProperty implements INtProjectProperty
 		
 	}
 
+	
 	public String toString()
 	{
-		return (StringUtils.isEmpty(ntProjectID) ? "NtProjekt undefiniert" : "erstellt am: "+getCreatedDate()); 
+		IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(ntProjectID);
+		if(iProject.exists())		
+			return iProject.getLocation().toOSString();
+		//return (StringUtils.isEmpty(ntProjectID) ? "NtProjekt undefiniert" : "erstellt am: "+getCreatedDate());
+		return super.toString(); 
 	}
-
+	
 	@Override
 	public void undo()
 	{
@@ -177,8 +185,8 @@ public class NtProjectProperty implements INtProjectProperty
 	@Override
 	public Action createAction()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		StructuredViewer viewer = Activator.findNavigator().getViewer();		
+		return new OpenProjectPathAction(viewer);
 	}
 	
 	/*

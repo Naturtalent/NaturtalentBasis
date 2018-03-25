@@ -4,9 +4,7 @@ package it.naturtalent.e4.project.ui.parts.emf;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventObject;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,7 +29,6 @@ import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.IPartListener;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.EList;
@@ -39,12 +36,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.ui.view.ECPRendererException;
-import org.eclipse.emf.ecp.ui.view.swt.DefaultReferenceService;
 import org.eclipse.emf.ecp.ui.view.swt.ECPSWTView;
 import org.eclipse.emf.ecp.ui.view.swt.ECPSWTViewRenderer;
-import org.eclipse.emf.ecp.view.spi.context.ViewModelContext;
-import org.eclipse.emf.ecp.view.spi.context.ViewModelContextFactory;
-import org.eclipse.emf.ecp.view.spi.provider.ViewProviderHelper;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -52,7 +45,6 @@ import org.eclipse.emf.emfstore.internal.client.model.changeTracking.commands.EM
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkingSet;
 import org.osgi.service.component.annotations.Deactivate;
@@ -65,10 +57,8 @@ import it.naturtalent.e4.project.IResourceNavigator;
 import it.naturtalent.e4.project.NtProjektPropertyUtils;
 import it.naturtalent.e4.project.model.project.DynPropertyItem;
 import it.naturtalent.e4.project.model.project.NtProject;
-import it.naturtalent.e4.project.model.project.NtProjectProperty;
 import it.naturtalent.e4.project.model.project.NtProperty;
 import it.naturtalent.e4.project.model.project.ProjectPackage;
-import it.naturtalent.e4.project.model.project.impl.NtPropertyImpl;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.actions.emf.SaveAction;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
@@ -81,6 +71,7 @@ public class NtProjectView
 	public static final String NTPROJECT_VIEW_ID = "iit.naturtalent.e4.project.ui.part.emf.NtProjectView";
 	public static final String SAVE_TOOLBAR_ID = "it.naturtalent.e4.project.ui.directtoolitem.speichern";
 	public static final String UNDO_TOOLBAR_ID = "it.naturtalent.e4.project.ui.directtoolitem.undo";
+	public static final String SYNC_TOOLBAR_ID = "it.naturtalent.e4.project.ui.directtoolitem.sync";
 	
 	public final static String UPDATE_PROJECTVIEW_REQUEST = "updateprojectviewrequest";
 	

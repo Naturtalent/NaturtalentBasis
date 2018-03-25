@@ -8,20 +8,13 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.UISynchronize;
-import org.eclipse.e4.ui.internal.workbench.E4Workbench;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.IWorkbench;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
@@ -31,7 +24,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.core.ECPProject;
-import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.ChangeCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -47,12 +39,8 @@ import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.expimp.dialogs.ProjectImportDialog;
 import it.naturtalent.e4.project.model.project.NtProject;
-import it.naturtalent.e4.project.model.project.NtProjects;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.datatransfer.CopyFilesAndFoldersOperation;
-import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
-import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
-import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
 
 /**
  * @author dieter
