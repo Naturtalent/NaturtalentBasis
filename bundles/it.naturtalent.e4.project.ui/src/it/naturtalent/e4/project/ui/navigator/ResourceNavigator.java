@@ -24,6 +24,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.ItemType;
@@ -123,7 +124,8 @@ public class ResourceNavigator implements IResourceNavigator
 
 	// ID des PopUpMenues
 	public static final String RESOURCE_NAVIGATOR_POPUPMENUE_ID = "it.naturtalent.e4.project.popupmenu.explorer"; //$NON-NLS-1$
-	public static final String RESOURCE_NAVIGATOR_OPENWITHMENUE_ID = "it.naturtalent.e4.project.ui.menu.openwith"; //$NON-NLS-1$
+	public static final String RESOURCE_NAVIGATOR_OPENWITHMENUE_ID = "it.naturtalent.e4.project.ui.menu.openwith"; //$NON-NLS-1$	
+	
 
 	@Inject
 	@Optional
@@ -421,6 +423,13 @@ public class ResourceNavigator implements IResourceNavigator
 						if (eventBroker != null)
 							eventBroker.send(NAVIGATOR_EVENT_SELECTED,
 									selection.toList());
+						
+						if (selObj instanceof IResource)
+						{
+							IResource iResource = (IResource) selObj;
+							IProject iProject = iResource.getProject();
+							Activator.projectQueue.addLast(iProject.getName());
+						}
 					}
 				}					
 			}
@@ -1087,6 +1096,28 @@ public class ResourceNavigator implements IResourceNavigator
 		return topLevelFlag;
 	}
 
-	
+	/**
+	 * Das uebergebene IProjekt im ResourceNavigator aktualisieren.
+	 * Wenn (iProjekt == null) wird das momentan selektierte Projekt aktualisiert 
+	 * @param iProject
+	 */
+	@Inject
+	@Optional
+	public void handleNavigatorUpdateEvent(@UIEventTopic(IResourceNavigator.NAVIGATOR_EVENT_UPDATE_REQUEST) IProject iProject)
+	{
+		if(iProject != null)	
+			treeViewer.update(iProject, null);
+		else
+		{
+			// das momentan selektierte Projekt aktualisieren
+			IStructuredSelection selection = treeViewer.getStructuredSelection();
+			Object selObj = selection.getFirstElement();
+			if (selObj instanceof IResource)
+			{
+				IResource iResource  = (IResource) selObj;
+				treeViewer.update(iResource.getProject(), null);				
+			}
+		}
+	}
 
 }

@@ -110,4 +110,9 @@
       </toolbar>
     </elements>
   </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IevuUDTCEeiSsaPRVIzGGw" featurename="children" parentElementId="toolbar:org.eclipse.ui.main.toolbar">
+    <elements xsi:type="menu:DirectToolItem" xmi:id="_QSG88DTCEeiSsaPRVIzGGw" elementId="it.naturtalent.e4.project.ui.directtoolitem.lastproject" label="LastProject" iconURI="icon://ICON_BACKWARD_NAV" tooltip="zum letzten Projekt" enabled="false" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.BackPrevProjectHandler"/>
+    <elements xsi:type="menu:DirectToolItem" xmi:id="_8tTOoDTDEeiSsaPRVIzGGw" elementId="it.naturtalent.e4.project.ui.directtoolitem.inuseprojects" label="ProjectsInUse" iconURI="icon://ICON_LAST_EDIT_POS" tooltip="Projekte in Bearbeitung" enabled="false" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.SelectInUseProjectHandler"/>
+    <elements xsi:type="menu:DirectToolItem" xmi:id="_JY3-0DTDEeiSsaPRVIzGGw" elementId="it.naturtalent.e4.project.ui.directtoolitem.nextproject" label="NextProject" iconURI="icon://ICON_FORWARD_NAV" tooltip="zum n&#xe4;chsten Projekt" enabled="false" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.ForwardNextProjectHandler"/>
+  </fragments>
 </fragment:ModelFragments>

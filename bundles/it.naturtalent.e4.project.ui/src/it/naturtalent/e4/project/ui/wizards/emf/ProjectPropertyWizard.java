@@ -271,8 +271,7 @@ public class ProjectPropertyWizard extends Wizard
 		eventBroker.post(NtProjectView.UPDATE_PROJECTVIEW_REQUEST, ntProject);
 		
 		// IProject im Navigator selektieren
-		IResourceNavigator navigator = Activator.findNavigator();
-		navigator.getViewer().setSelection(new StructuredSelection(iProject), true);
+		eventBroker.post(IResourceNavigator.NAVIGATOR_EVENT_UPDATE_REQUEST,iProject);
 		
 		return true;
 	}

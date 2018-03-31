@@ -58,6 +58,7 @@ import it.naturtalent.e4.project.ui.model.WorkbenchAdapterFactory;
 import it.naturtalent.e4.project.ui.model.WorkingSetAdapterFactory;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.registry.ProjectImageRegistry;
+import it.naturtalent.e4.project.ui.utils.ProjectQueue;
 import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSetRoot;
 import it.naturtalent.emf.model.EMFModelUtils;
@@ -93,9 +94,6 @@ public class Activator implements BundleActivator
 	
 	public static final String PLATFORM_PREFIX = "platform:/plugin"; //$NON-NLS-1$
 	
-	
-	
-
 	private static BundleContext context;
 	
 	private static WorkingSetManager iWorkingSetManager = null;
@@ -124,7 +122,8 @@ public class Activator implements BundleActivator
     
     // Zugriff auf 'plugin.properties'
     public static Properties properties = new Properties();
-    
+
+    public static ProjectQueue projectQueue = new ProjectQueue();
 
 	static BundleContext getContext()
 	{		
@@ -146,7 +145,8 @@ public class Activator implements BundleActivator
 		initProjectImageRegistry();
 		NtPreferences.initialize();
 		initPluginProperties();
-		initService();		
+		initService();	
+		projectQueue.start();
 	}
 	
 	
@@ -435,7 +435,9 @@ public class Activator implements BundleActivator
 	 */
 	public void stop(BundleContext bundleContext) throws Exception
 	{
+		projectQueue.stop();
 		Activator.context = null;
+		
 	}
 	
 	/**

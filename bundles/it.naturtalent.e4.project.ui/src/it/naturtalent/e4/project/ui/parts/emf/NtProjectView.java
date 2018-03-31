@@ -27,6 +27,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolBarElement;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.e4.ui.services.internal.events.EventBroker;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.emf.common.command.Command;
@@ -34,6 +35,7 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.ui.view.ECPRendererException;
 import org.eclipse.emf.ecp.ui.view.swt.ECPSWTView;
@@ -75,20 +77,29 @@ public class NtProjectView
 	
 	public final static String UPDATE_PROJECTVIEW_REQUEST = "updateprojectviewrequest";
 	
+	private final static String FEATURE_NTPRPJECTNAME = "name";
+	
 	private ScrolledComposite projectComposite;
 	private ScrolledComposite propertyComposite;
 	
 	private EObject selectedNtProject;
 	
+	// aktuell editiertes NtProjekt
+	private NtProject editedNtProject;
+	
 	private INtProjectPropertyFactoryRepository ntProjektDataFactoryRepository;
+	
+	private EventBroker eventBroker;
 		
 		
 	@PostConstruct
 	public void postConstruct(Composite composite, Shell shell,
 			final EPartService partService, final EModelService modelService,
-			@Optional INtProjectPropertyFactoryRepository ntProjektDataFactoryRepository)
+			@Optional INtProjectPropertyFactoryRepository ntProjektDataFactoryRepository,
+			@Optional EventBroker eventBroker)
 	{
 		this.ntProjektDataFactoryRepository = ntProjektDataFactoryRepository;
+		this.eventBroker = eventBroker;
 		
 		projectComposite = new ScrolledComposite(composite, SWT.V_SCROLL | SWT.H_SCROLL);
 		projectComposite.setBackground(shell.getDisplay().getSystemColor(SWT.COLOR_WHITE));
@@ -109,7 +120,7 @@ public class NtProjectView
 			{
 				// Modellaenderungen enablen die Toolbaraktionen undo und save
 				EMFStoreBasicCommandStack commandStack = (EMFStoreBasicCommandStack) event.getSource();
-				Command command = commandStack.getMostRecentCommand();				
+				Command command = commandStack.getMostRecentCommand();
 				if(command instanceof SetCommand)				
 				{
 					MPart mPart = partService.findPart(NTPROJECT_VIEW_ID);
@@ -119,7 +130,18 @@ public class NtProjectView
 					
 					items = modelService.findElements(mPart, UNDO_TOOLBAR_ID, MToolItem.class,null, EModelService.IN_PART);
 					item = items.get(0);
-					item.setEnabled(true);					
+					item.setEnabled(true);
+
+					// aktuell editiertes NtProjekt zwischenspeichern
+					EStructuralFeature eStructuralFeature = ((SetCommand) command).getFeature();					
+					if(StringUtils.equals(eStructuralFeature.getName(), FEATURE_NTPRPJECTNAME))
+					{
+						List<Object> result = new ArrayList<Object>();
+						result.addAll(command.getResult());
+						Object eObject = result.get(0);
+						if (eObject instanceof NtProject)					
+							editedNtProject = (NtProject) eObject;
+					}
 				} 				
 			}
 		});
@@ -222,7 +244,8 @@ public class NtProjectView
 							iProject.setPersistentProperty(INtProject.projectNameQualifiedName,ntProject.getName());
 							MPart mPart = partService.findPart(ResourceNavigator.RESOURCE_NAVIGATOR_ID);
 							ResourceNavigator navigator = (ResourceNavigator) mPart.getObject();
-							navigator.getTreeViewer().update(iProject, null);
+							//navigator.getTreeViewer().update(iProject, null);
+							eventBroker.post(IResourceNavigator.NAVIGATOR_EVENT_UPDATE_REQUEST, iProject);
 
 							// Daten des 'alte' selektierte Projects im Modell speichern
 							mPart = partService.findPart(NTPROJECT_VIEW_ID);
@@ -235,7 +258,7 @@ public class NtProjectView
 								if (obj instanceof SaveAction)
 								{
 									SaveAction saveAction = (SaveAction) obj;
-									saveAction.execute(partService,modelService, mPart);
+									saveAction.execute(partService,modelService, mPart);									
 								}
 							}
 
@@ -489,6 +512,14 @@ public class NtProjectView
 	{
 		return selectedNtProject;
 	}
+
+	// das editierte NtProjekt zurueckliefern @see SaveAction
+	public NtProject getEditedNtProject()
+	{
+		return editedNtProject;
+	}
+	
+	
 	
 	
 

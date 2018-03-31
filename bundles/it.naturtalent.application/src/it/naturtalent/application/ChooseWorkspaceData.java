@@ -2,8 +2,12 @@ package it.naturtalent.application;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -32,7 +36,9 @@ public class ChooseWorkspaceData
 	private static final String NEW_LINE = "\n"; //$NON-NLS-1$
 	private static final String COMMAND_PREFIX = "-"; //$NON-NLS-1$
 
-	private static final String DJAVA_LIBRARY_PATH = "Djava.library.path"; //$NON-NLS-1$
+	private static final String DJAVA_LIBRARY_PATH = "-Djava.library.path"; //$NON-NLS-1$
+	
+	private File iniFile;
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
@@ -63,6 +69,277 @@ public class ChooseWorkspaceData
 	}
 
 	/**
+	 * CMD_DATA Workspacepfad eintragen
+	 * 
+	 * Eine Konfigurationsdatei lesen, parsen und wieder schreiben.
+	 * Der Workspacepfad wird durch den uebergebenen ersetzt.
+	 * 
+	 * @param workspacePath
+	 * @throws Exception
+	 */
+	public void setCommandData(String workspacePath) throws Exception
+	{	
+		// die aktuelle Datei lesen und parsen
+		String iniFileContent = getLauncherIniFileContent();
+		Map<String, String>parseMap = parseIniFile(iniFileContent);
+				
+		parseMap.put(CMD_DATA, workspacePath);
+		validateIniContent(parseMap);
+		
+		// Datei mit aktuellen Inhalt wieder schreiben
+		String content = createIniContent(parseMap);
+		FileUtils.writeStringToFile(iniFile, content);	
+	}
+	
+	/*
+	 * Den Inhalt der ini-Datei in key/value zerlegen und in einer Map zurueckgeben.
+	 * 
+	 */
+	private Map<String, String>	parseIniFile(String iniFileContent)
+	{
+		String key, value;
+		Map<String, String>parseMap = new LinkedHashMap<String, String>();
+		
+		String phase1[] = StringUtils.split(iniFileContent, NEW_LINE);
+		for(int i = 0;i < phase1.length;i++)
+		{
+			if(StringUtils.startsWith(phase1[i],"-"))	
+			{
+				key = phase1[i];				
+				if(i+1 >= phase1.length)
+				{
+					// Stop, wenn key = letzte Zeile
+					parseMap.put(key, "");
+					break;
+				}
+				
+				value = phase1[i+1];
+				if(!StringUtils.startsWith(value,"-"))
+				{
+					// klassisches key/value Parsing
+					parseMap.put(key, value);
+					i++;
+				}
+				else
+				{
+					// key ohne value
+					parseMap.put(key, "");
+				}
+			}			
+		}
+	
+		return parseMap;
+	}
+	
+	private Map<String, String> validateIniContent(Map<String, String>parseMap)
+	{
+		// entfernt CMD_DATA mit Pfadangabe in einer Zeile
+		parseMap = removeInlineDataKey(parseMap);
+		
+		// verschiebt JavaLibraryPath ans Ende der Datei
+		parseMap = moveJavaLibraryToEnd(parseMap);
+		
+		return parseMap;
+	}
+
+	/*
+	 * verschiebt JavaLibraryPath ans Ende der Datei
+	 */
+	private Map<String, String> moveJavaLibraryToEnd(Map<String, String>parseMap)
+	{
+		List<String> removeKeys = new ArrayList<String>();
+		String javaLibraryPath = null;
+		
+		for (String key : parseMap.keySet())
+		{			
+			if (StringUtils.equals(key, CMD_VMARGS))					
+				removeKeys.add(key);
+			
+			if (StringUtils.startsWith(key, DJAVA_LIBRARY_PATH))
+			{
+				javaLibraryPath = key;
+				removeKeys.add(key);
+			}
+		}
+		
+		for(String key : removeKeys)
+			parseMap.remove(key);
+		
+		if(javaLibraryPath != null)
+		{			
+			parseMap.put(CMD_VMARGS, "");
+			parseMap.put(javaLibraryPath, "");
+		}
+			
+		return parseMap;
+	}
+
+	/**
+	 * DJAVA_LIBRARY_PATH LibPath eintragen
+	 * 
+	 * Eine Konfigurationsdatei lesen, parsen und wieder schreiben.
+	 * Der LibPath wird durch den uebergebenen ersetzt.
+	 * 
+	 * @param libPath
+	 */
+	public void setJavaLibraryPath(String libPath)
+	{
+		StringBuilder buildJavaLibPath = null;
+		String vmargs = CMD_VMARGS;
+		try
+		{
+			// die aktuelle Datei lesen und parsen
+			String iniFileContent = getLauncherIniFileContent();
+			Map<String, String>parseMap = parseIniFile(iniFileContent);
+			validateIniContent(parseMap);
+
+			// DJAVA_LIBRARY_PATH Command zusammensetzen
+			buildJavaLibPath = new StringBuilder(DJAVA_LIBRARY_PATH);
+			buildJavaLibPath.append("=");
+			buildJavaLibPath.append(libPath);
+
+			// einen 
+			for (String key : parseMap.keySet())
+			{			
+				if (StringUtils.startsWith(key, DJAVA_LIBRARY_PATH))
+				{
+					// bestehenden Eintrag loeschen, vmargs = null markiert Eintrag als vorhanden
+					parseMap.remove(key);
+					vmargs = null;
+				}
+			}
+			
+			if(vmargs != null)
+				parseMap.put(CMD_VMARGS, "");
+				
+			parseMap.put(buildJavaLibPath.toString(), "");
+			
+			// Datei mit aktuellen Inhalt wieder schreiben
+			String content = createIniContent(parseMap);
+			FileUtils.writeStringToFile(iniFile, content);
+			
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Rueckgabe des LauncherIniFiles
+	 * 
+	 * @param commandLine
+	 * @return
+	 */
+	
+	public File getLauncherIniFile()
+	{
+		// fuer Debug in der IDE ini.-File im Launcherpfad direkt adressieren
+		//return new File("/home/dieter/NaturtalentTest/RCP product-linux.gtk.x86","NaturTalent.ini");
+		
+		String commandLine = System.getProperty(PROP_COMMANDS);
+		return getLauncherIniFile(commandLine);
+		//return getLauncherIniFileTEST();
+	}
+
+	/*
+	 * nur zum Test
+	 */
+	public File getLauncherIniFileTEST()
+	{
+		return new File("/home/dieter/NaturtalentTest/RCP product-linux.gtk.x86_64","NaturTalent.ini");
+		//return new File("/home/dieter/NaturtalentTest/RCP product-linux.gtk.x86_64","NaturTalentOxygen.ini");
+		
+	}
+
+	/**
+	 * Rueckgabe des LauncherIniFiles
+	 * 
+	 * @param commandLine
+	 * @return
+	 */
+	public File getLauncherIniFile(String commandLine)
+	{
+		String baseName;
+		File launcherIniFile = null;				
+		
+		String property = getProperty(commandLine, CMD_LAUNCHER);		
+		if(StringUtils.isNotEmpty(property))
+		{
+			baseName = FilenameUtils.getBaseName(property)+".ini";			
+			File launcherFile = new File(property);			
+			if(launcherFile.isDirectory())
+				launcherIniFile = new File(launcherFile,baseName);
+			else
+			{				
+				String path = launcherFile.getParent();				
+				launcherIniFile = new File(path,baseName);
+			}
+	
+			if(!launcherIniFile.exists())
+				return null;
+		}
+		
+		return launcherIniFile;
+	}
+
+	/**
+	 * Den Inhalt des ini-Files zurueckgeben.
+	 * 
+	 * @param systemCommandLine
+	 * @return
+	 * @throws Exception
+	 */
+	public String getLauncherIniFileContent() throws Exception
+	{
+		String commandLine = null;
+		iniFile = getLauncherIniFile();		
+		if ((iniFile != null) && (iniFile.exists()))
+			commandLine = FileUtils.readFileToString(iniFile);
+		return commandLine;
+	}
+
+	/*
+	 * entfernt CMD_DATA mit Pfadangabe in einer Zeile
+	 */
+	private Map<String, String> removeInlineDataKey(Map<String, String>parseMap)
+	{
+		List<String> removeKeys = new ArrayList<String>();
+		for (String key : parseMap.keySet())
+		{
+			if (StringUtils.startsWith(key, CMD_DATA)
+					&& (StringUtils.length(key) > StringUtils.length(CMD_DATA)))
+				removeKeys.add(key);
+		}
+		for(String key : removeKeys)
+			parseMap.remove(key);
+			
+		return parseMap;
+	}
+	
+	
+	/*
+	 * 
+	 */
+	private String createIniContent(Map<String, String>parseMap)
+	{
+		StringBuilder content = new StringBuilder();		
+		for(String key : parseMap.keySet())
+		{
+			String value = parseMap.get(key);
+			content.append(key);
+			content.append(NEW_LINE);
+			if(StringUtils.isNotEmpty(value))
+			{
+				content.append(value);
+				content.append(NEW_LINE);				
+			}
+		}
+		
+		return content.toString();
+	}
+
+	/**
 	 * Ein INI_CMD.DATA Eintrag in die Launcher-Ini Datei eintragen.
 	 * Ein bestehender Eintrag wird aktualisiert.
 	 * Es ist sichergestellt, dass der Entrag vor einem INI_CMD.VMARGS eingetragen wird.
@@ -70,12 +347,13 @@ public class ChooseWorkspaceData
 	 * @param workspaces
 	 * @throws Exception
 	 */
-	public void setDATA_CMDWorkspaceIni(String workspacePath) throws Exception
+	public void setDATA_CMDWorkspaceIniOLD(String workspacePath) throws Exception
 	{		
 		int startPos, endPos;
 		String check;
 		File iniFile = getLauncherIniFile();
 		String iniFileContent = getLauncherIniFileContent();
+		
 		if (StringUtils.isNotEmpty(iniFileContent))
 		{
 			StringBuilder builder = new StringBuilder(iniFileContent);
@@ -248,70 +526,6 @@ public class ChooseWorkspaceData
 	 * @return
 	 * @throws Exception
 	 */
-	public String getLauncherIniFileContent() throws Exception
-	{
-		String commandLine = null;
-		File file = getLauncherIniFile();		
-		if ((file != null) && (file.exists()))
-			commandLine = FileUtils.readFileToString(file);
-		return commandLine;
-	}
-
-	/**
-	 * Rueckgabe des LauncherIniFiles
-	 * 
-	 * @param commandLine
-	 * @return
-	 */
-
-	public File getLauncherIniFile()
-	{
-		// fuer Debug in der IDE ini.-File im Launcherpfad direkt adressieren
-		//return new File("/home/dieter/NaturtalentTest/RCP product-linux.gtk.x86","NaturTalent.ini");
-		
-		String commandLine = System.getProperty(PROP_COMMANDS);
-		return getLauncherIniFile(commandLine);
-	}
-
-	/**
-	 * Rueckgabe des LauncherIniFiles
-	 * 
-	 * @param commandLine
-	 * @return
-	 */
-	public File getLauncherIniFile(String commandLine)
-	{
-		String baseName;
-		File launcherIniFile = null;				
-		
-		String property = getProperty(commandLine, CMD_LAUNCHER);		
-		if(StringUtils.isNotEmpty(property))
-		{
-			baseName = FilenameUtils.getBaseName(property)+".ini";			
-			File launcherFile = new File(property);			
-			if(launcherFile.isDirectory())
-				launcherIniFile = new File(launcherFile,baseName);
-			else
-			{				
-				String path = launcherFile.getParent();				
-				launcherIniFile = new File(path,baseName);
-			}
-	
-			if(!launcherIniFile.exists())
-				return null;
-		}
-		
-		return launcherIniFile;
-	}
-
-
-	/**
-	 * Den Inhalt des ini-Files zurueckgeben.
-	 * 
-	 * @param systemCommandLine
-	 * @return
-	 * @throws Exception
-	 */
 	public String getLauncherIniFileContent(String systemCommandLine) throws Exception
 	{
 		String commandLine = null;
@@ -319,16 +533,6 @@ public class ChooseWorkspaceData
 		if ((file != null) && (file.exists()))
 			commandLine = FileUtils.readFileToString(file);
 		return commandLine;
-	}
-
-
-	/*
-	 * nur zum Test
-	 */
-	public File getLauncherIniFileTEST()
-	{
-		return new File("/home/dieter/NaturtalentTest/RCP product-linux.gtk.x86","NaturTalent.ini");
-		
 	}
 
 
@@ -354,7 +558,7 @@ public class ChooseWorkspaceData
 		return null;
 	}
 
-	public void setJPIPEConfigurationEntry(String oldJPIPEPath, String newJPIPEPath)
+	public void setJPIPEConfigurationEntryOLD(String oldJPIPEPath, String newJPIPEPath)
 	{
 		String stgConfigContent = getConfigFileContentAsString();
 		if(StringUtils.isEmpty(stgConfigContent))

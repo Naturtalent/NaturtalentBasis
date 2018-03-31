@@ -174,7 +174,7 @@ public class ChooseWorkspaceDialog extends TitleAreaDialog
 		try
 		{
 			// speichert Workspace Lecation unter CMD_DATA im LauchInifile
-			new ChooseWorkspaceData().setDATA_CMDWorkspaceIni(selectedURL);
+			new ChooseWorkspaceData().setCommandData(selectedURL);
 			
 			//new ChooseWorkspaceData().setWorkspaceLocations(workspaces);
 		} catch (Exception e)
