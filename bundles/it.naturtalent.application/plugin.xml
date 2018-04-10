@@ -36,10 +36,6 @@
                name="windowImages"
                value="icons/nt16x16.gif,icons/nt32x32.gif,icons/nt48x48.gif,icons/nt64x64.gif,icons/nt128x128.gif">
          </property>
-         <property
-     			name="applicationCSS"
-     			value="platform:/plugin/it.naturtalent.application/css/default.css">
-         </property>           
             
       </product>
    </extension>

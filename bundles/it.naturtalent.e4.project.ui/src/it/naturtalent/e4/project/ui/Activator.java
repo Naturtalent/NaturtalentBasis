@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -37,8 +36,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.core.ECPProject;
 import org.eclipse.emf.ecp.core.ECPProjectManager;
-import org.eclipse.emf.ecp.core.ECPProvider;
-import org.eclipse.emf.ecp.core.exceptions.ECPProjectWithNameExistsException;
 import org.eclipse.emf.ecp.core.util.ECPUtil;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkingSet;
@@ -123,6 +120,7 @@ public class Activator implements BundleActivator
     // Zugriff auf 'plugin.properties'
     public static Properties properties = new Properties();
 
+    // Queue indem die ProjectID der zuletzt selektierten Projekte gespeichert sind 
     public static ProjectQueue projectQueue = new ProjectQueue();
 
 	static BundleContext getContext()

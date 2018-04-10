@@ -1120,4 +1120,20 @@ public class ResourceNavigator implements IResourceNavigator
 		}
 	}
 
+	/**
+	 * Projekt im ResourceNavigator selektieren
+	 *  
+	 * @param iProject
+	 */
+	@Inject
+	@Optional
+	public void handleNavigatorSelectEvent(@UIEventTopic(IResourceNavigator.NAVIGATOR_EVENT_SELECT_REQUEST) IResource iResource)
+	{
+		if (iResource instanceof IResource)
+		{
+			IProject iProject = ((IResource) iResource).getProject();
+			treeViewer.setSelection(new StructuredSelection(iProject));
+		}
+	}
+
 }

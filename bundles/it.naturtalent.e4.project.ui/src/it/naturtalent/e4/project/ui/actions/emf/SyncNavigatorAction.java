@@ -79,19 +79,20 @@ public class SyncNavigatorAction
 	
 	@Inject
 	public void handleSelection(@Named(IServiceConstants.ACTIVE_SELECTION) @Optional IResource iResource)
-	{
-		// Toolbarstatus Sync updaten		
-		MPart mPart = partService.findPart(NtProjectView.NTPROJECT_VIEW_ID);
-
-		// sync - Toolbar
-		List<MToolItem> items = modelService.findElements(mPart,
-				NtProjectView.SYNC_TOOLBAR_ID, MToolItem.class, null,
-				EModelService.IN_PART);
-		MToolItem item = items.get(0);
-		item.setEnabled(false);
-		
+	{		
 		if(iResource instanceof IResource)
-		{		
+		{
+			// Toolbarstatus Sync updaten		
+			MPart mPart = partService.findPart(NtProjectView.NTPROJECT_VIEW_ID);
+
+			// sync - Toolbar
+			List<MToolItem> items = modelService.findElements(mPart,
+					NtProjectView.SYNC_TOOLBAR_ID, MToolItem.class, null,
+					EModelService.IN_PART);
+			MToolItem item = items.get(0);
+			item.setEnabled(false);
+			
+			
 			iProject = ((IResource) iResource).getProject();
 			item.setEnabled(true);
 		}		

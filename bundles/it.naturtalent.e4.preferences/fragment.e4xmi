@@ -10,7 +10,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_HmDBwJn9EeO0WaX6XhVZ_g" featurename="handlers" parentElementId="it.naturtalent.e4.application">
     <elements xsi:type="commands:Handler" xmi:id="_MAaUQJn9EeO0WaX6XhVZ_g" elementId="it.naturtalent.e4.preferences.handler.0" contributionURI="bundleclass://it.naturtalent.e4.preferences/it.naturtalent.e4.preferences.handlers.PreferenceHandler" command="_fkdDAJn6EeO0WaX6XhVZ_g"/>
-    <elements xsi:type="commands:Handler" xmi:id="_rNrFMIkQEeeYgp_a-84UGA" elementId="it.naturtalent.e4.preferences.handler.tempHandler" contributionURI="bundleclass://it.naturtalent.e4.preferences/it.naturtalent.e4.preferences.handlers.TempFolderHandler" command="_J9zcYInTEeeXRuY5oMmD8Q"/>
+    <elements xsi:type="commands:Handler" xmi:id="_rNrFMIkQEeeYgp_a-84UGA" elementId="it.naturtalent.e4.preferences.handler.tempHandler" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.SystemOpenHandler" command="_J9zcYInTEeeXRuY5oMmD8Q"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Gntg0IkDEeeYgp_a-84UGA" featurename="addons" parentElementId="it.naturtalent.e4.application">
     <elements xsi:type="application:Addon" xmi:id="_Z3Zo0IkDEeeYgp_a-84UGA" elementId="it.naturtalent.e4.preferences.addon.0" contributionURI="bundleclass://it.naturtalent.e4.preferences/it.naturtalent.e4.preferences.PreferenceAddOn"/>

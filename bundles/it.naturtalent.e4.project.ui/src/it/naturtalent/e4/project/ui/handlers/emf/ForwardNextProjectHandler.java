@@ -11,7 +11,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 
 /**
- * Im den Uhrzeigersinn ein Project aus dem ProjectQueue selektieren.
+ * Im den Uhrzeigersinn ein Projekt aus dem ProjectQueue selektieren.
  * 
  * @author dieter
  *

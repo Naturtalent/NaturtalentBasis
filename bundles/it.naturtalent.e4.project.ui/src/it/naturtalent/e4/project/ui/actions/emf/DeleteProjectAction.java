@@ -6,17 +6,20 @@ import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 
+import it.naturtalent.e4.project.INtProject;
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.NtProjektPropertyUtils;
 import it.naturtalent.e4.project.model.project.NtProject;
+import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
 
 /**
@@ -26,6 +29,7 @@ import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
  * @author dieter
  *
  */
+@Deprecated
 public class DeleteProjectAction extends Action
 {
 	private IProject iProject;
@@ -52,6 +56,15 @@ public class DeleteProjectAction extends Action
 				// Importfunktion des Adapters aufrufen
 				propertyAdapter.setNtProjectID(iProject.getName());
 				propertyAdapter.delete();							
+			}
+			
+			try
+			{
+				Activator.projectQueue.remove(iProject.getPersistentProperty(INtProject.projectNameQualifiedName));
+			} catch (CoreException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 			// alle dem iProject zugeordneten PropertyFactories auflisten und loeschen

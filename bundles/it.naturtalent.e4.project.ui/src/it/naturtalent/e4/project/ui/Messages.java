@@ -249,6 +249,11 @@ public class Messages extends NLS {
 	public static String ProjectPreferenceComposite_btnEdit_text;
 	public static String ProjectPreferenceComposite_btnDelete_text;
 	public static String ProjectPreferenceComposite_lblNewLabel_text;
+	public static String ProjectQueueDialog_this_title;
+	public static String ProjectQueueDialog_this_message;
+	public static String ProjectQueueDialog_btnNewButton_text;
+	public static String ProjectQueueDialog_btnNewButton_text_1;
+	public static String ProjectQueueDialog_text_text;
 	
 	
 	

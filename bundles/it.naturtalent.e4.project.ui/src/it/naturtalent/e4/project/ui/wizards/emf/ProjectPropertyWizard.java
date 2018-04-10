@@ -270,8 +270,9 @@ public class ProjectPropertyWizard extends Wizard
 		NtProject ntProject = Activator.findNtProject(ntProjectID);
 		eventBroker.post(NtProjectView.UPDATE_PROJECTVIEW_REQUEST, ntProject);
 		
-		// IProject im Navigator selektieren
+		// IProject im Navigator updaten und selektieren
 		eventBroker.post(IResourceNavigator.NAVIGATOR_EVENT_UPDATE_REQUEST,iProject);
+		eventBroker.post(IResourceNavigator.NAVIGATOR_EVENT_SELECT_REQUEST,iProject);
 		
 		return true;
 	}

@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecp.edit.spi.swt.util.SWTValidationHelper;
 import org.eclipse.emf.ecp.view.internal.control.multireference.MultiReferenceSWTRenderer;
 import org.eclipse.emf.ecp.view.spi.context.ViewModelContext;
 import org.eclipse.emf.ecp.view.spi.model.VControl;
@@ -46,8 +47,7 @@ import it.naturtalent.e4.project.model.project.NtProperty;
  */
 public class DynPropertiesRenderer extends MultiReferenceSWTRenderer
 
-{
-	
+{	
 	// das zentrale ProjectPropertyRepository
 	private @Inject INtProjectPropertyFactoryRepository ntProjektDataFactoryRepository;
 	

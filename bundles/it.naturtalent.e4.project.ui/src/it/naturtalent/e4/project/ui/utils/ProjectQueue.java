@@ -6,6 +6,13 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
 import org.eclipse.jface.dialogs.IDialogSettings;
 
+/**
+ * In der Liste (Queue) werden die ProjectIDs der zulezt selektierten Projekte gespeichert. 
+ * Der Queue ermoeglicht eine vor-rueckwaerts Selektion der gespeicherten Projekte.
+ * 
+ * @author dieter
+ *
+ */
 public class ProjectQueue extends LinkedList<String>
 {
 	/**
@@ -28,7 +35,7 @@ public class ProjectQueue extends LinkedList<String>
 	@Override
 	public void addLast(String projectID)
 	{
-		if(size() > 10)
+		if(size() > 20)
 			removeFirst();
 		remove(projectID);
 		super.addLast(projectID);

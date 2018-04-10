@@ -31,6 +31,7 @@
     <elements xsi:type="commands:Handler" xmi:id="__v8MsFZIEeWs0IWTttXAEQ" elementId="it.naturtalent.e4.project.ui.handler.openProject" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.OpenProjectHandler" command="_vs3KoFZIEeWs0IWTttXAEQ"/>
     <elements xsi:type="commands:Handler" xmi:id="_fyBKYPrrEeaCq-uzpVRTiA" elementId="it.naturtalent.e4.project.ui.handler.opensystemeditor" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.SystemOpenWithHandler" command="_8U5cYProEeaCq-uzpVRTiA"/>
     <elements xsi:type="commands:Handler" xmi:id="_R2JLoPx7EeaYytYauPqaDg" elementId="it.naturtalent.e4.project.ui.handler.TESTOpenWith" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.TESThandler" command="_I0aFYPx7EeaYytYauPqaDg"/>
+    <elements xsi:type="commands:Handler" xmi:id="_4diYADhEEeil7MUhKl7YXg" elementId="it.naturtalent.e4.project.ui.handler.2" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.SelectInUseProjectHandler" command="_oIy-MDhEEeil7MUhKl7YXg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mhXEsEoWEeKe98mRhRmliA" featurename="children" parentElementId="it.naturtalent.e4.application.menu.new">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_upyHIHzIEeKI9olPChfamg" label="%Explorer.newProjectLabel" command="_sVDuME7jEeKHl_UfCGMO3g"/>
@@ -44,6 +45,7 @@
     <elements xsi:type="commands:Command" xmi:id="_vs3KoFZIEeWs0IWTttXAEQ" elementId="it.naturtalent.e4.project.ui.command.openProject" commandName="%Explorer.openProjectLabel"/>
     <elements xsi:type="commands:Command" xmi:id="_8U5cYProEeaCq-uzpVRTiA" elementId="it.naturtalent.e4.project.ui.command.openwithsystemeditor" commandName="SystemEditor"/>
     <elements xsi:type="commands:Command" xmi:id="_I0aFYPx7EeaYytYauPqaDg" elementId="it.naturtalent.e4.project.ui.command.testOpenWith" commandName="Test"/>
+    <elements xsi:type="commands:Command" xmi:id="_oIy-MDhEEeil7MUhKl7YXg" elementId="it.naturtalent.e4.project.ui.command.ProjectQueue" commandName="ProjectQueue"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_MDC-wHahEeOft_dJf8JoSA" featurename="children" parentElementId="it.naturtalent.e4.application.menu.new" positionInList="index:8">
     <elements xsi:type="menu:MenuSeparator" xmi:id="_MFFM0HamEeOft_dJf8JoSA" elementId="it.naturtalent.e4.project.ui.menuseparator.2"/>
@@ -52,6 +54,7 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_7_g80IpAEeOahtNvIwc_-g" featurename="bindings" parentElementId="it.naturtalent.e4.application.bindingTable">
     <elements xsi:type="commands:KeyBinding" xmi:id="_CXucEIpBEeOahtNvIwc_-g" elementId="it.naturtalent.e4.project.ui.keybinding.0" keySequence="F5" command="_K8d4MEUnEeK2PdDjk-7XFQ"/>
     <elements xsi:type="commands:KeyBinding" xmi:id="_UFKGUIpxEeOahtNvIwc_-g" elementId="it.naturtalent.e4.project.ui.keybinding.tmpDir" keySequence="M1+T" command="_4x93YIpvEeOahtNvIwc_-g"/>
+    <elements xsi:type="commands:KeyBinding" xmi:id="_GPkkgDhFEeil7MUhKl7YXg" elementId="it.naturtalent.e4.project.ui.keybinding.ProjectQueue" keySequence="M1+E" command="_oIy-MDhEEeil7MUhKl7YXg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_43aYoMzJEeO1K7CGPXg3lQ" featurename="children" parentElementId="it.naturtalent.trimwindow.perspectivestack">
     <elements xsi:type="advanced:Perspective" xmi:id="_IzFLIMzKEeO1K7CGPXg3lQ" elementId="it.naturtalent.e4.project.ui.perspective.0" label="Test" iconURI="platform:/plugin/it.naturtalent.e4.project.ui/icons/projekt.png">
@@ -112,7 +115,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IevuUDTCEeiSsaPRVIzGGw" featurename="children" parentElementId="toolbar:org.eclipse.ui.main.toolbar">
     <elements xsi:type="menu:DirectToolItem" xmi:id="_QSG88DTCEeiSsaPRVIzGGw" elementId="it.naturtalent.e4.project.ui.directtoolitem.lastproject" label="LastProject" iconURI="icon://ICON_BACKWARD_NAV" tooltip="zum letzten Projekt" enabled="false" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.BackPrevProjectHandler"/>
-    <elements xsi:type="menu:DirectToolItem" xmi:id="_8tTOoDTDEeiSsaPRVIzGGw" elementId="it.naturtalent.e4.project.ui.directtoolitem.inuseprojects" label="ProjectsInUse" iconURI="icon://ICON_LAST_EDIT_POS" tooltip="Projekte in Bearbeitung" enabled="false" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.SelectInUseProjectHandler"/>
+    <elements xsi:type="menu:DirectToolItem" xmi:id="_8tTOoDTDEeiSsaPRVIzGGw" elementId="it.naturtalent.e4.project.ui.directtoolitem.inuseprojects" label="ProjectsInUse" iconURI="icon://ICON_LAST_EDIT_POS" tooltip="Projekte in Bearbeitung (STRG+E)" enabled="false" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.SelectInUseProjectHandler"/>
     <elements xsi:type="menu:DirectToolItem" xmi:id="_JY3-0DTDEeiSsaPRVIzGGw" elementId="it.naturtalent.e4.project.ui.directtoolitem.nextproject" label="NextProject" iconURI="icon://ICON_FORWARD_NAV" tooltip="zum n&#xe4;chsten Projekt" enabled="false" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.ForwardNextProjectHandler"/>
   </fragments>
 </fragment:ModelFragments>

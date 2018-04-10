@@ -11,7 +11,7 @@ import org.eclipse.e4.core.di.extensions.Preference;
 import it.naturtalent.application.IPreferenceAdapter;
 import it.naturtalent.e4.preferences.ApplicationPreferenceAdapter;
 
-
+@Deprecated
 public class TempFolderHandler
 {
 	@Execute

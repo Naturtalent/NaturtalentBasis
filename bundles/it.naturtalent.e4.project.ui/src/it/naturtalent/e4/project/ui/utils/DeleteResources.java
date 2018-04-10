@@ -30,6 +30,7 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkingSet;
 
+import it.naturtalent.e4.project.INtProject;
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
@@ -115,6 +116,9 @@ public class DeleteResources
 												propertyAdapter.delete();
 											}
 										}
+										
+										// iProject aus dem ProjektQueue entfernen										
+										Activator.projectQueue.remove(iProject.getName());
 											
 										// project loeschen
 										iProject.delete(true, true, new SubProgressMonitor(
