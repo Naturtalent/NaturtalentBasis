@@ -1,5 +1,6 @@
 package it.naturtalent.e4.preferences;
 
+@Deprecated
 public class AppModelId {
 	public static final String ADDON_IT_NATURTALENT_E4_PREFERENCES_ADDON_0 = "it.naturtalent.e4.preferences.addon.0";
 	public static final String COMMAND_IT_NATURTALENT_E4_PREFERENCES_COMMAND_SHOW = "it.naturtalent.e4.preferences.command.show";

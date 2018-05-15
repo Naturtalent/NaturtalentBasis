@@ -4,14 +4,13 @@ package it.naturtalent.e4.preferences.handlers;
 import java.io.IOException;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.extensions.Preference;
 
 import it.naturtalent.application.IPreferenceAdapter;
-import it.naturtalent.e4.preferences.ApplicationPreferenceAdapter;
 
-@Deprecated
 public class TempFolderHandler
 {
 	@Execute
@@ -20,17 +19,28 @@ public class TempFolderHandler
 			String tempDir)
 	{
 		try
-		{
-			String os = System.getProperty("os.name");					
-			if(StringUtils.containsIgnoreCase(os,"linux"))
+		{				
+			if (SystemUtils.IS_OS_LINUX)
 				Runtime.getRuntime().exec("nautilus " + tempDir);
 			else
 				Runtime.getRuntime().exec("explorer " + tempDir);
-			
-		} catch (IOException e)
+
+		} catch (Exception exp)
 		{
-			e.printStackTrace();
+			if (SystemUtils.IS_OS_LINUX)
+				try
+				{
+					Runtime.getRuntime().exec("nemo " + tempDir);
+					return;
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			exp.printStackTrace();
 		}
+
 	}
 
 	@CanExecute
