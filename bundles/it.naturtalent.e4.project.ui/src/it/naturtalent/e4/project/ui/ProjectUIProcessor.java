@@ -81,7 +81,7 @@ public class ProjectUIProcessor
 		
 
 		DynamicNewMenu newDynamicMenu = new DynamicNewMenu();
-		DynamicOpenWithMenu openWithMenu = new DynamicOpenWithMenu();
+		//DynamicOpenWithMenu openWithMenu = new DynamicOpenWithMenu();
 		//DynamicNewMenu openWithMenu = new DynamicNewMenu();
 		
 		// alle definierten Commands auflisten

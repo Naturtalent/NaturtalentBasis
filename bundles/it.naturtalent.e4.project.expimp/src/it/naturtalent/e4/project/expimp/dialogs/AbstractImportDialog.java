@@ -261,7 +261,14 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		btnCheckOverwrite.setSelection(true);
 		btnCheckOverwrite.setText(Messages.AbstractImportDialog_btnCheckOverwrite_text);
 		
-		init();
+		try
+		{
+			init();
+		} catch (Exception e1)
+		{
+			// TODO Auto-generated catch block
+			//e1.printStackTrace();
+		}
 		
 		return area;
 	}

@@ -297,7 +297,7 @@ public class Activator implements BundleActivator
 		
 		ECPProjectManager projectManager = ECPUtil.getECPProjectManager();
 		//Collection<ECPProject>projects = projectManager.getProjects();
-		projectManager = ECPUtil.getECPProjectManager();
+		//projectManager = ECPUtil.getECPProjectManager();
 		
 		if(ecpNtProject == null)
 			ecpNtProject = ECPUtil.getECPProjectManager().getProject(ECPNTPROJECTNAME);
