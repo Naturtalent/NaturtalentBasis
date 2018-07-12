@@ -4,23 +4,21 @@ package it.naturtalent.e4.preferences;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.List;
 
 public class ListEditorComposite extends Composite
 {
@@ -115,8 +113,7 @@ public class ListEditorComposite extends Composite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				list.remove(list.getSelectionIndex());
-				updateWidgets();				
+				doRemove();
 			}
 		});
 		btnRemove.setText(Messages.ListPreferenceComposite_Remove);
@@ -136,6 +133,12 @@ public class ListEditorComposite extends Composite
 		InputDialog dialog = new InputDialog(getShell(),dialogTitle, messageTitle,list.getItem(idx),validator);
 		if(dialog.open() == InputDialog.OK)			
 			list.setItem(idx, dialog.getValue());				
+	}
+	
+	protected void doRemove()
+	{
+		list.remove(list.getSelectionIndex());
+		updateWidgets();				
 	}
 	
 	private void updateWidgets()

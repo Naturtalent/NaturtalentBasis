@@ -1,6 +1,7 @@
 package it.naturtalent.e4.preferences;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import it.naturtalent.application.IPreferenceAdapter;
