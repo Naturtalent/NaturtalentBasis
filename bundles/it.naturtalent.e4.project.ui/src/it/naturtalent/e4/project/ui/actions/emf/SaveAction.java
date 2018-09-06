@@ -79,7 +79,7 @@ public class SaveAction
 
 	@CanExecute
 	public boolean canExecute()
-	{
+	{				
 		return Activator.getECPProject().hasDirtyContents();
 	}
 	

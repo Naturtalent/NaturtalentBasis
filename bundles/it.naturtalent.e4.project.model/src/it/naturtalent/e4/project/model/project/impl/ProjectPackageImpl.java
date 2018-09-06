@@ -85,7 +85,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 
 	/**
 	 * Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
-	 * 
+	 *
 	 * <p>This method is used to initialize {@link ProjectPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
 	 * <!-- begin-user-doc -->
@@ -100,7 +100,8 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 		if (isInited) return (ProjectPackage)EPackage.Registry.INSTANCE.getEPackage(ProjectPackage.eNS_URI);
 
 		// Obtain or create and register package
-		ProjectPackageImpl theProjectPackage = (ProjectPackageImpl)(EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ProjectPackageImpl ? EPackage.Registry.INSTANCE.get(eNS_URI) : new ProjectPackageImpl());
+		Object registeredProjectPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		ProjectPackageImpl theProjectPackage = registeredProjectPackage instanceof ProjectPackageImpl ? (ProjectPackageImpl)registeredProjectPackage : new ProjectPackageImpl();
 
 		isInited = true;
 
@@ -112,7 +113,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 
 		// Register package validator
 		EValidator.Registry.INSTANCE.put
-			(theProjectPackage, 
+			(theProjectPackage,
 			 new EValidator.Descriptor()
 			 {
 				 public EValidator getEValidator()
@@ -124,7 +125,6 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 		// Mark meta-data to indicate it can't be changed
 		theProjectPackage.freeze();
 
-  
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ProjectPackage.eNS_URI, theProjectPackage);
 		return theProjectPackage;

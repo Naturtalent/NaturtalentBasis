@@ -19,5 +19,15 @@
     <genClasses ecoreClass="ntproject.ecore#//NtProjects">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ntproject.ecore#//NtProjects/NtProject"/>
     </genClasses>
+    <genClasses ecoreClass="ntproject.ecore#//DynPropertyItem">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//DynPropertyItem/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//DynPropertyItem/className"/>
+    </genClasses>
+    <genClasses ecoreClass="ntproject.ecore#//NtProperty">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//NtProperty/workingset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//NtProperty/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//NtProperty/created"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ntproject.ecore#//NtProperty/properties"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

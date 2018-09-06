@@ -100,34 +100,38 @@ public class ChooseWorkspaceData
 		String key, value;
 		Map<String, String>parseMap = new LinkedHashMap<String, String>();
 		
+		// Abbruch, wenn keine ini-Datei gelesen werden konnte (z.B. Aufruf innerhalb der IDE)
 		String phase1[] = StringUtils.split(iniFileContent, NEW_LINE);
-		for(int i = 0;i < phase1.length;i++)
+		if(!ArrayUtils.isEmpty(phase1))
 		{
-			if(StringUtils.startsWith(phase1[i],"-"))	
+			for (int i = 0; i < phase1.length; i++)
 			{
-				key = phase1[i];				
-				if(i+1 >= phase1.length)
+				if (StringUtils.startsWith(phase1[i], "-"))
 				{
-					// Stop, wenn key = letzte Zeile
-					parseMap.put(key, "");
-					break;
+					key = phase1[i];
+					if (i + 1 >= phase1.length)
+					{
+						// Stop, wenn key = letzte Zeile
+						parseMap.put(key, "");
+						break;
+					}
+
+					value = phase1[i + 1];
+					if (!StringUtils.startsWith(value, "-"))
+					{
+						// klassisches key/value Parsing
+						parseMap.put(key, value);
+						i++;
+					}
+					else
+					{
+						// key ohne value
+						parseMap.put(key, "");
+					}
 				}
-				
-				value = phase1[i+1];
-				if(!StringUtils.startsWith(value,"-"))
-				{
-					// klassisches key/value Parsing
-					parseMap.put(key, value);
-					i++;
-				}
-				else
-				{
-					// key ohne value
-					parseMap.put(key, "");
-				}
-			}			
+			}
 		}
-	
+
 		return parseMap;
 	}
 	
@@ -191,6 +195,11 @@ public class ChooseWorkspaceData
 			// die aktuelle Datei lesen und parsen
 			String iniFileContent = getLauncherIniFileContent();
 			Map<String, String>parseMap = parseIniFile(iniFileContent);
+			
+			// Abbruch, wenn keine Datei gelesen werden konnte
+			if(parseMap.isEmpty())
+				return;
+			
 			validateIniContent(parseMap);
 
 			// DJAVA_LIBRARY_PATH Command zusammensetzen

@@ -10,7 +10,6 @@
   <imports xsi:type="commands:Command" xmi:id="_sVDuME7jEeKHl_UfCGMO3g" elementId="it.naturtalent.application.newProject"/>
   <imports xsi:type="commands:Command" xmi:id="_aRUBMHbWEeOpc9TgLkg68Q" elementId="it.naturtalent.application.command.newWizard"/>
   <imports xsi:type="commands:Command" xmi:id="_4x93YIpvEeOahtNvIwc_-g" elementId="it.naturtalent.application.command.tempDir"/>
-  <imports xsi:type="menu:HandledMenuItem" xmi:id="_edkhEIpwEeOahtNvIwc_-g" elementId="it.naturtalent.e4.application.command.tempDir"/>
   <imports xsi:type="commands:Command" xmi:id="_K1c2AJ8sEeOgWLfjDX1yNQ" elementId="it.naturtalent.application.command.close"/>
   <imports xsi:type="commands:Command" xmi:id="_PPjp0J8sEeOgWLfjDX1yNQ" elementId="it.naturtalent.application.command.reopen"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_bCj5YEUkEeK2PdDjk-7XFQ" featurename="handlers" parentElementId="it.naturtalent.e4.application">

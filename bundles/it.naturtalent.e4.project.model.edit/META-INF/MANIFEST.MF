@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: it.naturtalent.e4.project.model.edit;singleton:=true
+Automatic-Module-Name: it.naturtalent.e4.project.model.edit
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: it.naturtalent.e4.project.model.project.provider.NtprojectEditPlugin$Implementation

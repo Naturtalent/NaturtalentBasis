@@ -39,6 +39,13 @@ public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
 	}
 
 	@Override
+	public void cancelPressed()
+	{
+		// no Operation - in Abstract
+		// in erweiterter Klasse definieren
+	}
+
+	@Override
 	public Composite createNodeComposite(IPreferenceNode referenceNode)
 	{
 		referenceNode.setTitle(getLabel());		

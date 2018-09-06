@@ -14,8 +14,6 @@
 
 	<modules>
 		<module>it.naturtalent.feature.basis</module>
-		<module>it.naturtalent.feature.basis.emf</module>
-		<module>it.naturtalent.feature.basis.rcp</module>		
 	</modules>
 
 </project>

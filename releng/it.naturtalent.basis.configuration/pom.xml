@@ -7,24 +7,20 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<tycho.version>0.26.0</tycho.version>
+		<tycho.version>1.0.0</tycho.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<repo.url>http://download.eclipse.org/releases/oxygen</repo.url>
+		<repo.url>http://download.eclipse.org/releases/photon</repo.url>
 	</properties>
 	
-	<!-- Repositories should be commented out to only use the target definition -->	
-	<!-- 
+	<!-- Repositories should be commented out to only use the target definition -->		
  	<repositories>
  		 <repository>
-   			<id>oxygen</id>
+   			<id>eclipse-release</id>
   			<url>${repo.url}</url>
    			<layout>p2</layout>
  		 </repository>
  	</repositories>
- 	 -->
-
- 
-	
+ 	
 	<build>
 		<plugins>
 			<plugin>
@@ -36,20 +32,24 @@
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+              		<execution>
+                		<phase>package</phase>
+                		<id>package-feature</id>
+						<configuration>
+							<finalName>${project.artifactId}_${unqualifiedVersion}.${buildQualifier}</finalName>
+                  		  </configuration>
+            		</execution>
+        		</executions>			
+			</plugin>
+			
+			<plugin>				
+				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-				
-				<!-- This block activates the usage of the target definition file -->						
-					<target>					
-						<artifact>
-							<groupId>it.naturtalent.basis</groupId>
-							<artifactId>it.naturtalent.basis.target</artifactId>
-							<version>1.0.0-SNAPSHOT</version>
-						</artifact>
-					</target>
-				
-
 					<environments>
 						<environment>
 							<os>linux</os>
@@ -79,6 +79,7 @@
 					</environments>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 
 	</build>

@@ -145,8 +145,8 @@ public class NtProjectView
 				} 				
 			}
 		});
-		
-		
+
+	
 	}
 
 	/**

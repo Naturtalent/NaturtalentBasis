@@ -44,5 +44,7 @@ public interface IPreferenceAdapter
 	
 	public void okPressed ();
 	
+	public void cancelPressed ();
+	
 	public Composite createNodeComposite(IPreferenceNode parentNodeComposite);
 }

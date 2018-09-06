@@ -3,11 +3,5 @@
    <feature url="features/it.naturtalent.feature.basis_1.0.0.qualifier.jar" id="it.naturtalent.feature.basis" version="1.0.0.qualifier">
       <category name="basic"/>
    </feature>
-   <feature url="features/it.naturtalent.feature.basis.emf_1.0.0.qualifier.jar" id="it.naturtalent.feature.basis.emf" version="1.0.0.qualifier">
-      <category name="basic"/>
-   </feature>
-   <feature url="features/it.naturtalent.feature.basis.rcp_1.0.0.qualifier.jar" id="it.naturtalent.feature.basis.rcp" version="1.0.0.qualifier">
-      <category name="basic"/>
-   </feature>
    <category-def name="basic" label="Basic"/>
 </site>

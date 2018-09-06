@@ -51,7 +51,7 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		{
 			text.selectAll();
 			
-			// Textselektion soll nur einmal erfolgen (Listener und Contexteintrag entfernen)
+			// Textselektion soll nur einmal erfolgen (Listener und Contexteintrag entfernen)			
 			text.removeModifyListener(firstTimeSelection);
 			E4Workbench.getServiceContext().remove(NewProjectAction.PREDIFINED_PROJECTNAME);
 		}
@@ -87,16 +87,15 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		
 		// Zugriff auf EventBroker
 		eventBroker = E4Workbench.getServiceContext().get(IEventBroker.class);
-
 		
 		// Listener reagiert auf Aenderungen am Modell	
-		viewContext.registerViewChangeListener(new ModelChangeListener()
+		viewContext.registerDomainChangeListener(new ModelChangeListener()
 		{			
 			@Override
 			public void notifyChange(ModelChangeNotification notification)
-			{
+			{				
 				EObject obj = notification.getNotifier();
-				if (obj instanceof VViewImpl)
+				if (obj instanceof NtProject)
 				{
 					// Validierungsergebnis bekanntgeben
 					boolean validationStatus = new ProjectValidator().validateNtProject(ntObject, new BasicDiagnostic(), null);
@@ -104,7 +103,7 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 				}
 			}
 		});
-	
+
 	}
 	
 	
@@ -122,7 +121,7 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		{
 			if(child instanceof Text)	
 			{
-				text = (Text)child;
+				text = (Text)child;				
 				eventBroker.send(ProjectModelEventKey.PROJECTNAME_WIZARDTEXTFIELD, text);
 				break;
 			}

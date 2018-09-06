@@ -88,6 +88,16 @@ public class PreferenceDialog extends Dialog
 		
 		super.okPressed();
 	}
+	
+	@Override
+	protected void cancelPressed()
+	{
+		IPreferenceAdapter adapter = preferenceView.getPreferenceAdapter();
+		if(adapter != null)
+			adapter.cancelPressed();
+
+		super.cancelPressed();
+	}
 
 	/**
 	 * Return the initial size of the dialog.

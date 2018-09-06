@@ -338,7 +338,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	{
 		if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (workingset: ");
 		result.append(workingset);
 		result.append(", id: ");

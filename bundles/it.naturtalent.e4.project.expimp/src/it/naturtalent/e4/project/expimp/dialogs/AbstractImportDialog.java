@@ -296,7 +296,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	
 	public abstract void removeExistedObjects(List<EObject>importObjects);
 	
-	// Die ExpImportDaten in Modell einlesen
+	// Die ExpImportDaten in Modell einlesen	
 	public void setModelData(List<ExpImportData>expimpdata)
 	{
 		if(m_bindingContext != null)
@@ -304,6 +304,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		model.setData(expimpdata);		
 		m_bindingContext = initDataBindings();
 	}
+
 	
 	
 	protected void init()
@@ -354,6 +355,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		return new Point(450, 673);
 	}
 
+	
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
 		//
@@ -367,4 +369,5 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		//
 		return bindingContext;
 	}
+
 }

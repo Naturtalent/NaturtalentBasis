@@ -83,7 +83,7 @@ public class ProjectPropertyWizardPage extends WizardPage
 		@Override
 		public void handleEvent(Event event)
 		{
-			// ist kein Projektname definiert - ist die Seite nicht komplatt
+			// ist kein Projektname definiert - ist die Seite nicht komplett
 			Object obj = event.getProperty(IEventBroker.DATA);
 			ProjectPropertyWizardPage.this.setPageComplete((Boolean) obj);
 		}
