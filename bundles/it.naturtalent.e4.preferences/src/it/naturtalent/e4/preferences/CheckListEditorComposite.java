@@ -1,6 +1,5 @@
 package it.naturtalent.e4.preferences;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -19,9 +18,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 
-public class CheckListEditor extends Composite
+public class CheckListEditorComposite extends Composite
 {
 	
 	private CheckboxTableViewer checkboxTableViewer;
@@ -33,7 +31,7 @@ public class CheckListEditor extends Composite
 	protected Button btnAdd;
 	protected Button btnEdit;
 	protected Button btnRemove;
-	private String checkedElement;
+	//private String [] checkedElements;
 	
 	
 	
@@ -65,20 +63,23 @@ public class CheckListEditor extends Composite
 	 * @param parent
 	 * @param style
 	 */
-	public CheckListEditor(Composite parent, int style)
+	public CheckListEditorComposite(Composite parent, int style)
 	{
 		super(parent, style);
 		setLayout(new GridLayout(2, false));
 
 		checkboxTableViewer = CheckboxTableViewer.newCheckList(this, SWT.BORDER | SWT.FULL_SELECTION);
+		
+		/*
 		checkboxTableViewer.addCheckStateListener(new ICheckStateListener()
 		{			
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event)
-			{				
-				checkedElement = (String) event.getElement();				
+			{	
+				checkedElements = (String[]) checkboxTableViewer.getCheckedElements();
 			}
 		});
+		*/
 		
 		/*
 		checkboxTableViewer.addSelectionChangedListener(new ISelectionChangedListener()
@@ -209,11 +210,19 @@ public class CheckListEditor extends Composite
 	 * @return
 	 */
 	public String getValues()
-	{		
+	{	
+		// die moḿentan gecheckte Eintrage werden gesichert
+		Object [] checkedElements = checkboxTableViewer.getCheckedElements();
+		
+		// !!! alle Tabelleneintraege weerden gecheckt
 		checkboxTableViewer.setAllChecked(true);		
 		Object [] result = checkboxTableViewer.getCheckedElements();
 		String [] stg = new String[result.length];
-		System.arraycopy(result, 0, stg, 0,result.length);		
+		System.arraycopy(result, 0, stg, 0,result.length);
+		
+		// realen Checkstatus wieder herstellen
+		checkboxTableViewer.setCheckedElements(checkedElements);
+		
 		return StringUtils.join(stg,",");
 	}
 
@@ -254,16 +263,20 @@ public class CheckListEditor extends Composite
 	}
 
 
-	public String getCheckedElement()
+	public String[] getCheckedElements()
 	{
-		return checkedElement;
+		Object [] result = checkboxTableViewer.getCheckedElements();
+		String [] stg = new String[result.length];
+		System.arraycopy(result, 0, stg, 0,result.length);
+				
+		return stg;
 	}
 
 
-	public void setCheckedElement(String checkedElement)
+	public void setCheckedElements(String[] checkedElements)
 	{
-		this.checkedElement = checkedElement;
-		checkboxTableViewer.setChecked(checkedElement, true);
+		//this.checkedElements = checkedElements;
+		checkboxTableViewer.setCheckedElements(checkedElements);
 	}
 
 	
