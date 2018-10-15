@@ -19,7 +19,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
-import it.naturtalent.e4.project.NtProjektPropertyUtils;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizard;
 
@@ -64,29 +63,42 @@ public class OpenProjectAction extends Action
 	@Override
 	public void run()
 	{		
-		if ((iResource != null) && (iResource.getType() == IResource.PROJECT))
+		if (iResource != null)
 		{
-			// ProjectWizard erzeugen
-			ProjectPropertyWizard projectPropertyWizard = ContextInjectionFactory
-					.make(ProjectPropertyWizard.class, context);
+			if (iResource.getType() == IResource.PROJECT)
+			{
+				// ProjectWizard erzeugen
+				ProjectPropertyWizard projectPropertyWizard = ContextInjectionFactory
+						.make(ProjectPropertyWizard.class, context);
 
-			projectPropertyWizard.setiProject((IProject) iResource);
+				projectPropertyWizard.setiProject((IProject) iResource);
 
-			// die dem Projekt zugeordneten PropertyFactories uebergeben
-			/*
-			List<INtProjectPropertyFactory> propertyFactories = NtProjektPropertyUtils
-					.getProjectPropertyFactories(ntProjektDataFactoryRepository,
-							(IProject) iResource);
-							*/
-			List<INtProjectPropertyFactory> propertyFactories = 
-					ntProjektDataFactoryRepository.getAllProjektDataFactories();
-						
-			if ((propertyFactories != null) && (!propertyFactories.isEmpty()))
-				projectPropertyWizard.setPropertyFactories(propertyFactories);
+				// die dem Projekt zugeordneten PropertyFactories uebergeben
+				/*
+				 * List<INtProjectPropertyFactory> propertyFactories =
+				 * NtProjektPropertyUtils
+				 * .getProjectPropertyFactories(ntProjektDataFactoryRepository,
+				 * (IProject) iResource);
+				 */
+				List<INtProjectPropertyFactory> propertyFactories = ntProjektDataFactoryRepository
+						.getAllProjektDataFactories();
 
-			// Projekt oeffnen
-			WizardDialog wizardDialog = new WizardDialog(shell,projectPropertyWizard);
-			wizardDialog.open();
+				if ((propertyFactories != null)
+						&& (!propertyFactories.isEmpty()))
+					projectPropertyWizard
+							.setPropertyFactories(propertyFactories);
+
+				// Projekt oeffnen
+				WizardDialog wizardDialog = new WizardDialog(shell,
+						projectPropertyWizard);
+				wizardDialog.open();
+			}
+			else
+			{
+				SystenOpenEditorAction action = ContextInjectionFactory
+						.make(SystenOpenEditorAction.class, context);
+				action.run();
+			}
 		}
 	}
 

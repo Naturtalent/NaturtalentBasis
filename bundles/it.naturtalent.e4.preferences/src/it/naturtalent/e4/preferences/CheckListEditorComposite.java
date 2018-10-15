@@ -19,10 +19,17 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
+/**
+ * Composite zur Realisierung eines Listeditors mit Checkfunktion durch Implementierung eines
+ * CheckBoxTableViewers.
+ * 
+ * @author dieter
+ *
+ */
 public class CheckListEditorComposite extends Composite
 {
 	
-	private CheckboxTableViewer checkboxTableViewer;
+	protected CheckboxTableViewer checkboxTableViewer;
 	private GridData gd_table;
 	private int tableWidth;
 	private int tableHeight;
@@ -68,29 +75,7 @@ public class CheckListEditorComposite extends Composite
 		super(parent, style);
 		setLayout(new GridLayout(2, false));
 
-		checkboxTableViewer = CheckboxTableViewer.newCheckList(this, SWT.BORDER | SWT.FULL_SELECTION);
-		
-		/*
-		checkboxTableViewer.addCheckStateListener(new ICheckStateListener()
-		{			
-			@Override
-			public void checkStateChanged(CheckStateChangedEvent event)
-			{	
-				checkedElements = (String[]) checkboxTableViewer.getCheckedElements();
-			}
-		});
-		*/
-		
-		/*
-		checkboxTableViewer.addSelectionChangedListener(new ISelectionChangedListener()
-		{			
-			@Override
-			public void selectionChanged(SelectionChangedEvent event)
-			{
-				updateWidgets(); 
-			}
-		});
-		*/
+		checkboxTableViewer = CheckboxTableViewer.newCheckList(this, SWT.BORDER | SWT.FULL_SELECTION);		
 		
 		table = checkboxTableViewer.getTable();		
 		
@@ -100,9 +85,9 @@ public class CheckListEditorComposite extends Composite
 		gd_table.widthHint = tableWidth;
 		table.setLayoutData(gd_table);
 		
+		// kontrolliert den Checkmodus (Einzelchecking)
 		addCheckStateListener();
 		
-		//table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		checkboxTableViewer.setContentProvider(new ArrayContentProvider());
 		table.addMouseListener(new MouseAdapter()
 		{
@@ -236,6 +221,9 @@ public class CheckListEditorComposite extends Composite
 		btnRemove.setEnabled(selection);
 	}
 	
+	/**
+	 * neuer Eintrag in der EditorListe mit Eingabedialog (simple Texteingabe mit einstellbaen Validator)
+	 */
 	protected void doAdd()
 	{
 		dialog = new EditorDialog(getShell(),dialogTitle, ADD_DIALOG_MESSAGE,"",validator);

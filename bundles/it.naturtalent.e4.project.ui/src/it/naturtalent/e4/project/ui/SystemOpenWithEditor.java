@@ -41,4 +41,17 @@ public class SystemOpenWithEditor implements IOpenWithEditorAdapter
 		return 0;
 	}
 
+	@Override
+	public boolean isExecutable(String filePath)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void execute(String filePath)
+	{
+		// TODO Auto-generated method stub
+	}
+
 }

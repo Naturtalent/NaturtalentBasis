@@ -90,6 +90,10 @@ public class DynamicOpenWithMenu
 			List<IOpenWithEditorAdapter> menueAdapters = openwithAdapterRepository.getOpenWithAdapters();
 			for(IOpenWithEditorAdapter menueAdapter : menueAdapters)
 			{
+				// mit Index < 0 wird der Adapter nicht als dyn. Menue Adapter interpretiert
+				if (menueAdapter.getIndex() < 0)
+					continue;
+					
 				if (menueAdapter.getType())
 				{
 					MCommand command = application.getCommand(menueAdapter.getCommandID());

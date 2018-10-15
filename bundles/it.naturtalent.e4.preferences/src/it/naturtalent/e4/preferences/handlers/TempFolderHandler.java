@@ -3,7 +3,6 @@ package it.naturtalent.e4.preferences.handlers;
 
 import java.io.IOException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;

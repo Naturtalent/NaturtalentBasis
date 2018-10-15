@@ -43,4 +43,17 @@ public class TestOpenWithAdapter implements IOpenWithEditorAdapter
 		return 1;
 	}
 
+	@Override
+	public boolean isExecutable(String filePath)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void execute(String filePath)
+	{
+		// TODO Auto-generated method stub
+	}
+
 }

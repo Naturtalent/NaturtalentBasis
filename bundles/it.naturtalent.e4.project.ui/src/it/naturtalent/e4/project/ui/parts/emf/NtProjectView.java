@@ -498,13 +498,13 @@ public class NtProjectView
 	@Deactivate
 	public void deActivate()
 	{
-		System.out.println("NtProjectView: DEACTIVATE");
+		//System.out.println("NtProjectView: DEACTIVATE");
 	}
 
 	@PersistState
 	public void save()
 	{
-		System.out.println("NtProjectView: SAVE");
+		//System.out.println("NtProjectView: SAVE");
 	}
 
 
