@@ -27,6 +27,7 @@ import it.naturtalent.e4.project.ProjectPropertyData;
 import it.naturtalent.e4.project.ProjectPropertySettings;
 import it.naturtalent.e4.project.expimp.ecp.ECPExportHandlerHelper;
 
+@Deprecated
 public class ExportProjectPropertyOperation implements IRunnableWithProgress
 {
 	private final static String SAVEPROPERTY_OPERATION_TITLE = "Speichern der Projekteigenschaft";

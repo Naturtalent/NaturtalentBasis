@@ -1,20 +1,12 @@
 package it.naturtalent.e4.project.expimp.dialogs;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.DirectoryFileFilter;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,8 +16,6 @@ import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -42,7 +32,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -87,34 +76,32 @@ import it.naturtalent.e4.project.expimp.Messages;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.dialogs.ConfigureWorkingSetDialog;
 import it.naturtalent.e4.project.ui.dialogs.SelectWorkingSetDialog;
-import it.naturtalent.e4.project.ui.emf.ExpImpUtils;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 
 /**
- * Mit diesem Dialog wird das Importverzeichnis ausgewaehlt. Erwartet wird, dass die Unterverzeichnisse die NtProjekte
- * repraesentieren. Die Namen der Unterverzeichnisse entsprechen den NtProjekt-IDs. In jedem NtProjekt-Vezeichnis befinden 
- * sich nicht nur die Projektresourcen (Verzeichnisse, Dateien) sondern auch die Projekteigenschaften (Defaulteigenschaft,
- * Kontakt, Archiv ...) in den jeweiligen EMFStore - Dateien. Fuer die Praesentation der zuimportierenden NtProjekte im 
- * Dialogviewer werden die Defaulteigenschaften in EMF-Modell eingelesen und die Projektnamen werden mit dem Labelprovider
- * im CheckboxViewer angezeigt.
- *   
- * PropertyAdapter
- * @see it.naturtalent.e4.project.ui.emf.NtProjectProperty
+ * Mit diesem Dialog wird das Quellverzeichnis der Importdateien ausgewaehlt.
+ * Im ausgewaehlten Verzeichnis werden NtProjekte (Verzeichnissnamen = ProjektID's) und die EMFStore 
+ * Exportdateinen (*.xmi) erwartet. 
+ * Die EMFStore-Dateien beinhalten die dem jeweiligen NtProjekt zugeordneten Property Informationen.
+ * Unverzichtbar ist die "ECPProject.xmi" - Datei. Diese Datei beinhaltet u.a. den eigentlichen Namen des NtProjekts.
  * 
  * @author dieter
  *
  */
-public class ProjectImportDialog extends TitleAreaDialog
+public class ProjectImportDialogOLDEMF extends TitleAreaDialog
 {
-
+	
+	private final static String ECP_NTPROJECT_PROPERTYFILE = "ECPProject.xmi";
+	
+	private DataBindingContext m_bindingContext;
+	
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	/*
-	 * NameFilter fuer den Viewer.
-	 * Filtert den Viewer nach einem String aus dem Textfeld 'txtSeek'
+	 * Filter nach einem String in 'stgFilter'
 	 */
 	public class NameFilter extends ViewerFilter
 	{
@@ -160,17 +147,63 @@ public class ProjectImportDialog extends TitleAreaDialog
 			return 0;
 		}
 	}
+
+
+	/*
+	 * Realisiert ein Modell fuer Databindings
+	 */
+	public class ImportSourceDirectory
+	{
+		String srcDir;
+
+		public String getSrcDir()
+		{
+			return srcDir;
+		}
+
+		public void setSrcDir(String srcDir)
+		{
+			this.srcDir = srcDir;
+		}
+	}
 	
+	/**
+	 * Interne Klasse zum ueberpruefen des Textfeldes 'applicationText'
+	 * 
+	 * @author dieter
+	 * 
+	 */
+	public class EmptyStringValidator implements IValidator
+	{
+		public EmptyStringValidator()
+		{
+			super();
+		}
+
+		@Override
+		public IStatus validate(Object value)
+		{
+			if (StringUtils.isNotEmpty((String) value))
+			{				
+				controlDecoration.hide();	
+				updateWidgets();
+				return Status.OK_STATUS;
+			}
+			else
+			{			
+				controlDecoration.show();
+				updateWidgets();
+				return ValidationStatus.error(Messages.SelectExportDialog_controlDecoration_descriptionText);
+			}
+		}
+	}
 
 	// liefert den Namen des NtProjekts
 	private class TableLabelProvider extends LabelProvider implements ITableLabelProvider
 	{
 		public Image getColumnImage(Object element, int columnIndex)
 		{
-			if(element instanceof NtProject)	
-				return Icon.ICON_PROJECT.getImage(IconSize._16x16_DefaultIconSize);
-			
-			return null;
+			return Icon.ICON_PROJECT.getImage(IconSize._16x16_DefaultIconSize);
 		}
 
 		public String getColumnText(Object element, int columnIndex)
@@ -192,11 +225,39 @@ public class ProjectImportDialog extends TitleAreaDialog
 		}
 	}
 	
+	// beinhaltet die zu importierenden NtProjectProperties
+	private static class ContentProvider implements IStructuredContentProvider
+	{
+		private EObject[] ntProjects;
+		
+		public Object[] getElements(Object inputElement)
+		{
+			return ntProjects;
+		}
+
+		public void dispose()
+		{
+		}
+
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
+		{
+			ntProjects = new EObject[0];
+			if(newInput instanceof EList)
+			{
+				EList inputProperties = (EList) newInput; 
+				ntProjects = (EObject[]) ((EList) newInput).toArray(new NtProject[inputProperties.size()]);
+			}
+		}
+	}
+	
+	private ImportSourceDirectory importSourceDirectory = new ImportSourceDirectory();
+	
 	private Table table;
 	private CheckboxTableViewer checkboxTableViewer;
 	private Combo comboSourceDir;
 	private Button okButton;
-	private EObject [] resultImportEobjects;	
+	private EObject [] resultImportEobjects;
+	private ControlDecoration controlDecoration;
 	private Button btnWorkingSets;
 	private CCombo comboWorkingSets;
 	private Button btnBrowseWorkingset;
@@ -207,19 +268,30 @@ public class ProjectImportDialog extends TitleAreaDialog
 	// Liste der zugeordneten WorkingSets	
 	private ArrayList<IWorkingSet> assignedWorkingSets = new ArrayList<IWorkingSet>();
 	
-	// das ausgewaehlte Importverzeichnis
-	private File selectedImportDirectory;
-	
 	private String stgFilter;
-
-	// Textfeld zur Eingabe eines Suchstrings
+	
+	/*
+	 * Der FileFilter akzeptiert alle Verzeichnisse, die selbst ein Unterverzeichnis IProjectData.PROJECTDATA_FOLDER und
+	 * hier eine ProjectProperty-Datei IProjectData.PROJECTDATAFILE gespeichert ist.
+	 * (In dieser Datei sind die dem NtProject zugeordnete ProjectPropertyFactory-Klassennamen gespeichert)    
+	 */
+	private FilenameFilter projectFileFilter = new FilenameFilter()
+	{		
+		@Override
+		public boolean accept(File dir, String name)
+		{
+			File checkDir = new File(dir,name);
+			checkDir = new File(checkDir, IProjectData.PROJECTDATA_FOLDER);
+			return (new File(checkDir,IProjectData.PROJECTDATAFILE).exists());
+		}
+	};
 	private Text txtSeek;
 	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public ProjectImportDialog(Shell parentShell)
+	public ProjectImportDialogOLDEMF(Shell parentShell)
 	{
 		super(parentShell);		
 	}
@@ -231,37 +303,33 @@ public class ProjectImportDialog extends TitleAreaDialog
 	@Override
 	protected Control createDialogArea(Composite parent)
 	{
-		setTitleImage(SWTResourceManager.getImage(ProjectImportDialog.class, "/icons/full/wizban/import_wiz.png")); //$NON-NLS-1$
+		setTitleImage(SWTResourceManager.getImage(ProjectImportDialogOLDEMF.class, "/icons/full/wizban/import_wiz.png")); //$NON-NLS-1$
 		setMessage(Messages.SelectImportDialog_this_message);
 		setTitle(Messages.SelectImportDialog_this_title);
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(3, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		// Combo mit Importverzeichnissen
+		
+		Label lblSource = new Label(container, SWT.NONE);
+		lblSource.setText(Messages.SelectImportDialog_lblSource_text);
+		
 		comboSourceDir = new Combo(container, SWT.BORDER);		
 		comboSourceDir.addSelectionListener(new SelectionAdapter()
 		{
 			@Override
 			public void widgetSelected(SelectionEvent e)
-			{		
-				// Viewer mit den Projekten aus der Combobox Selektion initialisieen
-				initViewer(comboSourceDir.getText());
+			{
+				initSourceTable(comboSourceDir.getText());
 			}
 		});
 		comboSourceDir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		comboSourceDir.setEnabled(false);
 		
-		// Combo initialisieren mit Settingwerten
-		String [] sourcePaths = settings.getArray(IMPORT_SOURCEDIRS_SETTINGS);
-		if(ArrayUtils.isNotEmpty(sourcePaths))
-		{
-			comboSourceDir.setItems(sourcePaths);
-			comboSourceDir.setText(sourcePaths[0]);
-		}
+		controlDecoration = new ControlDecoration(comboSourceDir, SWT.LEFT | SWT.TOP);
+		controlDecoration.setImage(SWTResourceManager.getImage(ProjectImportDialogOLDEMF.class, "/icons/full/ovr16/error_ovr.gif")); //$NON-NLS-1$
+		controlDecoration.setDescriptionText("Some description"); //$NON-NLS-1$
 		
-		// Button startet die Auswahl eines Importverzeichnisses
 		Button btnBrowse = new Button(container, SWT.NONE);
 		btnBrowse.addSelectionListener(new SelectionAdapter()
 		{
@@ -270,24 +338,25 @@ public class ProjectImportDialog extends TitleAreaDialog
 			{
 				DirectoryDialog dlg = new DirectoryDialog(getShell());
 
-				// Dateibrowser auf Path im Combotext einstellen				
+				// Set the initial filter path according
+				// to anything they've selected or typed in
 				dlg.setFilterPath(comboSourceDir.getText());
 
-				// Label des Diealogs
+				// Change the title bar text
 				dlg.setText(Messages.SelectImportDialog_ImportDirTitle);
 
 				// Customizable message displayed in the dialog
 				dlg.setMessage(Messages.SelectImportDialog_Message);
 
+				// Calling open() will open and run the dialog.
+				// It will return the selected directory, or
+				// null if user cancels
 				String dir = dlg.open();
 				if (dir != null)
 				{
-					// das ausgewaehlte Verzeichnis in die Combobox uebernehmen
+					// Set the text box to the new selection
 					comboSourceDir.setText(dir);
-					
-					// Viewer mit den Projekten aus der 'browse'-Button Selektion initialisieen
-					initViewer(comboSourceDir.getText());					
-					
+					initSourceTable(dir);
 					updateWidgets();
 				}
 			}
@@ -338,8 +407,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		AbstractTableSorter sorter = new Sorter(checkboxTableViewer,tableViewerColumn);
 		
 		checkboxTableViewer.setLabelProvider(new TableLabelProvider());
-		checkboxTableViewer.setContentProvider(new ArrayContentProvider());
-		//checkboxTableViewer.setContentProvider(new ContentProvider());
+		checkboxTableViewer.setContentProvider(new ContentProvider());
 		
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
@@ -447,93 +515,90 @@ public class ProjectImportDialog extends TitleAreaDialog
 		});
 		btnBrowseWorkingset.setText(Messages.SelectImportDialog_btnBrowseWorkingset_text);
 
-		// Viewer mit den ImportNtProjekte aus dem Setting ImportPath initialisieren
-		initViewer(comboSourceDir.getText());
+		initSourceDirCombo();
 		updateWidgets();
 		
 		return area;
 	}
 	
-	/**
-	 * Den Viewer mit den Projekte des Importverzeichnisses initialisieren.
-	 * 
-	 * @param importDirPath
+	/*
+	 * Sourceverzeichnis vorbelegen (aus DialogSettings od. Default-TempDir)
 	 */
-	private void initViewer(String importDirPath)
+	private void initSourceDirCombo()
 	{
-		List <NtProject>ntProjects = readImportFiles(importDirPath);		
-		checkboxTableViewer.setInput(ntProjects);	
-		disableExistObjects(ntProjects);
-	}
-	
-	/**
-	 * Defaulteigenschaft der NtProjekte aus den NtProjekt-Unterverzeichnissen einlesen.
-	 * Zurueckgegeben wird eine Liste mit den Eigenschaften der importierbaren NtProjekte.
-	 * 
-	 * @param importDirPath
-	 * @return
-	 */
-	private List <NtProject>readImportFiles(String importDirPath)
-	{
-		List<NtProject>ntProjects = new ArrayList<NtProject>();
-		File importDir = new File(importDirPath);
-		File[] subdirs = importDir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
-		
-		File propertyFile;
-		if (ArrayUtils.isNotEmpty(subdirs))
+		String [] sourcePaths = settings.getArray(IMPORT_SOURCEDIRS_SETTINGS);
+		if(sourcePaths != null)
 		{
-			for (File dir : subdirs)
+			for(String path : sourcePaths)
+				comboSourceDir.add(path);
+			setImportDir(sourcePaths[0]);	
+			
+			// falls Zielverzeichnis nicht existiert, temporaeres Verzeichnis benutzen
+			if(!new File(sourcePaths[0]).exists())
 			{
-				// Defaulteigenschaft aus der Datei
-				// 'NtProjectProperty.EXPIMP_NTPROJECTDATA_FILE' lesen
-				propertyFile = new File(dir,NtProjectProperty.EXPIMP_NTPROJECTDATA_FILE);
-				if (propertyFile.exists())
-				{
-					EList<EObject> eObjects = ExpImpUtils.loadEObjectFromResource(propertyFile);
-					ntProjects.add((NtProject) eObjects.get(0));
-				}
+				IEclipsePreferences instancePreferenceNode = InstanceScope.INSTANCE.getNode(IPreferenceAdapter.ROOT_APPLICATION_PREFERENCES_NODE);
+				setImportDir(instancePreferenceNode.get(IPreferenceAdapter.PREFERENCE_APPLICATION_TEMPDIR_KEY,null));
 			}
 		}
+		else
+		{
+			// temporaeres Verzeichnis ist Defaultverzeichnis
+			IEclipsePreferences instancePreferenceNode = InstanceScope.INSTANCE
+					.getNode(
+							IPreferenceAdapter.ROOT_APPLICATION_PREFERENCES_NODE);			
+			setImportDir(instancePreferenceNode.get(IPreferenceAdapter.PREFERENCE_APPLICATION_TEMPDIR_KEY,null));
+		}
 		
-		return ntProjects;
+		initSourceTable(importSourceDirectory.getSrcDir());		
 	}
 	
 	/*
-	 * Vorhandenen NtProjekte koennen nicht importiert werden und werden in der CheckBoxTableView 
-	 * disabled (@see TableLableProvider).
-	 * In diesem Fall wird eine Message angezeigt.
-	 *      
+	 * Initialisiert den TableViewer des Dialogs
+	 * Die Daten aus EMF-Datei lesen und in dem TableViewer (ContentProvider) speichern
 	 */
-	private void disableExistObjects(List<NtProject>importedNtProjects)
+	private void initSourceTable(String sourceDir)
 	{		
-		boolean showExistsMessage = false;
-		for(NtProject ntProject : importedNtProjects)
+		// die NtProject-Eigenschaften aus der 'xmi'-Datei auslesen
+		EList<EObject>importedNtProperties = importProjectProperties(sourceDir);
+		if(importedNtProperties != null)
 		{
-			String id = ntProject.getId();
-			IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(ntProject.getId());
-			if(iProject.exists())
+			checkboxTableViewer.setInput(importedNtProperties);
+			disableExistObjects(importedNtProperties);
+		}
+	}
+	
+	/*
+	 * Die vorhandenen Objekte werden in der CheckBoxTableView disabled (@see TableLableProvider).    
+	 */
+	private void disableExistObjects(EList<EObject>importedNtProperties)
+	{		
+		boolean exists = false;
+		for(EObject eObject : importedNtProperties)
+		{
+			String id = ((NtProject)eObject).getId();
+			if(it.naturtalent.e4.project.ui.Activator.findNtProject(id) != null)
 			{
-				checkboxTableViewer.setGrayed(ntProject, true);
-				showExistsMessage = true;
+				checkboxTableViewer.setGrayed(eObject, true);
+				exists = true;
 			}
 		}
 		
-		if(showExistsMessage)
+		if(exists)
 			setErrorMessage("nicht alle Projekte können importiert werden, da sie bereits existieren");
 		
 		checkboxTableViewer.refresh();
 	}
-
+	
 	/*
 	 * EMF-Daten aus der 'xmi' - Datei, in der die NtProject-Eigenschaften gespeichert sind, lesen
 	 */
-	private EList<EObject> importProjectPropertiesOLD(String sourceDir)
+	private EList<EObject> importProjectProperties(String sourceDir)
 	{
 		EList<EObject>projectProperties = null;
 		
 		// alle direkten Unterverzeichnisse auflisten
 		File dir = new File(sourceDir);
-		File projectPropertyFile = new File(dir, NtProjectProperty.EXPIMP_NTPROJECTDATA_FILE);
+		File projectPropertyFile = new File(dir,ECP_NTPROJECT_PROPERTYFILE);
 		if(projectPropertyFile.exists())
 		{
 			// Resource laden
@@ -562,7 +627,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		}
 		
 		if((projectProperties == null) || (projectProperties.isEmpty()))
-			log.error("keine Importdaten in "+/*ECP_NTPROJECT_PROPERTYFILE+*/" defniert");
+			log.error("keine Importdaten in "+ECP_NTPROJECT_PROPERTYFILE+" defniert");
 			
 		return projectProperties;
 	}
@@ -577,6 +642,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 		updateWidgets();
+		m_bindingContext = initDataBindings();
 	}
 
 	/**
@@ -597,25 +663,24 @@ public class ProjectImportDialog extends TitleAreaDialog
 	@Override
 	protected void okPressed()
 	{
-		// die ausgewaehlten NtProjekt Defaulteigenschaften listen
 		Object[] result = checkboxTableViewer.getCheckedElements();
+		
 		resultImportEobjects = new EObject[result.length];
 		System.arraycopy(result, 0, resultImportEobjects, 0,result.length);
 		
-		// die selektierten WorkingSets
 		assignedWorkingSets = (btnWorkingSets.getSelection() ? assignedWorkingSets : null);
 		
-		// das Importverzeichnis	
-		String importDir = comboSourceDir.getText();
-		selectedImportDirectory = (StringUtils.isNotEmpty(importDir)) ? new File(importDir) : null;
-		
-		// Dialogsettings aktualisieren
 		storeSettings();
-		
 		super.okPressed();
 	}
 	
 	
+
+	public String getImportSourceDirectory()
+	{
+		return importSourceDirectory.getSrcDir();
+	}
+
 	private void storeSettings()
 	{
 		List<String>srcPaths = new ArrayList<String>();
@@ -638,12 +703,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		}
 	}
 
-	/**
-	 * Die zum Import ausgewaehlten NtProjekt zurueckgeben.
-	 * 
-	 * @return
-	 */
-	public EObject[] getSelectedImportNtProjects()
+	public EObject[] getResultImportSource()
 	{
 		return resultImportEobjects;
 	}
@@ -653,13 +713,23 @@ public class ProjectImportDialog extends TitleAreaDialog
 		return assignedWorkingSets;
 	}
 
-	public File getSelectedImportDirectory()
+	private void setImportDir(String importDir)
 	{
-		return selectedImportDirectory;
+		if(m_bindingContext != null)
+			m_bindingContext.dispose();
+
+		importSourceDirectory.setSrcDir(StringUtils.isNotEmpty(importDir) ? importDir : ""); //$NON-NLS-1$
+		m_bindingContext = initDataBindings();
 	}
-
-
-
-	
-
+	protected DataBindingContext initDataBindings() {
+		DataBindingContext bindingContext = new DataBindingContext();
+		//
+		IObservableValue observeTextComboSourceDirObserveWidget = WidgetProperties.text().observe(comboSourceDir);
+		IObservableValue srcDirImportSourceDirectoryObserveValue = PojoProperties.value("srcDir").observe(importSourceDirectory); //$NON-NLS-1$
+		UpdateValueStrategy strategy = new UpdateValueStrategy();
+		strategy.setAfterGetValidator(new EmptyStringValidator());
+		bindingContext.bindValue(observeTextComboSourceDirObserveWidget, srcDirImportSourceDirectoryObserveValue, strategy, null);
+		//
+		return bindingContext;
+	}
 }

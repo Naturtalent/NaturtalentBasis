@@ -45,8 +45,7 @@ import it.naturtalent.e4.project.ui.utils.CreateNewProject;
  * @author dieter
  *
  */
-@Deprecated
-public class ImportProjectPrepareOperation implements IRunnableWithProgress
+public class ImportProjectPrepareOperationOLD implements IRunnableWithProgress
 {
 	private final static String PREPAREPROPERTY_OPERATION_TITLE = "Import vorbereiten";
 	
@@ -72,7 +71,7 @@ public class ImportProjectPrepareOperation implements IRunnableWithProgress
 	
 	
 	
-	public ImportProjectPrepareOperation(Shell shell, File importDir, EObject[] importObjects, List<IWorkingSet> selectedWorkingSets)
+	public ImportProjectPrepareOperationOLD(Shell shell, File importDir, EObject[] importObjects, List<IWorkingSet> selectedWorkingSets)
 	{
 		super();
 		this.shell = shell;
@@ -106,7 +105,7 @@ public class ImportProjectPrepareOperation implements IRunnableWithProgress
 					monitor.worked(1);
 				}
 			}
-			//final Set<String>selectedImportProjectIDs = createProjectMap.keySet();
+			final Set<String>selectedImportProjectIDs = createProjectMap.keySet();
 
 			// die zuimportierenden NtProjekte im Workspace erzeugen	
 			

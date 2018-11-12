@@ -28,6 +28,7 @@ import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
  * @author dieter
  *
  */
+@Deprecated
 public class DefaultNtProjectProperty implements INtProjectProperty
 {
 	// mit diesem EventKey informiert der Broker Undo - Events
@@ -171,10 +172,16 @@ public class DefaultNtProjectProperty implements INtProjectProperty
 	}
 
 	@Override
-	public boolean importProperty(Object importData)
+	public void importProperty()
+	{
+
+	}
+
+	@Override
+	public void exportProperty()
 	{
 		// TODO Auto-generated method stub
-		return false;
+		
 	}
 
 	/*

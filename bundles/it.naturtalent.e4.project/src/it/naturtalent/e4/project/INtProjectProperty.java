@@ -7,7 +7,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 /**
  * Adapter Interface 
  * 
- * Mit diesem Adapter werden die ProjektProperties angepasst. Die konkreten Daten sind ohnehin 
+ * Mit diesem Adapter werden die Projekteigenschaften angepasst. Die konkreten Daten sind  
  * alle vom Typ EObject und werden in einem ECPProject persistent gespeichert. 
  * 
  * @author dieter
@@ -100,13 +100,16 @@ public interface INtProjectProperty
 	/**
 	 * Eigenschaft exportieren
 	 */
-	//public void exportProperty();
+	public void exportProperty();
 
 	/**
 	 * Eigenschaft importieren
-	 * @return 
+	 * 
+	 * Die NtProjektID muss zuvor mit 'setNtProjectID(String ntProjectID)' definiert werden und die zuvor exportierten
+	 * Daten muessen in dem jeweiligen Projektbereich in einer spezifischen Datei gespeichert sein.
+	 * Die implementierten Funktionen importieren die Daten dieser Datei und speichern sie jeweiligen ECPProject.
 	 */
-	public boolean importProperty(Object importData);
+	public void importProperty();
 
 	
 	/**

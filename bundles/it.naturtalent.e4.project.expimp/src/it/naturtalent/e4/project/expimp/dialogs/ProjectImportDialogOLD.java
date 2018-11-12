@@ -507,11 +507,12 @@ public class ProjectImportDialogOLD extends TitleAreaDialog
 		});
 		btnBrowseWorkingset.setText(Messages.SelectImportDialog_btnBrowseWorkingset_text);
 
-		initSourceDirCombo();
+		//initSourceDirCombo();
 		updateWidgets();
 		
 		return area;
 	}
+
 	
 	private void initSourceDirCombo()
 	{
@@ -525,6 +526,7 @@ public class ProjectImportDialogOLD extends TitleAreaDialog
 		else setImportDir(SystemUtils.getUserDir().getPath());
 		initSourceTable(importSourceDirectory.getSrcDir());
 	}
+	
 	
 	private void initSourceTable(String sourceDir)
 	{

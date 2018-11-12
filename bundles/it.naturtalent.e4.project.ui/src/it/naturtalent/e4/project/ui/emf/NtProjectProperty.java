@@ -16,6 +16,8 @@ import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -24,20 +26,17 @@ import org.eclipse.jface.wizard.IWizardPage;
 import it.naturtalent.e4.project.INtProject;
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.model.project.NtProject;
-import it.naturtalent.e4.project.model.project.NtProjects;
 import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.ui.Activator;
-import it.naturtalent.e4.project.ui.actions.emf.DeleteProjectAction;
 import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.actions.emf.UndoProjectAction;
-import it.naturtalent.e4.project.ui.handlers.emf.SystemOpenHandler;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
 
 /**
- * ProjectProperty-Klasse des NtProjekts.
- * 
- * Diese Klasse ist obligatorisch fuer jedes NtProjekt und definiert die grundlegenden Eigenschaften eines
- * NtProjekts. 
+ * Dieser Adapter implementiert die Eigenschaft des NtProjekts und ist obligatorisch fuer jedes NtProjekt.
+ *  
+ * @see it.naturtalent.e4.project.expimp.actions.ExportAction 
+ * @see it.naturtalent.e4.project.expimp.actions.ExportAction
  * 
  * @author dieter
  *
@@ -46,10 +45,13 @@ import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
 public class NtProjectProperty implements INtProjectProperty
 {
 	
-	// die eigentlichen Propertydaten
+	// EMF-Modell der Projekteigenschaft
 	private NtProject ntPropertyData = ProjectFactory.eINSTANCE.createNtProject();
 	
-	// ID des Projekts, auf das sich die Eigenschaft bezieht
+	// in diese Datei werden die Projekteigenschaften waehrend des Exports gespeichert
+	public static final String EXPIMP_NTPROJECTDATA_FILE = ".ntProjectData.xmi";
+	
+	// ID des NtProjekts auf den sich der Adapter bezieht
 	protected String ntProjectID;
 	
 	private IEclipseContext context;
@@ -71,6 +73,7 @@ public class NtProjectProperty implements INtProjectProperty
 	{
 		this.ntProjectID = ntProjectID;		
 		
+		// fuer jedes ProjektID(Workspaceprojekt) muss ein NtProject (EMF-Modell) existieren
 		NtProject ntProject = Activator.findNtProject(ntProjectID);
 		if(ntProject != null)
 			ntPropertyData = ntProject;
@@ -233,11 +236,37 @@ public class NtProjectProperty implements INtProjectProperty
 	}
 
 	@Override
-	public boolean importProperty(Object importData)
+	public void importProperty()
 	{		
-		return false;
-		
+		EObject niProjectData = ExpImpUtils.importNtPropertyData(EXPIMP_NTPROJECTDATA_FILE, ntProjectID);
+		if (niProjectData instanceof NtProject)
+		{
+			NtProject ntProject = (NtProject) niProjectData;
+			
+			// nochmal pruefen, ob die IDs uebereinstimmen
+			if(StringUtils.equals(ntProjectID, ntProject.getId()))
+				Activator.getNtProjects().getNtProject().add(ntProject);
+		}
 	}
 
+	/* 
+	 * Beim Exportieren wird das zuexportierende Objekt geloescht (warum ist unklar). Als Workaroung wird vor dem
+	 * exportieren eine Kopie gezogen und nachher wieder eigefuegt. 
+	 */
+	@Override
+	public void exportProperty()
+	{
+		// sind Propertydaten vorhanden @see setNtProjectID(String ntProjectID)
+		if(ntPropertyData != null)
+		{
+			String projectID = ntPropertyData.getId();
+			if(StringUtils.isNotEmpty(projectID))
+			{
+				// wenn die Propertydaten und projektid uebereinstimmen wird exportiert 
+				if(StringUtils.equals(projectID, ntProjectID))
+					ExpImpUtils.exportNtPropertyData(projectID, ntPropertyData, EXPIMP_NTPROJECTDATA_FILE);
+			}
+		}
+	}
 	
 }

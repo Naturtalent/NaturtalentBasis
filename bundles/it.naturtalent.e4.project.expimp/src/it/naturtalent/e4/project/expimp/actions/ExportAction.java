@@ -1,6 +1,5 @@
 package it.naturtalent.e4.project.expimp.actions;
 
-
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -8,23 +7,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -34,187 +26,153 @@ import org.eclipse.swt.widgets.Shell;
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
-import it.naturtalent.e4.project.ProjectPropertyData;
-import it.naturtalent.e4.project.ProjectPropertySettings;
 import it.naturtalent.e4.project.expimp.ExpImpProcessor;
 import it.naturtalent.e4.project.expimp.ExportResources;
 import it.naturtalent.e4.project.expimp.Messages;
-import it.naturtalent.e4.project.expimp.dialogs.ExportDialog;
 import it.naturtalent.e4.project.expimp.dialogs.ProjectExportDialog;
-import it.naturtalent.e4.project.expimp.ecp.ECPExportHandlerHelper;
 import it.naturtalent.e4.project.ui.datatransfer.RefreshResourcesOperation;
+import it.naturtalent.e4.project.ui.emf.ExportProjectPropertiesOperation;
 
 /**
- * Mit dieser Klasse wird der Export von Projekten in ein auszuwaehlendes Verzeichnis ausgefuehrt.
- * Kopiert werden alle Resourcen des ausgewaehleten Projekte.
- * Vor Ausfuehrung muessen (sollten) alle Dateien des Projekts geschlossen sein.
- * (Moeglicherweise sollte vor dem Kopieren noch ein Refresh erfolgen)
+ * Mit dieser Klasse wird der Export von Projekten in ein auszuwaehlendes
+ * Verzeichnis ausgefuehrt. Kopiert werden alle Resourcen der ausgewaehleten
+ * Projekte. 
  * 
- *  Alle den Projekten zugeordnete PropertyAdapter werden angesprochen und die jeweiligen 'Export'-Funktionen aufgerufen.
+ * Alle verfuegbaren Eigenschftsadapter werden angesprochen und die von dem Adapter gelieferten
+ * projektspezifischen Daten werden ueber die Adapter-Export-Funktion exportiert (in einer Datei im
+ * Projektbereich gespeichert)
+ * 
+ * exportieren der Eigenschaften im ProgressMonitor 
+ * @see it.naturtalent.e4.project.ui.emf.ExportProjectPropertiesOperation
+ * 
+ * Dialog zur Auswahl der zuexportierenden Projekte und dem Zielverzeichnis
+ * @see it.naturtalent.e4.project.expimp.dialogs.ProjectExportDialog
+ * 
+ * Adapter der Projecteigenschaften
+ * @see it.naturtalent.e4.project.ui.emf.NtProjectProperty
  * 
  * @author dieter
  *
  */
 public class ExportAction extends Action
 {
-	
-	//public static final String PROJECT_OOEXPORT_TEMPLATE = "projekte0.ods"; //$NON-NLS-1$
-	//public static final String PROJECT_MSEXPORT_TEMPLATE = "projekte0.xlsx"; //$NON-NLS-1$
-		
-	//public static final String IMPEXPORTFILE_NAME = "impexpprojectproperty.xmi"; //$NON-NLS-1$	
-		
-	//@Inject @Optional IProjectDataFactory projectDataFactory;
-	//@Inject @Optional UISynchronize sync;
-	
+
 	private INtProjectPropertyFactoryRepository projektDataFactoryRepository;
+
 	private Log log = LogFactory.getLog(this.getClass());
+
 	private Shell shell;
 
-	
 	private File exportDestDir;
-	
-	private Map<String,List<String>>mapProjectFactories = new HashMap<String, List<String>>();	
-	
+
+	private Map<String, List<String>> mapProjectFactories = new HashMap<String, List<String>>();
+
 	@PostConstruct
-	private void postConstruct(@Optional INtProjectPropertyFactoryRepository projektDataFactoryRepository,
-			@Named(IServiceConstants.ACTIVE_SHELL)@Optional Shell shell)
+	private void postConstruct(
+			@Optional INtProjectPropertyFactoryRepository projektDataFactoryRepository,
+			@Named(IServiceConstants.ACTIVE_SHELL) @Optional Shell shell)
 	{
 		this.projektDataFactoryRepository = projektDataFactoryRepository;
-		this.shell = shell;	
+		this.shell = shell;
 	}
-	
+
 	@Override
 	public void run()
 	{
-		final ProjectExportDialog projectExportDialog = new ProjectExportDialog(ExpImpProcessor.shell);
-		
-		// BusyIndicator - das Einlesen der vorhandenen NtProjecte kann dauern	
+		final ProjectExportDialog projectExportDialog = new ProjectExportDialog(
+				ExpImpProcessor.shell);
+
+		// BusyIndicator - das Einlesen der vorhandenen NtProjecte kann dauern
 		BusyIndicator.showWhile(shell.getDisplay(), new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				// ueber ProjectExportDialog.init() werden die Projekte oder
+				// WorkingSets eingelesen
 				projectExportDialog.create();
 			}
 		});
-		
+
 		// Exportmodalitaeten im Dialog festlegen
-		if(projectExportDialog.open() == ProjectExportDialog.OK)
+		if (projectExportDialog.open() == ProjectExportDialog.OK)
 		{
-			// die zuexportierenden Resourcen in einer Liste zusammenfassen
-			IResource [] resources = projectExportDialog.getResultExportSource();			
-			if(ArrayUtils.isEmpty(resources))
+			// die zum Export ausgewaehlten Resourcen in einer Liste zusammenfassen
+			IResource[] resources = projectExportDialog.getResultExportSource();
+			if (ArrayUtils.isEmpty(resources))
 				return;
-			
+
 			// das ausgewaelte Zielverzeichnis (hierhin werden die Projekte exportiert)
-			exportDestDir = projectExportDialog.getResultDestDir();			
-									
+			exportDestDir = projectExportDialog.getResultDestDir();
+
 			// die Resourcen in eine Liste ueberfuehren
 			List<IResource> iResources = Arrays.asList(resources);
+
+			// die Eigenschaften des Projekts werden ueber die
+			// Eigenschaftsadapter ermittelt und
+			// in einer fuer jeder Eigenschaft spezifische Date im
+			// Projektbereich gespeichet
+			// zuerst alle definierten AdapterFactories aus dem Repository laden
+			List<INtProjectPropertyFactory> projectPropertyFactories = projektDataFactoryRepository
+					.getAllProjektDataFactories();
+
+			// dann die Adapter selbst erzeugen und auflisten
+			List<INtProjectProperty> projectPropertyAdapters = new ArrayList<INtProjectProperty>();
+			for (INtProjectPropertyFactory propertyFactory : projectPropertyFactories)
+				projectPropertyAdapters
+						.add(propertyFactory.createNtProjektData());
 			
-		
-			// Refresh fuer alle Resourcen
-			RefreshResourcesOperation refreshOperation = new RefreshResourcesOperation(iResources);
+			ExportProjectPropertiesOperation exportPropertiesOperation = new ExportProjectPropertiesOperation(
+					iResources, projectPropertyAdapters);
 			try
 			{
-				new ProgressMonitorDialog(shell).run(true, false, refreshOperation);
+				new ProgressMonitorDialog(shell).run(true, false,exportPropertiesOperation);
 			} catch (InvocationTargetException e)
 			{
 				// Error
 				Throwable realException = e.getTargetException();
-				MessageDialog.openError(shell, Messages.ExportResources_Error, realException.getMessage());
+				MessageDialog.openError(shell, Messages.ExportResources_Error,realException.getMessage());
 			} catch (InterruptedException e)
 			{
 				// Abbruch
-				MessageDialog.openError(shell, Messages.ExportResources_Cancel, e.getMessage());
+				MessageDialog.openError(shell, Messages.ExportResources_Cancel,e.getMessage());
+				return;
 			}
-		
-			
-			// alle zuexportierenden Ressourcen (NtProjekte) werden exportiert		
+
+			// da die Eigenschaften in separaten Dateien gespeichert wurden ist
+			// ein refresh erforderlich
+			RefreshResourcesOperation refreshOperation = new RefreshResourcesOperation(iResources);
+			try
+			{
+				new ProgressMonitorDialog(shell).run(true, false,
+						refreshOperation);
+			} catch (InvocationTargetException e)
+			{
+				// Error
+				Throwable realException = e.getTargetException();
+				MessageDialog.openError(shell, Messages.ExportResources_Error,
+						realException.getMessage());
+			} catch (InterruptedException e)
+			{
+				// Abbruch
+				MessageDialog.openError(shell, Messages.ExportResources_Cancel,e.getMessage());
+				return;
+			}
+
+			// abschliessend alle zuexportierenden Ressourcen exportiert
+			// (kopiert)
 			if (shell != null)
 			{
 				ExportResources exportResource = new ExportResources(shell);
 				exportResource.export(shell, iResources,
-						exportDestDir.getPath(), projectExportDialog.isArchivState());
+						exportDestDir.getPath(),
+						projectExportDialog.isArchivState());
 			}
-			
-			// die ProjectPropertiwa exportieren
-			ExportProjectPropertyOperation exportPropertyOperation = new ExportProjectPropertyOperation(
-					shell, exportDestDir, resources, projektDataFactoryRepository);			
-			try
-			{
-				new ProgressMonitorDialog(shell).run(true, false, exportPropertyOperation);
-			} catch (InvocationTargetException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			// Projekte ohne PropertyData-File im LogFile dokumentieren
-			List<String>noPropertyData = exportPropertyOperation.getNoPropertyData();
-			if(!noPropertyData.isEmpty())
-			{				
-				log.info("Projekte ohne Properties:");
-				for(String projectID : noPropertyData)
-					log.info(projectID);
-				MessageDialog.openInformation(shell,"Projekteigenschaften","fehlerhafte Projekte (s. Logdatei");
-			}
-			
-			MessageDialog.openInformation(null, "Export", "Projekte wurden exportiert in das Verzeichnis: " + exportDestDir); //$NON-NLS-1$ //$NON-NLS-2$			
-		}
-			
-	}
-	
-	/*
-	 * Die jeweiligen PropjectProperties werden in ECPProjectFiles (.xmi) gespeichert.
-	 * Der Name dieses Files wird vom jeweiligen ContainerObject (ECPProject) abgeleitet.
-	 */
-	public void exportProjectProperty(String factoryName)
-	{
-		// Name des ECPProjects
-		String ecpProjectName = null;
-		
-		INtProjectProperty ntProjectProperty = null;
-		
-		// mit Hilfe des PropertyFactory wird der NtProjectProperty-Adapter instanziiert
-		List<INtProjectPropertyFactory>projectFactories = projektDataFactoryRepository.getAllProjektDataFactories();
-		for(INtProjectPropertyFactory projectFactory : projectFactories)
-		{
-			if(StringUtils.equals(projectFactory.getClass().getName(),factoryName))
-			{
-				ecpProjectName = projectFactory.getParentContainerName();
-				ntProjectProperty = projectFactory.createNtProjektData();
-				break;				
-			}
-		}
-		
-		List<EObject>exportListe = new ArrayList<EObject>();
-		if(ecpProjectName != null)
-		{
-			// alle Propertydaten laden und in einer Liste sammeln 
-			List<String>projectIDs = mapProjectFactories.get(factoryName);
-			for(String projectID : projectIDs)
-			{
-				// ueber den Adapter laden 
-				ntProjectProperty.setNtProjectID(projectID);
-				Object obj = ntProjectProperty.getNtPropertyData();
-				if (obj instanceof EObject)
-				{
-					EObject eObject = (EObject) obj;
-					exportListe.add(EcoreUtil.copy(eObject));
-				}				
-			}
-			
-			// Dateiname des Properties generieren und daten exportieren
-			File exportFile = new File(exportDestDir,ecpProjectName+".xmi");
-			ECPExportHandlerHelper.export(shell, exportListe, exportFile.getPath());			
+
+			MessageDialog.openInformation(null, "Export", //$NON-NLS-1$
+					"Projekte wurden exportiert in das Verzeichnis: " //$NON-NLS-1$
+							+ exportDestDir);
 		}
 	}
-	
-	
-	
+
 }

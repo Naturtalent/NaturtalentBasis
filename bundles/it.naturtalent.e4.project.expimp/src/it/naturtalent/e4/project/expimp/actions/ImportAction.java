@@ -1,16 +1,23 @@
 package it.naturtalent.e4.project.expimp.actions;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -30,23 +37,32 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkingSet;
 
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
+import it.naturtalent.e4.project.IResourceNavigator;
+import it.naturtalent.e4.project.expimp.Messages;
 import it.naturtalent.e4.project.expimp.dialogs.ProjectImportDialog;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.datatransfer.CopyFilesAndFoldersOperation;
+import it.naturtalent.e4.project.ui.emf.ExportProjectPropertiesOperation;
+import it.naturtalent.e4.project.ui.emf.ImportProjectPropertiesOperation;
+import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
+import it.naturtalent.e4.project.ui.utils.CreateNewProject;
 
 /**
  * @author dieter
  *
- * Importiert ausgewaehlte NtProjekte die in das 'ImportVerzeichnis' exportiert wurden.
+ * Importiert ausgewaehlte NtProjekte aus dem 'ImportVerzeichnis' 
  * 
+ * @see it.naturtalent.e4.project.expimp.dialogs.ProjectImportDialog
  */
 public class ImportAction extends Action
 {
@@ -76,66 +92,138 @@ public class ImportAction extends Action
 		if(dialog.open() == ProjectImportDialog.OK)
 		{
 			// die im Dialog selektierten ImportProjekte abfragen 
-			final EObject [] selectedImportObjects = dialog.getResultImportSource();
+			final EObject [] selectedImportObjects = dialog.getSelectedImportNtProjects();
+			if(ArrayUtils.isEmpty(selectedImportObjects))
+				return;
 			
 			// Verzeichnis in das die zu importierenden Projekte exportiert wurden
-			final File importDir = new File(dialog.getImportSourceDirectory());
+			final File importDir = dialog.getSelectedImportDirectory();
+			if(importDir == null)
+				return;
 			
-			// Operation Import vorbereiten (NtProjekte und diverse Hilfskonstruktionen (Maps) erzeugen)
-			final ImportProjectPrepareOperation importProjectPrepareOperation = new ImportProjectPrepareOperation(
-					shell, importDir, selectedImportObjects, dialog.getAssignedWorkingSets());
-			try
+			//Mapped ProjektId u. Name der selektierten ImportProjekte
+			final Map<String,String>createProjectMap = new HashMap<String, String>();
+			for(EObject eObject : selectedImportObjects)
 			{
-				// mit der Operation 'importProjectPrepareOperation' den ImportProzess vorbereiten 
-				new ProgressMonitorDialog(shell).run(true, false, importProjectPrepareOperation);
-			} catch (InvocationTargetException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				if (eObject instanceof NtProject)
+				{
+					NtProject ntProject = (NtProject) eObject;
+					String projectID = ntProject.getId();
+					String projectName = ntProject.getName();
+					createProjectMap.put(projectID, projectName);					
+				}
 			}
-
-			// Map mit IProjecten und den zugeorigen Resourcen
-			final Map<IProject, String[]>importProjectMap = importProjectPrepareOperation.getImportProjectMap();
-			BusyIndicator.showWhile(shell.getDisplay(), new Runnable()
+			
+			// die selektierten NtProjekte im Workspace erzeugen 
+			final List<IWorkingSet> selectedWorkingSets = dialog.getAssignedWorkingSets();
+			shell.getDisplay().syncExec(new Runnable()
 			{
-				@Override
 				public void run()
 				{
-					// Die Resourcen in das Project kopieren
-					CopyFilesAndFoldersOperation copyFileAndFolder = new CopyFilesAndFoldersOperation(shell);
-					copyFileAndFolder.copyFileStores(shell, importProjectMap);
-
-					// die ProjectProperties importieren
-					List<NtProject>ntProjects = Activator.getNtProjects().getNtProject();
-					for(EObject importObject : selectedImportObjects)
-						ntProjects.add((NtProject) importObject);
-					Activator.getECPProject().saveContents();
-					
-					// im Nachgang alle Adapter aufrufen
-					List<INtProjectPropertyFactory> projectPropertyFactories = projektDataFactoryRepository
-							.getAllProjektDataFactories();
-					for(INtProjectPropertyFactory propertyFactory : projectPropertyFactories)
-					{
-						// koennen ueber den Adapter projectgekoppelte PropertyDaten geladen werden
-						INtProjectProperty propertyAdapter = propertyFactory.createNtProjektData();
-						
-						// alle betroffenen Projekte (Projekte mit der Eigenschaft 'factory'  durchlaufen
-						for(EObject importObject : selectedImportObjects)
-						{
-							// Importfunktion des Adapters aufrufen
-							NtProject ntProject = (NtProject) importObject;
-							propertyAdapter.setNtProjectID(ntProject.getId());
-							propertyAdapter.importProperty(importDir);							
-						}
-					}
+					if((selectedWorkingSets != null) && (!selectedWorkingSets.isEmpty()))
+						WorkbenchContentProvider.newAssignedWorkingSets = selectedWorkingSets.toArray(new IWorkingSet[selectedWorkingSets.size()]);					
+					CreateNewProject.createProject(shell, createProjectMap);
+					WorkbenchContentProvider.newAssignedWorkingSets = null;
 				}
 			});
+
+			// NtProjectID und zugehoerige Resourcen in einer Map zusammenfassen
+			Map<String, String[]> mapImportFiles = prepareProjectResourceMap(importDir, selectedImportObjects);
+
+			// zum Kopiern mit 'CopyFilesAndFoldersOperation' in das IProject muss der key=NtProjectID in der			
+			// ResourceMap ausgetauscht werden durch IProject
+			Map<IProject,String[]>importProjectMap = new HashMap<IProject, String[]>();
+			IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();			
+			for(EObject eObject : selectedImportObjects)
+			{
+				NtProject ntProject = (NtProject) eObject;
+				IProject iProject = workspaceRoot.getProject(ntProject.getId());
+				String [] importResources = mapImportFiles.get(ntProject.getId());
+				importProjectMap.put(iProject, importResources);
+			}
+						
+			// Die Resourcen in das Project kopieren
+			CopyFilesAndFoldersOperation copyFileAndFolder = new CopyFilesAndFoldersOperation(shell);
+			copyFileAndFolder.copyFileStores(shell, importProjectMap);
+
+			// die Eigenschaften des Projekts werden ueber die
+			// Eigenschaftsadapter ermittelt und
+			// in einer fuer jeder Eigenschaft spezifische Date im
+			// Projektbereich gespeichet
+			// zuerst alle definierten AdapterFactories aus dem Repository laden
+			List<INtProjectPropertyFactory> projectPropertyFactories = projektDataFactoryRepository
+					.getAllProjektDataFactories();
+
+			// dann die Adapter selbst erzeugen und auflisten
+			List<INtProjectProperty> projectPropertyAdapters = new ArrayList<INtProjectProperty>();
+			for (INtProjectPropertyFactory propertyFactory : projectPropertyFactories)
+				projectPropertyAdapters.add(propertyFactory.createNtProjektData());
+			
+			// Rannable zum Importieren der Eigenschaften vorbereiten
+			Set<String> importedProjectID = mapImportFiles.keySet();
+			ImportProjectPropertiesOperation importPropertiesOperation = new ImportProjectPropertiesOperation(
+					importedProjectID, projectPropertyAdapters);
+			
+			
+			try
+			{
+				// Eigenschaften importieren
+				new ProgressMonitorDialog(shell).run(true, false, importPropertiesOperation);
+			} catch (InvocationTargetException e)
+			{
+				// Error
+				Throwable realException = e.getTargetException();
+				MessageDialog.openError(shell, Messages.ExportResources_Error,
+						realException.getMessage());
+			} catch (InterruptedException e)
+			{
+				// Abbruch
+				MessageDialog.openError(shell, Messages.ExportResources_Cancel,e.getMessage());
+				return;
+			}	
+			
+			// ToDo - ist sichergestellt, dass die importierten Eigenschaften korrekt im NtProjektView gezeigt werden 
+			
 		}
 	}
+	
+	/*
+	 * In einer Map werden alle zu einem NtProjekt (key = ProjectID) gehoerenden Resourcen (value = Dateien und Verzeichnisse)
+	 * zusammengefasst.
+	 */
+	private Map<String, String[]> prepareProjectResourceMap(File sourceImportDir, EObject [] importObjects)
+	{
+		// zu importierende und vorhandene Projekte separieren
+		Map<String, String[]>mapImportFiles = new HashMap<String, String[]>();
+		
+		for(EObject eObject : importObjects)
+		{
+			if (eObject instanceof NtProject)
+			{
+				String projectID = ((NtProject) eObject).getId();
+				File importProjectFile = new File(sourceImportDir, projectID);
+				if (importProjectFile.exists())
+				{
+					String [] srcFiles = importProjectFile.list(new FilenameFilter()
+					{						
+						@Override
+						public boolean accept(File dir, String name)
+						{							
+							return !name.equals(".project");
+						}
+					});
+					
+					// das Projektverzeichnis wird vorangestellt
+					for(int i = 0;i < srcFiles.length;i++)
+						srcFiles[i] = importProjectFile.getPath()+File.separator+srcFiles[i];
+					
+					mapImportFiles.put(projectID, srcFiles);
+				}				
+			}			
+		}
+		return mapImportFiles;
+	}
+
 
 	/*
 	 * Die exportierten Properties mit Hilfe der EMFProperty-Datei '.xmi' importieren.   

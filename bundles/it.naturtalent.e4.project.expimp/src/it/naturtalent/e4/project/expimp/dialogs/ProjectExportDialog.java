@@ -65,6 +65,12 @@ import it.naturtalent.e4.project.ui.ws.WorkingSetRoot;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 
+
+/**
+ * Exportdialog (muss ueberarbeitet werden)
+ * @author dieter
+ *
+ */
 public class ProjectExportDialog extends TitleAreaDialog
 {
 	

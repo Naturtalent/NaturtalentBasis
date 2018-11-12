@@ -267,6 +267,20 @@ public class CheckListEditorComposite extends Composite
 		checkboxTableViewer.setCheckedElements(checkedElements);
 	}
 
+	/**
+	 * Rückgabe aller Eintraege im Viewer
+	 * 
+	 * @return
+	 */
+	public String[] getTableEntries()
+	{
+		String[] names;
+		String[] checkedNames = getCheckedElements();		
+		checkboxTableViewer.setAllChecked(true);
+		names = getCheckedElements();
+		checkboxTableViewer.setCheckedElements(checkedNames);
+		return names;
+	}
 	
 
 }

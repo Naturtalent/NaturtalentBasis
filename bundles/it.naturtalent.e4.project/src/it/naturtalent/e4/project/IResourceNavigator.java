@@ -17,6 +17,7 @@ public interface IResourceNavigator
 	public static final String NAVIGATOR_EVENT_UPDATE_REQUEST = NAVIGATOR_EVENT+"updateRequest";
 	public static final String NAVIGATOR_EVENT_SELECT_REQUEST = NAVIGATOR_EVENT+"selectRequest";
 	
+	
 	/**
 	 * In diesem WorkingSet sind alle im Navigator dargestellten Ressourcen
 	 * zusammengefasst. 

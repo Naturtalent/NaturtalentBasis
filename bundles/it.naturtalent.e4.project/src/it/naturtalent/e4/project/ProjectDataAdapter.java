@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+@Deprecated
 public class ProjectDataAdapter extends AbstractProjectDataAdapter
 {
 
