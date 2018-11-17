@@ -294,6 +294,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		});
 		btnBrowse.setText(Messages.SelectImportDialog_btnBrowse_text);
 		
+		// Eingabefeld Filter
 		txtSeek = new Text(container, SWT.BORDER);		
 		txtSeek.addModifyListener(new ModifyListener()
 		{

@@ -14,6 +14,7 @@ import javax.inject.Named;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -21,6 +22,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
 import it.naturtalent.e4.project.INtProjectProperty;
@@ -29,7 +31,7 @@ import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.expimp.ExpImpProcessor;
 import it.naturtalent.e4.project.expimp.ExportResources;
 import it.naturtalent.e4.project.expimp.Messages;
-import it.naturtalent.e4.project.expimp.dialogs.ProjectExportDialog;
+import it.naturtalent.e4.project.expimp.dialogs.ExportNtProjectDialog;
 import it.naturtalent.e4.project.ui.datatransfer.RefreshResourcesOperation;
 import it.naturtalent.e4.project.ui.emf.ExportProjectPropertiesOperation;
 
@@ -46,7 +48,7 @@ import it.naturtalent.e4.project.ui.emf.ExportProjectPropertiesOperation;
  * @see it.naturtalent.e4.project.ui.emf.ExportProjectPropertiesOperation
  * 
  * Dialog zur Auswahl der zuexportierenden Projekte und dem Zielverzeichnis
- * @see it.naturtalent.e4.project.expimp.dialogs.ProjectExportDialog
+ * @see it.naturtalent.e4.project.expimp.dialogs.ExportNtProjektDialog
  * 
  * Adapter der Projecteigenschaften
  * @see it.naturtalent.e4.project.ui.emf.NtProjectProperty
@@ -66,6 +68,7 @@ public class ExportAction extends Action
 	private File exportDestDir;
 
 	private Map<String, List<String>> mapProjectFactories = new HashMap<String, List<String>>();
+		
 
 	@PostConstruct
 	private void postConstruct(
@@ -79,7 +82,7 @@ public class ExportAction extends Action
 	@Override
 	public void run()
 	{
-		final ProjectExportDialog projectExportDialog = new ProjectExportDialog(
+		final ExportNtProjectDialog projectExportDialog = new ExportNtProjectDialog(
 				ExpImpProcessor.shell);
 
 		// BusyIndicator - das Einlesen der vorhandenen NtProjecte kann dauern
@@ -88,14 +91,13 @@ public class ExportAction extends Action
 			@Override
 			public void run()
 			{
-				// ueber ProjectExportDialog.init() werden die Projekte oder
-				// WorkingSets eingelesen
+				// projectExportDialog.createDialogArea(Composite parent) via Busyindicator aufrufen
 				projectExportDialog.create();
 			}
 		});
 
 		// Exportmodalitaeten im Dialog festlegen
-		if (projectExportDialog.open() == ProjectExportDialog.OK)
+		if (projectExportDialog.open() == ExportNtProjectDialog.OK)
 		{
 			// die zum Export ausgewaehlten Resourcen in einer Liste zusammenfassen
 			IResource[] resources = projectExportDialog.getResultExportSource();
@@ -104,6 +106,8 @@ public class ExportAction extends Action
 
 			// das ausgewaelte Zielverzeichnis (hierhin werden die Projekte exportiert)
 			exportDestDir = projectExportDialog.getResultDestDir();
+			if(exportDestDir == null)
+				return;
 
 			// die Resourcen in eine Liste ueberfuehren
 			List<IResource> iResources = Arrays.asList(resources);
@@ -126,6 +130,7 @@ public class ExportAction extends Action
 					iResources, projectPropertyAdapters);
 			try
 			{
+				// Projekteigenschaften im langlaufenden Prozess exportieren 
 				new ProgressMonitorDialog(shell).run(true, false,exportPropertiesOperation);
 			} catch (InvocationTargetException e)
 			{
@@ -139,13 +144,13 @@ public class ExportAction extends Action
 				return;
 			}
 
-			// da die Eigenschaften in separaten Dateien gespeichert wurden ist
-			// ein refresh erforderlich
+			/*
+			 *  da die Eigenschaften in separaten Dateien gespeichert wurden ist ein Refresh erforderlich
+			 */
 			RefreshResourcesOperation refreshOperation = new RefreshResourcesOperation(iResources);
 			try
 			{
-				new ProgressMonitorDialog(shell).run(true, false,
-						refreshOperation);
+				new ProgressMonitorDialog(shell).run(true, false,refreshOperation);
 			} catch (InvocationTargetException e)
 			{
 				// Error
@@ -159,8 +164,7 @@ public class ExportAction extends Action
 				return;
 			}
 
-			// abschliessend alle zuexportierenden Ressourcen exportiert
-			// (kopiert)
+			// abschliessend alle zuexportierenden NtProjekte exportieren (kopieren)
 			if (shell != null)
 			{
 				ExportResources exportResource = new ExportResources(shell);
@@ -174,5 +178,7 @@ public class ExportAction extends Action
 							+ exportDestDir);
 		}
 	}
+	
+
 
 }

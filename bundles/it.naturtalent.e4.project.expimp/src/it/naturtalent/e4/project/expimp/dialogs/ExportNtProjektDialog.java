@@ -71,7 +71,9 @@ import it.naturtalent.icons.core.IconSize;
  * @author dieter
  *
  */
-public class ProjectExportDialog extends TitleAreaDialog
+@Deprecated
+// @see ExportNtProjectDialog
+public class ExportNtProjektDialog extends TitleAreaDialog
 {
 	
 	public static final String EXPORT_DIRECTORY = "exportDirectory"; //$NON-NLS-1$
@@ -212,7 +214,7 @@ public class ProjectExportDialog extends TitleAreaDialog
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public ProjectExportDialog(Shell parentShell)
+	public ExportNtProjektDialog(Shell parentShell)
 	{
 		super(parentShell);	
 	}
