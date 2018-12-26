@@ -238,6 +238,7 @@ public class NtProjectProperty implements INtProjectProperty
 	@Override
 	public void importProperty()
 	{		
+		// Eigenschaft (NtProject) wird aus der Propertydatei generiert
 		EObject niProjectData = ExpImpUtils.importNtPropertyData(EXPIMP_NTPROJECTDATA_FILE, ntProjectID);
 		if (niProjectData instanceof NtProject)
 		{

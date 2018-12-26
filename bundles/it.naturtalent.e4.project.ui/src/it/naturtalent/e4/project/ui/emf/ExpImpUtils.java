@@ -125,7 +125,23 @@ public class ExpImpUtils
 	}
 	
 	/**
-	 * Die in einer Datei gespeicherten Daten von EObjects importieren und in einer Liste zurueckgeben.
+	 * Ein einzelnes EObject wird in einer Fileresource mit dem Prad 'resourcePath' gespeichert.
+	 * Das EOBject wird vorher kopiert.
+	 * 
+	 * @param eObject
+	 * @param resourcePath
+	 */
+	public static void saveEObjectToResource(EObject eObject, String resourcePath)
+	{		
+		List<EObject> eObjects = new ArrayList<EObject>();
+		EObject copyObject = EcoreUtil.copy(eObject);
+		eObjects.add(copyObject);
+		URI resourceURI = URI.createFileURI(resourcePath);
+		saveEObjectToResource(eObjects, resourceURI);
+	}
+
+	/**
+	 * Die in einer Datei gespeicherten Daten von EObjects importieren und in einer Liste zurueckgegeben.
 	 * 
 	 * @param resourceFile
 	 * @return
@@ -137,5 +153,22 @@ public class ExpImpUtils
 		Resource resource = resourceSet.getResource(resourceURI, true);
 		return resource.getContents();
 	}
+	
+	public static EList<EObject>loadEObjectFromResource(String resourcePath)
+	{
+		try
+		{
+			ResourceSet resourceSet = new ResourceSetImpl();
+			URI resourceURI = URI.createFileURI(resourcePath);		
+			Resource resource = resourceSet.getResource(resourceURI, true);
+			return resource.getContents();
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	
 }

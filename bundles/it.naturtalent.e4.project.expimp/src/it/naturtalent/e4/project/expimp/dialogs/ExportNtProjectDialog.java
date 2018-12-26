@@ -202,9 +202,11 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 
 		checkboxTreeViewer = new CheckboxTreeViewer(container, SWT.BORDER);
 		checkboxTreeViewer.setLabelProvider(new WorkbenchLabelProvider());
-		checkboxTreeViewer
-				.setContentProvider(new ExportSelectContentProvider());
+		checkboxTreeViewer.setContentProvider(new ExportSelectContentProvider());
 		checkboxTreeViewer.setComparator(new ViewerComparator());
+		
+		
+		
 		// checkboxTreeViewer.addFilter(new NameFilter());
 		checkboxTreeViewer.addCheckStateListener(new ICheckStateListener()
 		{
@@ -226,7 +228,9 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 		});
 
 		Tree tree = checkboxTreeViewer.getTree();
-		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_tree = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_tree.widthHint = 100;
+		tree.setLayoutData(gd_tree);
 
 		Composite compositeSelectButtons = new Composite(container, SWT.NONE);
 		compositeSelectButtons.setLayout(new GridLayout(2, false));

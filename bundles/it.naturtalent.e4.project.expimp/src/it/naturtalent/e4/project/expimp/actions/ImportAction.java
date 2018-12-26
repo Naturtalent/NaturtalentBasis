@@ -31,11 +31,13 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.core.ECPProject;
+import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.ChangeCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.ui.action.ValidateAction.EclipseResourcesUtil;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -159,7 +161,7 @@ public class ImportAction extends Action
 			for (INtProjectPropertyFactory propertyFactory : projectPropertyFactories)
 				projectPropertyAdapters.add(propertyFactory.createNtProjektData());
 			
-			// Rannable zum Importieren der Eigenschaften vorbereiten
+			// Runnable zum Importieren der Eigenschaften vorbereiten
 			Set<String> importedProjectID = mapImportFiles.keySet();
 			ImportProjectPropertiesOperation importPropertiesOperation = new ImportProjectPropertiesOperation(
 					importedProjectID, projectPropertyAdapters);

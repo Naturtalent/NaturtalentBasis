@@ -1,12 +1,19 @@
 package it.naturtalent.e4.preferences;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -39,17 +46,19 @@ public class CheckListEditorComposite extends Composite
 	protected Button btnEdit;
 	protected Button btnRemove;
 	//private String [] checkedElements;
-	
+	protected String editedEntry;
 	
 	
 	// Dialoglabels
 	private static final String DEFAULT_DIALOG_TITLE = "Präferenz"; //$NON-NLS-N$
 	protected String dialogTitle = DEFAULT_DIALOG_TITLE;
 	private static final String DEFAULT_DIALOG_MESSAGE = "Präferenz editieren"; //$NON-NLS-N$
-	protected String dialogMmessage = DEFAULT_DIALOG_MESSAGE;
+	protected String dialogMessage = DEFAULT_DIALOG_MESSAGE;
 	
 	private static final String ADD_DIALOG_MESSAGE = "neu Präferenz hinzufügen"; //$NON-NLS-N$
 	private static final String EDIT_DIALOG_MESSAGE = "Präferenz bearbeiten"; //$NON-NLS-N$
+	
+	protected boolean dialogCancel;
 	
 	
 	// Validator fuer InputDialog
@@ -89,22 +98,27 @@ public class CheckListEditorComposite extends Composite
 		addCheckStateListener();
 		
 		checkboxTableViewer.setContentProvider(new ArrayContentProvider());
-		table.addMouseListener(new MouseAdapter()
-		{
+		checkboxTableViewer.addDoubleClickListener(new IDoubleClickListener()
+		{			
 			@Override
-			public void mouseDoubleClick(MouseEvent e)
+			public void doubleClick(DoubleClickEvent event)
 			{
-				doEdit();
+				IStructuredSelection selection = checkboxTableViewer.getStructuredSelection();
+				Object selObj = selection.getFirstElement();
+				if (selObj instanceof String)
+				{
+					//selectedValue = (String) selObj;
+					doEdit();
+				}				
 			}
 		});
 		
-		
-		table.addSelectionListener(new SelectionAdapter()
-		{
+		checkboxTableViewer.addSelectionChangedListener(new ISelectionChangedListener()
+		{			
 			@Override
-			public void widgetSelected(SelectionEvent e)
+			public void selectionChanged(SelectionChangedEvent event)
 			{
-				updateWidgets();
+				updateWidgets();				
 			}
 		});
 		
@@ -130,7 +144,13 @@ public class CheckListEditorComposite extends Composite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				doEdit();
+				IStructuredSelection selection = checkboxTableViewer.getStructuredSelection();
+				Object selObj = selection.getFirstElement();
+				if (selObj instanceof String)
+				{
+					//selectedValue = (String) selObj;
+					doEdit();
+				}				
 			}
 		});
 		
@@ -156,9 +176,9 @@ public class CheckListEditorComposite extends Composite
 		{			
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event)
-			{			
+			{							
 				checkboxTableViewer.setAllChecked(false);
-				checkboxTableViewer.setChecked(event.getElement(), true);
+				checkboxTableViewer.setChecked(event.getElement(), event.getChecked());
 			}
 		});
 	}
@@ -210,15 +230,22 @@ public class CheckListEditorComposite extends Composite
 		
 		return StringUtils.join(stg,",");
 	}
+	
+	public boolean isEntryExist(String checkEntry)
+	{
+		String [] existValuesArray = StringUtils.split(getValues(), ",");
+		return ArrayUtils.contains(existValuesArray, checkEntry);
+	}
 
 	/**
 	 * UI's (Buttons) - Status aktualisieren
 	 */
 	protected void updateWidgets()
 	{
-		boolean selection = (table.getSelectionIndex() >= 0);
-		btnEdit.setEnabled(selection);
-		btnRemove.setEnabled(selection);
+		IStructuredSelection selection = checkboxTableViewer.getStructuredSelection();
+		boolean selectionState = selection.getFirstElement() != null;
+		btnEdit.setEnabled(selectionState);
+		btnRemove.setEnabled(selectionState);
 	}
 	
 	/**
@@ -226,26 +253,81 @@ public class CheckListEditorComposite extends Composite
 	 */
 	protected void doAdd()
 	{
-		dialog = new EditorDialog(getShell(),dialogTitle, ADD_DIALOG_MESSAGE,"",validator);
-		if(dialog.open() == InputDialog.OK)				
-			checkboxTableViewer.add(dialog.getValue());				
+		dialog = new EditorDialog(getShell(),dialogTitle, dialogMessage,"",validator);
+		if(dialog.open() == InputDialog.OK)	
+			addEntry(dialog.getValue());				
 	}
 	
+	protected void addEntry(String newEntry)
+	{
+		checkboxTableViewer.add(newEntry);	
+	}
+	
+	/**
+	 * Der selektierte Eintrag kann mit einem InputDialog bearbeitet werden und wird dann anschliessend mit 
+	 * 'updateEntry()' aktualisiert.
+	 */
 	protected void doEdit()
-	{				
-		int idx = table.getSelectionIndex();		
-		String value = table.getItem(idx).getText(idx);
-		InputDialog dialog = new InputDialog(getShell(),dialogTitle, EDIT_DIALOG_MESSAGE,value,validator);
-		if(dialog.open() == InputDialog.OK)	
-			table.getItem(idx).setText(dialog.getValue());
+	{
+		IStructuredSelection selection = checkboxTableViewer.getStructuredSelection();
+		Object selObj = selection.getFirstElement();
+		if (selObj instanceof String)
+		{
+			editedEntry = null;
+			String oldEntry = (String) selObj; 
+			InputDialog dialog = new InputDialog(getShell(), dialogTitle,
+					dialogMessage, oldEntry, validator);
+			if (dialog.open() == InputDialog.OK)
+			{
+				editedEntry = dialog.getValue();
+				updateEntry(editedEntry);
+				dialogCancel = false;
+			}
+			else dialogCancel = true;						
+		}
+	}
+	
+	/*
+	 * den seektierten Tabelleneintrag durch 'updateEntry' ersetzen
+	 */
+	protected void updateEntry(String updateEntry)
+	{
+		IStructuredSelection selection = checkboxTableViewer.getStructuredSelection();
+		Object selObj = selection.getFirstElement();
+		if (selObj instanceof String)
+		{
+			boolean checkedState = checkboxTableViewer.getChecked(selObj);
+			
+			int idx = checkboxTableViewer.getTable().getSelectionIndex();
+
+			// alten Eintrag loeschen
+			checkboxTableViewer.remove(selObj);
+
+			// den editierten Wert einfuegen
+			checkboxTableViewer.insert(updateEntry, idx);
+			
+			/*
+			String [] contentArray = (String[]) checkboxTableViewer.getInput();
+			contentArray = ArrayUtils.remove(contentArray, idx);
+			contentArray = ArrayUtils.insert(idx, contentArray, updateEntry);
+			checkboxTableViewer.setInput(contentArray);
+			*/
+						
+			// aktualisierten Wert wieder selektieren
+			checkboxTableViewer.setSelection(new StructuredSelection(updateEntry), true);
+
+			// CheckStatur wiederherstellen
+			checkboxTableViewer.setChecked(updateEntry, checkedState);
+		}
 	}
 
 
 	protected void doRemove()
 	{
-		int idx = table.getSelectionIndex();
-		if(idx >= 0)
-			table.remove(idx);
+		IStructuredSelection selection = checkboxTableViewer.getStructuredSelection();
+		Object selObj = selection.getFirstElement();
+		if (selObj instanceof String)
+			checkboxTableViewer.remove(selObj);				
 		
 		updateWidgets();				
 	}
