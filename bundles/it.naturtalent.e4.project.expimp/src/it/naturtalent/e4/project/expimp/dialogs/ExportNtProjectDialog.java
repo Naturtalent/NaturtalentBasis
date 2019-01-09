@@ -80,9 +80,10 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 
 	private Button okButton;
 
-	// DialogSettings
+	// DialogSettings Zielverzeichnis
 	private static final String EXPORT_DESTDIRS_SETTINGS = "export_sourcedirs_settings"; //$NON-NLS-1$
 
+	// DialogSetting Exportmodus (WorkingSet / Projekte)
 	private static final String EXPORT_DEST_SETTINGS = "export_source_settings"; //$NON-NLS-1$
 	// private static final String EXPORT_OPTION_SETTINGS =
 	// "export_option_settings"; //$NON-NLS-1$

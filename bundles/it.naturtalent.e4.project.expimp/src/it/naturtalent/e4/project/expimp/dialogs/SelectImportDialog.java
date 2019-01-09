@@ -70,6 +70,7 @@ import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.core.databinding.beans.PojoProperties;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 
+@Deprecated
 public class SelectImportDialog extends TitleAreaDialog
 {
 	private DataBindingContext m_bindingContext;
@@ -92,7 +93,7 @@ public class SelectImportDialog extends TitleAreaDialog
 	}
 	
 	/**
-	 * Interne Klasse zum Überprüfen des Textfeldes 'applicationText'
+	 * Interne Klasse zum ï¿½berprï¿½fen des Textfeldes 'applicationText'
 	 * 
 	 * @author dieter
 	 * 
@@ -267,7 +268,7 @@ public class SelectImportDialog extends TitleAreaDialog
 				dlg.setText("Importverzeichnis");
 
 				// Customizable message displayed in the dialog
-				dlg.setMessage("Ordner mit den Quellprojekten auswählen");
+				dlg.setMessage("Ordner mit den Quellprojekten auswï¿½hlen");
 
 				// Calling open() will open and run the dialog.
 				// It will return the selected directory, or

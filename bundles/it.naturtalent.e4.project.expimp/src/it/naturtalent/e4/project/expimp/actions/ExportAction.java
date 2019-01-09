@@ -56,6 +56,7 @@ import it.naturtalent.e4.project.ui.emf.ExportProjectPropertiesOperation;
  * @author dieter
  *
  */
+
 public class ExportAction extends Action
 {
 

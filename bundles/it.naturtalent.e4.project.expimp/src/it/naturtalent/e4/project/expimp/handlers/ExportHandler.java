@@ -27,35 +27,7 @@ public class ExportHandler
 	{
 		ExportDialog exportDialog = ContextInjectionFactory.make(ExportDialog.class, context);
 		exportDialog.open();
-		
-	/*
-		SelectExportDialog selectExportDialog = new SelectExportDialog(shell, part);
-		if(selectExportDialog.open() == SelectExportDialog.OK)
-		{
-			IResource [] resources = dialog.getResultImportSource();
-			File destDir = dialog.getResultDestDir();
-			Path destinationPath = new Path(destDir.getPath());
-			
-			List<IResource>lResources = new ArrayList<IResource>(); 
-			for(IResource iResource : resources)
-				lResources.add(iResource);
-			
-			ExportResources exportResource = new ExportResources(shell);
-			exportResource.export(shell, lResources, destDir.getPath());
-			
-			for(IResource resource : resources)
-				writeResource(resource, destinationPath);
-			
-			CopyFilesAndFoldersOperation operation = new CopyFilesAndFoldersOperation(shell);
-			operation.copyFiles(resourceData, path);			
-		}
-		*/
-	
-		
 	}
-	
-
-	
 	
 	@CanExecute
 	public boolean canExecute()

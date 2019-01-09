@@ -51,7 +51,7 @@ import org.osgi.service.event.EventHandler;
 
 import it.naturtalent.e4.project.expimp.Messages;
 
-
+@Deprecated
 public class DefaultImportDialog extends TitleAreaDialog
 {
 	

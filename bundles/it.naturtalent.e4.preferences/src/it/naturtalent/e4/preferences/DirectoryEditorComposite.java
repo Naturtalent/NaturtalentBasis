@@ -52,13 +52,18 @@ public class DirectoryEditorComposite extends Composite
 			
 				// Dialog oeffnen				
 				String dir = dlg.open();
-				if(StringUtils.isNotEmpty(dir))
+				if(StringUtils.isNotEmpty(dir))	
+				{
 					textDirectory.setText(dir);
-
+					preSelection();
+				}
 			}
 		});
 		btnSelect.setText("auswählen");
-
+	}
+	
+	protected void preSelection()
+	{
 	}
 	
 	public String getDirectory()

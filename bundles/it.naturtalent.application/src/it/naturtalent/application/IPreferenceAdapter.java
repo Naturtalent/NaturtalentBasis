@@ -17,7 +17,7 @@ public interface IPreferenceAdapter
 	public static final String PREFERENCE_APPLICATION_TEMPDIR_KEY = "preferenceapplicationtempdir"; //$NON-NLS-1$	
 	//private String key = PREFERENCE_APPLICATION_TEMPDIR_KEY;
 
-	// Key der Workspaces Praeferenz  
+	// Key der Logger Praeferenz  
 	public static final String PREFERENCE_APPLICATION_LOGGERFILE_KEY = "preferenceapplicationloggerfile"; //$NON-NLS-1$	
 
 	// Key der Workspaces Praeferenz  

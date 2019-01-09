@@ -1,7 +1,6 @@
 package it.naturtalent.e4.preferences;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 import it.naturtalent.application.IPreferenceAdapter;
@@ -12,7 +11,7 @@ public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
 {	
 	protected IEclipsePreferences defaultPreferenceNode;
 	protected IEclipsePreferences instancePreferenceNode;	
-	protected Composite composite = null;
+	protected Composite referenceComposite = null;
 	
 	@Override
 	public abstract String getLabel();
@@ -49,7 +48,7 @@ public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
 	public Composite createNodeComposite(IPreferenceNode referenceNode)
 	{
 		referenceNode.setTitle(getLabel());		
-		return composite;
+		return referenceComposite;
 	}
 
 

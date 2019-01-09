@@ -119,7 +119,7 @@ public class Activator implements BundleActivator
 			File workspaceDir = ResourcesPlugin.getWorkspace().getRoot()
 					.getLocation().toFile();
 			Path path = new Path(workspaceDir.getPath());
-			path = (Path) path.removeLastSegments(2);
+			path = (Path) path.removeLastSegments(1);
 			
 			// existiert ein Verzeichnis 'programme'
 			path = (Path) path.append("programme"); //$NON-NLS-1$
@@ -139,8 +139,6 @@ public class Activator implements BundleActivator
 				System.err.println(Messages.Activator_IncorrectWorkspaceStructure);
 				return;
 			}
-			
-			
 			
 			System.setProperty(NT_PROGRAM_HOME, path.toOSString());
 		}

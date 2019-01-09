@@ -38,13 +38,13 @@ public class ProjectPreferenceAdapter extends AbstractPreferenceAdapter
 	{
 		String value = defaultPreferenceNode.get(fileTemplateKey, null);
 		if(StringUtils.isNotEmpty(value))
-			((ProjectPreferenceComposite)composite).setPreferenceValue(value);
+			((ProjectPreferenceComposite)referenceComposite).setPreferenceValue(value);
 	}
 
 	@Override
 	public void appliedPressed()
 	{
-		String value = ((ProjectPreferenceComposite)composite).getPreferenceValue();
+		String value = ((ProjectPreferenceComposite)referenceComposite).getPreferenceValue();
 		if(StringUtils.isNotEmpty(value))
 		{			
 			try
@@ -61,13 +61,13 @@ public class ProjectPreferenceAdapter extends AbstractPreferenceAdapter
 	@Override
 	public Composite createNodeComposite(IPreferenceNode referenceNode)
 	{
-		composite = new ProjectPreferenceComposite(referenceNode.getParentNode(), SWT.None);
+		referenceComposite = new ProjectPreferenceComposite(referenceNode.getParentNode(), SWT.None);
 		
 		String value = instancePreferenceNode.get(fileTemplateKey,null);
 		if(StringUtils.isEmpty(value))			
 			value = getDefaultPreference().get(fileTemplateKey,null);
 		
-		((ProjectPreferenceComposite)composite).setPreferenceValue(value);
+		((ProjectPreferenceComposite)referenceComposite).setPreferenceValue(value);
 		return super.createNodeComposite(referenceNode);
 	}
 

@@ -49,7 +49,7 @@ import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 
 
-
+@Deprecated
 public abstract class AbstractExportDialog extends TitleAreaDialog //implements EventHandler
 {
 	private DataBindingContext m_bindingContext;	

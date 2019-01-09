@@ -38,13 +38,13 @@ public class UpdatePreferenceAdapter extends AbstractPreferenceAdapter
 	public void restoreDefaultPressed()
 	{
 		String value = defaultPreferenceNode.get(UPDATESITE_LOCATION_PREFERENCE, null);
-		((ListEditorComposite)composite).setValues(value);
+		((ListEditorComposite)referenceComposite).setValues(value);
 	}
 
 	@Override
 	public void appliedPressed()
 	{
-		String value = ((ListEditorComposite) composite).getValues();
+		String value = ((ListEditorComposite) referenceComposite).getValues();
 		try
 		{
 			instancePreferenceNode.put(UPDATESITE_LOCATION_PREFERENCE, value);
@@ -58,12 +58,12 @@ public class UpdatePreferenceAdapter extends AbstractPreferenceAdapter
 	@Override
 	public Composite createNodeComposite(IPreferenceNode referenceNode)
 	{
-		composite = new UpdatePreferenceComposite(referenceNode.getParentNode(), SWT.None);
+		referenceComposite = new UpdatePreferenceComposite(referenceNode.getParentNode(), SWT.None);
 		
 		String value = instancePreferenceNode.get(UPDATESITE_LOCATION_PREFERENCE,null);
 		if(StringUtils.isEmpty(value))			
 			value = getDefaultPreference().get(UPDATESITE_LOCATION_PREFERENCE,null);		
-		((ListEditorComposite)composite).setValues(value);
+		((ListEditorComposite)referenceComposite).setValues(value);
 				
 		return super.createNodeComposite(referenceNode);
 	}
