@@ -55,14 +55,15 @@ public class DirectoryEditorComposite extends Composite
 				if(StringUtils.isNotEmpty(dir))	
 				{
 					textDirectory.setText(dir);
-					preSelection();
+					postSelection();
 				}
 			}
 		});
 		btnSelect.setText("auswählen");
 	}
 	
-	protected void preSelection()
+	// Nachbearbeitung der Selektion in den abgeleiteten Klassen definieren
+	protected void postSelection()
 	{
 	}
 	
