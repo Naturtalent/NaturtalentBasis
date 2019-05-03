@@ -112,7 +112,7 @@ public class NtProjectView
 		
 		// Aenderungen im NtProject ueberwachen
 		EditingDomain domain = AdapterFactoryEditingDomain.getEditingDomainFor(Activator.getECPProject());
-		EMFStoreBasicCommandStack commandStack = (EMFStoreBasicCommandStack) domain.getCommandStack();
+		EMFStoreBasicCommandStack commandStack = (EMFStoreBasicCommandStack) domain.getCommandStack();		
 		domain.getCommandStack().addCommandStackListener(new CommandStackListener()
 		{			
 			@Override
@@ -145,8 +145,6 @@ public class NtProjectView
 				} 				
 			}
 		});
-
-	
 	}
 
 	/**

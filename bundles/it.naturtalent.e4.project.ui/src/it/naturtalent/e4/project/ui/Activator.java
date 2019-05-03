@@ -36,6 +36,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.core.ECPProject;
 import org.eclipse.emf.ecp.core.ECPProjectManager;
+import org.eclipse.emf.ecp.core.ECPProvider;
+import org.eclipse.emf.ecp.core.ECPProviderRegistry;
+import org.eclipse.emf.ecp.core.exceptions.ECPProjectWithNameExistsException;
 import org.eclipse.emf.ecp.core.util.ECPUtil;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkingSet;
@@ -287,31 +290,43 @@ public class Activator implements BundleActivator
 	}
 
 	/**
-	 * ECP-Projekt in dem alle EMF Modelle (ProjektProperty-Daten) gehalten werden zurueckgeben
+	 * ECP-Projekt fuer die NtProject-Properties abfragen (ggf. neu erzugen)
 	 *   
 	 * @return
 	 */
 	private static ECPProject ecpNtProject;
 	public static ECPProject getECPProject()
 	{
-		ECPProjectManager projectManager = ECPUtil.getECPProjectManager();
-		//Collection<ECPProject>projects = projectManager.getProjects();
-		//projectManager = ECPUtil.getECPProjectManager();
+		
+/*		
+		ECPProviderRegistry registry = ECPUtil.getECPProviderRegistry();
+		for (final ECPProvider provider : registry.getProviders())
+		{
+			String s = provider.getName();
+			System.out.println(s);
+		}
+		*/
+		
 		
 		if(ecpNtProject == null)
-			ecpNtProject = ECPUtil.getECPProjectManager().getProject(ECPNTPROJECTNAME);
+		{
+			ECPProjectManager manager = ECPUtil.getECPProjectManager();
+			if(manager != null)			
+				ecpNtProject = ECPUtil.getECPProjectManager().getProject(ECPNTPROJECTNAME);
+			else return null;
+		}
 		
 		if(ecpNtProject == null)
 		{
 			ecpNtProject = EMFModelUtils.createProject(ECPNTPROJECTNAME);
-			if(ecpNtProject == null)
-				log.error("es konnte kein ECPProject erzeugt werden");
+			//ecpNtProject = createProject(ECPNTPROJECTNAME);
+			log.error("es konnte kein ECPProject erzeugt werden");
 		}
 		
 		return ecpNtProject;
 	}
 	
-	/*
+
 	private static ECPProject createProject(String projectName)
 	{
 		ECPProject project = null;
@@ -340,7 +355,7 @@ public class Activator implements BundleActivator
 		
 		return project;
 	}
-	*/
+
 
 
 	/**

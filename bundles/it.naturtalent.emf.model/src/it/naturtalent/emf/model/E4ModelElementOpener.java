@@ -12,11 +12,11 @@
  *******************************************************************************/
 package it.naturtalent.emf.model;
 
-import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.emf.ecp.core.ECPProject;
+import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.emf.ecp.ui.e4.editor.ECPE4Editor;
 import org.eclipse.emf.ecp.ui.e4.util.EPartServiceHelper;
 import org.eclipse.emf.ecp.ui.util.ECPModelElementOpener;

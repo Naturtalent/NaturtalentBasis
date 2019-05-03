@@ -21,6 +21,7 @@ public class EMFModelUtils
 
 	private static Log log = LogFactory.getLog(EMFModelUtils.class);
 	
+
 	/**
 	 * Ein neues Projekt erzeugen.
 	 * 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<org.eclipse.emf.ecp.view.model:View xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:org.eclipse.emf.ecp.view.model="http://org/eclipse/emf/ecp/view/model/1170" xmi:id="_Z6bbMAeVEei1-Ov9xNcBhA" name="NtProperty">
+<org.eclipse.emf.ecp.view.model:View xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:org.eclipse.emf.ecp.view.model="http://org/eclipse/emf/ecp/view/model/1180" xmi:id="_Z6bbMAeVEei1-Ov9xNcBhA" name="NtProperty">
   <rootEClass href="http://www.example.org/project#//NtProperty"/>
   <ecorePaths>/it.naturtalent.e4.project.model/model/ntproject.ecore</ecorePaths>
   <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Z6dQYgeVEei1-Ov9xNcBhA" name="Control id" readonly="true">
