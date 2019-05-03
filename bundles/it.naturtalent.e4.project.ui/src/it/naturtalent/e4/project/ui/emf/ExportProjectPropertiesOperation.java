@@ -53,7 +53,7 @@ public class ExportProjectPropertiesOperation implements IRunnableWithProgress
 		if((toExportResources != null) && (!toExportResources.isEmpty()) && 
 				(projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 		{
-			totalWork = toExportResources.size(); 
+			totalWork = toExportResources.size(); 			
 			monitor.beginTask(EXPORTPROPERTIES_LABEL,totalWork);
 			for(IResource iResource : toExportResources)
 			{
