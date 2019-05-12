@@ -133,7 +133,8 @@ public class SelectProjectDataAdapter extends TitleAreaDialog
 		ViewerFilter [] filters = new ViewerFilter[]{new AdapterFilter()};  
 		checkboxTableViewer.setFilters(filters);
 		
-		checkboxTableViewer.setInput(Activator.projectDataAdapterRegister.getProjectDataAdapters());
+		System.out.println("ERROR: it.naturtalent.e4.project.ui.dialogs");
+		//checkboxTableViewer.setInput(Activator.projectDataAdapterRegister.getProjectDataAdapters());
 
 		return area;
 	}

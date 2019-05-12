@@ -17,7 +17,6 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -31,6 +30,7 @@ import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.actions.emf.UndoProjectAction;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
+
 
 /**
  * Dieser Adapter implementiert die Eigenschaft des NtProjekts und ist obligatorisch fuer jedes NtProjekt.

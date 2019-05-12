@@ -13,12 +13,9 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.commands.MCommand;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
-import it.naturtalent.application.services.IOpenWithEditorAdapter;
 import it.naturtalent.application.services.IOpenWithEditorAdapterRepository;
 import it.naturtalent.e4.preferences.IPreferenceRegistry;
-import it.naturtalent.e4.project.INewActionAdapter;
 import it.naturtalent.e4.project.INewActionAdapterRepository;
 import it.naturtalent.e4.project.IProjectDataFactory;
 import it.naturtalent.e4.project.ProjectDataAdapterRegistry;
@@ -31,7 +28,7 @@ public class ProjectUIProcessor
 	@Optional @Inject it.naturtalent.application.services.INewActionAdapterRepository newActionAdapterRepository;
 	
 	@Inject @Optional IProjectDataFactory projectDataFactory;
-	@Inject @Optional INewActionAdapterRepository newActionRepository;
+	//@Inject @Optional INewActionAdapterRepository newActionRepository;
 	@Inject @Optional IPreferenceRegistry preferenceRegistry;
 	@Inject @Optional IOpenWithEditorAdapterRepository openwithAdapterRepository;
 		
@@ -136,16 +133,18 @@ public class ProjectUIProcessor
 		
 		Activator.workbenchContext = context;
 		//Activator.setLogger(logger);
-		
+
+		/*
 		if(newActionRepository != null)
 		{
-			newActionRepository.addNewActionAdapter(new NewProjectActionAdapter());
-			newActionRepository.addNewActionAdapter(new NewFileActionAdapter());
-			newActionRepository.addNewActionAdapter(new NewFolderActionAdapter());
+			//newActionRepository.addNewActionAdapter(new NewProjectActionAdapter());
+			//newActionRepository.addNewActionAdapter(new NewFileActionAdapter());
+			//newActionRepository.addNewActionAdapter(new NewFolderActionAdapter());
 		}
+		*/
 		
 		// Zugriff auf die Projektdaten (AdapterRegister)
-		Activator.projectDataAdapterRegister = ContextInjectionFactory.make(ProjectDataAdapterRegistry.class, context);		
+		//Activator.projectDataAdapterRegister = ContextInjectionFactory.make(ProjectDataAdapterRegistry.class, context);		
 		Activator.projectDataFactory = projectDataFactory;	
 		
 		if(preferenceRegistry != null)

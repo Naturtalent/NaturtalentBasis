@@ -105,7 +105,7 @@ import it.naturtalent.e4.project.ui.handlers.TestProjectHandler;
 import it.naturtalent.e4.project.ui.handlers.TopLevelMenuUtils;
 import it.naturtalent.e4.project.ui.handlers.WorkingSetConfigurationHandler;
 import it.naturtalent.e4.project.ui.handlers.WorkingSetLevelHandler;
-import it.naturtalent.e4.project.ui.parts.emf.ProjectView;
+
 import it.naturtalent.e4.project.ui.ws.AggregateWorkingSet;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSet;
@@ -411,7 +411,10 @@ public class ResourceNavigator implements IResourceNavigator
 			{		
 				if (selectionService != null)
 				{					
-					autocommit();
+					//autocommit();
+					
+					System.out.println("Autocommit im ResourceNavigator updatgen");
+					
 					
 					IStructuredSelection selection = ((IStructuredSelection) event.getSelection());
 					Object selObj = selection.getFirstElement();
@@ -488,6 +491,8 @@ public class ResourceNavigator implements IResourceNavigator
 	 * Properties des bisher selektierten Projekts gespeichert. Ab jetzt ist auch kein 'undo' mehr moeglich.
 	 * Als 'bisherig' wird das im Detailfenster 'ProjctView' angezeigte definiert. 
 	 */
+	
+	/*
 	private void autocommit()
 	{
 		// wird im 'ProjectView' momentan die Eigenschaft eines Projekts angezeigt 
@@ -521,6 +526,7 @@ public class ResourceNavigator implements IResourceNavigator
 			}
 		}
 	}
+	*/
 
 	@PostConstruct
 	void hookEvents(ESelectionService selectionService)

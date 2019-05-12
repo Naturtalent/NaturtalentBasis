@@ -28,7 +28,6 @@ import org.osgi.service.event.EventHandler;
 
 import it.naturtalent.emf.model.Activator;
 import it.naturtalent.emf.model.ModelEventKey;
-import it.naturtalent.emf.model.ModelEventKeys;
 import it.naturtalent.emf.model.actions.DefaultModelAction;
 
 /**

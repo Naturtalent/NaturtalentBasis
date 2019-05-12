@@ -1,11 +1,10 @@
 package it.naturtalent.emf.model.actions;
 
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.StructuredViewer;
 
-import it.naturtalent.emf.model.Activator;
+
 
 
 public class DefaultModelAction extends Action
@@ -16,7 +15,7 @@ public class DefaultModelAction extends Action
 	
 	protected EObject eObject;
 	
-	protected IEventBroker eventBroker = Activator.getEventBroker();
+	//protected IEventBroker eventBroker = Activator.getEventBroker();
 	
 
 	public DefaultModelAction(StructuredViewer viewer)

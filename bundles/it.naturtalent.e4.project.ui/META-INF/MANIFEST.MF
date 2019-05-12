@@ -67,8 +67,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.swt,
  org.eclipse.e4.core.di.annotations,
  org.eclipse.emf.ecp.edit.swt,
- org.eclipse.emf.ecp.view.control.multireference,
- it.naturtalent.emf.model
+ org.eclipse.emf.ecp.view.control.multireference
 Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  javax.inject;version="1.0.0"
 Service-Component: OSGI-INF/ntprojectdescriptionrendererservice.xml,OSGI-INF/ntprojectnamerendererservice.xml,OSGI-INF/ntdynpropertynamerenderer.xml,OSGI-INF/ntdynpropertyrenderer.xml

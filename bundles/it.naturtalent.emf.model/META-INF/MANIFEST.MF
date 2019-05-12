@@ -3,6 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Model
 Bundle-SymbolicName: it.naturtalent.emf.model;singleton:=true
 Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
 Bundle-Activator: it.naturtalent.emf.model.Activator
 Bundle-Vendor: Dieter.Apel
 Export-Package: it.naturtalent.emf.model,

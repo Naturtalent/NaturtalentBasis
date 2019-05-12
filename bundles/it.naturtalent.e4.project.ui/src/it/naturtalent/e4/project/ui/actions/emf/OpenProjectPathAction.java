@@ -4,9 +4,11 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
-import it.naturtalent.emf.model.actions.DefaultModelAction;
+
+import it.naturtalent.e4.project.ui.handlers.emf.SystemOpenHandler;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 
@@ -18,12 +20,14 @@ import it.naturtalent.icons.core.IconSize;
  * @author dieter
  *
  */
-public class OpenProjectPathAction extends DefaultModelAction
+//public class OpenProjectPathAction extends DefaultModelAction
+public class OpenProjectPathAction extends Action
 {
+	private StructuredViewer viewer;
 
 	public OpenProjectPathAction(StructuredViewer viewer)
 	{
-		super(viewer);
+		//super(viewer);
 		setImageDescriptor(Icon.ICON_FOLDER.getImageDescriptor(IconSize._16x16_DefaultIconSize));
 		setEnabled(false);
 	}
@@ -67,7 +71,7 @@ public class OpenProjectPathAction extends DefaultModelAction
 		System.out.println("Aktion Open");
 	}
 
-	@Override
+	//@Override
 	public boolean canRun()
 	{
 		IStructuredSelection selection = viewer.getStructuredSelection();

@@ -37,7 +37,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecp.core.ECPProject;
 import org.eclipse.emf.ecp.core.ECPProjectManager;
 import org.eclipse.emf.ecp.core.ECPProvider;
-import org.eclipse.emf.ecp.core.ECPProviderRegistry;
 import org.eclipse.emf.ecp.core.exceptions.ECPProjectWithNameExistsException;
 import org.eclipse.emf.ecp.core.util.ECPUtil;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -49,7 +48,6 @@ import it.naturtalent.e4.project.INtProjectPropertyFactory;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.IProjectDataFactory;
 import it.naturtalent.e4.project.IResourceNavigator;
-import it.naturtalent.e4.project.ProjectDataAdapterRegistry;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.model.project.NtProjects;
 import it.naturtalent.e4.project.model.project.ProjectPackage;
@@ -61,7 +59,8 @@ import it.naturtalent.e4.project.ui.registry.ProjectImageRegistry;
 import it.naturtalent.e4.project.ui.utils.ProjectQueue;
 import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSetRoot;
-import it.naturtalent.emf.model.EMFModelUtils;
+//import it.naturtalent.emf.model.EMFModelUtils;
+
 
 
 
@@ -106,7 +105,7 @@ public class Activator implements BundleActivator
 	
 	public static IProjectDataFactory projectDataFactory;
 	
-	public static ProjectDataAdapterRegistry projectDataAdapterRegister;
+	//public static ProjectDataAdapterRegistry projectDataAdapterRegister;
 	
 	// steuert erweiterte Funktionalitaet nach der phys. Erzeugung von Projekten ('WorkbenchContentProvider')
 	public static boolean creatProjectAuxiliaryFlag = false;
@@ -318,7 +317,7 @@ public class Activator implements BundleActivator
 		
 		if(ecpNtProject == null)
 		{
-			ecpNtProject = EMFModelUtils.createProject(ECPNTPROJECTNAME);
+			ecpNtProject = createProject(ECPNTPROJECTNAME);
 			//ecpNtProject = createProject(ECPNTPROJECTNAME);
 			log.error("es konnte kein ECPProject erzeugt werden");
 		}
@@ -327,7 +326,7 @@ public class Activator implements BundleActivator
 	}
 	
 
-	private static ECPProject createProject(String projectName)
+	public static ECPProject createProject(String projectName)
 	{
 		ECPProject project = null;
 		

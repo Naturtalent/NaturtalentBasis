@@ -6,7 +6,7 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.StructuredViewer;
 
-import it.naturtalent.emf.model.ModelEventKeys;
+
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 

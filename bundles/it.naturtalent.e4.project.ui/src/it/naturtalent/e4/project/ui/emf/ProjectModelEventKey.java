@@ -1,17 +1,19 @@
 package it.naturtalent.e4.project.ui.emf;
 
-import it.naturtalent.emf.model.ModelEventKey;
+//import it.naturtalent.emf.model.ModelEventKey;
 
 public interface ProjectModelEventKey
 {
-	public static final String PROJECT_UNDO_MODELEVENT = ModelEventKey.PREFIX_MODELEVENT+"projectUndoModelEvent"; //$NON-NLS-N$
+	public static final String PREFIX_MODELEVENT = "prefixModelEvent/"; //$NON-NLS-N$
+	
+	public static final String PROJECT_UNDO_MODELEVENT = PREFIX_MODELEVENT+"projectUndoModelEvent"; //$NON-NLS-N$
 	
 	// see@ProjectPropertyWizardPage - steuert WizardPageComlete
-	public static final String PROJECT_VALIDATION_MODELEVENT = ModelEventKey.PREFIX_MODELEVENT+"projectValidationDetailsModelEvent"; //$NON-NLS-N$
+	public static final String PROJECT_VALIDATION_MODELEVENT = PREFIX_MODELEVENT+"projectValidationDetailsModelEvent"; //$NON-NLS-N$
 	
-	public static final String PROJECT_MODIFY_MODELEVENT = ModelEventKey.PREFIX_MODELEVENT+"projectModifyModelEvent"; //$NON-NLS-N$
+	public static final String PROJECT_MODIFY_MODELEVENT = PREFIX_MODELEVENT+"projectModifyModelEvent"; //$NON-NLS-N$
 	
-	public static final String PROJECTNAME_WIZARDTEXTFIELD = ModelEventKey.PREFIX_MODELEVENT+"projectnamewizardtextfield"; //$NON-NLS-N$
+	public static final String PROJECTNAME_WIZARDTEXTFIELD = PREFIX_MODELEVENT+"projectnamewizardtextfield"; //$NON-NLS-N$
 	
 	/*
 	public static final String DEFAULT_NEW_MODELEVENT = PREFIX_MODELEVENT+"defaultNewModelEvent"; //$NON-NLS-N$
