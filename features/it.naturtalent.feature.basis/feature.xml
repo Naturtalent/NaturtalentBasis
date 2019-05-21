@@ -73,8 +73,7 @@
          id="it.naturtalent.application"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="it.naturtalent.e4.project.model.edit"
