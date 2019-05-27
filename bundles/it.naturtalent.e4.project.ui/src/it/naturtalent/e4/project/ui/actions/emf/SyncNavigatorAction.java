@@ -18,6 +18,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkingSet;
 
 import it.naturtalent.e4.project.ui.Activator;
@@ -58,9 +59,14 @@ public class SyncNavigatorAction
 					}
 				}
 			}
-
+			
+			// Focus auf den Navigator
+			MPart part = partService.findPart(ResourceNavigator.RESOURCE_NAVIGATOR_ID);			
+			partService.activate(part);		
+			
+			// Projekt selektieren
 			treeViewer.expandToLevel(iProject, 1);
-			treeViewer.setSelection(new StructuredSelection(iProject), true);	
+			treeViewer.setSelection(new StructuredSelection(iProject), true);				
 		}
 	}
 	

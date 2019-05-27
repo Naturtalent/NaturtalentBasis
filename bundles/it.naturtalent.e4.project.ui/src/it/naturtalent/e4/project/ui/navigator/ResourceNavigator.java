@@ -105,7 +105,7 @@ import it.naturtalent.e4.project.ui.handlers.TestProjectHandler;
 import it.naturtalent.e4.project.ui.handlers.TopLevelMenuUtils;
 import it.naturtalent.e4.project.ui.handlers.WorkingSetConfigurationHandler;
 import it.naturtalent.e4.project.ui.handlers.WorkingSetLevelHandler;
-
+import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
 import it.naturtalent.e4.project.ui.ws.AggregateWorkingSet;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSet;
@@ -411,11 +411,8 @@ public class ResourceNavigator implements IResourceNavigator
 			{		
 				if (selectionService != null)
 				{					
-					//autocommit();
-					
-					System.out.println("Autocommit im ResourceNavigator updatgen");
-					
-					
+					autocommit();
+										
 					IStructuredSelection selection = ((IStructuredSelection) event.getSelection());
 					Object selObj = selection.getFirstElement();
 					if (selObj != null)
@@ -492,14 +489,14 @@ public class ResourceNavigator implements IResourceNavigator
 	 * Als 'bisherig' wird das im Detailfenster 'ProjctView' angezeigte definiert. 
 	 */
 	
-	/*
+	
 	private void autocommit()
 	{
 		// wird im 'ProjectView' momentan die Eigenschaft eines Projekts angezeigt 
-		ProjectView projectView = (ProjectView) partService.findPart(ProjectView.ID).getObject();
+		NtProjectView projectView = (NtProjectView) partService.findPart(NtProjectView.NTPROJECT_VIEW_ID).getObject();
 		if (projectView != null)
 		{
-			NtProject ntProject = (NtProject) projectView.getNtProject();
+			NtProject ntProject = (NtProject) projectView.getSelectedNtProject();
 			if (ntProject != null)
 			{
 				IProject iProject = ResourcesPlugin.getWorkspace().getRoot()
@@ -526,7 +523,7 @@ public class ResourceNavigator implements IResourceNavigator
 			}
 		}
 	}
-	*/
+
 
 	@PostConstruct
 	void hookEvents(ESelectionService selectionService)
@@ -795,7 +792,8 @@ public class ResourceNavigator implements IResourceNavigator
 	@Focus
 	public void setFocus(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell)
 	{
-		// TODO	Set the focus to control
+		if(treeViewer != null)
+			tree.setFocus();
 	}
 	
 	public void initWindowWorkingSet()

@@ -98,6 +98,7 @@
       <toolbar xmi:id="_ThcOUBsQEeedQ-EvGGux8g" elementId="it.naturtalent.e4.project.ui.toolbar.0">
         <children xsi:type="menu:DirectToolItem" xmi:id="_VFpMABsQEeedQ-EvGGux8g" elementId="it.naturtalent.e4.project.ui.directtoolitem." label="" iconURI="icon://ICON_FOLDER" tooltip="%Explorer.tooltip.fileExplorer" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.SystemOpenHandler"/>
         <children xsi:type="menu:DirectToolItem" xmi:id="_03zLIDqCEeeguLcLTdWmiQ" elementId="it.naturtalent.e4.project.ui.directtoolitem.clipboardPath" iconURI="icon://MENU_PASTE" tooltip="%Explorer.tooltip.pathClipboard" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.ClipboardPath"/>
+        <children xsi:type="menu:DirectToolItem" xmi:id="_N5qnYH80EemTWYutn-DCmg" elementId="it.naturtalent.e4.project.ui.directtoolitem.rootWorkspace" iconURI="icon://ICON_HOUSE" tooltip="%Explorer.rootWorkspace" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.RootWorkspaceExplorer"/>
         <children xsi:type="menu:DirectToolItem" xmi:id="_v37NQDqBEeeguLcLTdWmiQ" elementId="it.naturtalent.e4.project.ui.directtoolitem.collapseProjectTree" iconURI="icon://ICON_COLLAPSEALL" tooltip="%Explorer.tooltip.collapse" contributionURI="bundleclass://it.naturtalent.e4.project.ui/it.naturtalent.e4.project.ui.handlers.emf.CollapseProjectTree"/>
       </toolbar>
     </elements>
