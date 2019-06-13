@@ -253,7 +253,7 @@ public class Messages extends NLS {
 	public static String ProjectQueueDialog_this_message;
 	public static String ProjectQueueDialog_btnNewButton_text;
 	public static String ProjectQueueDialog_btnNewButton_text_1;
-	public static String ProjectQueueDialog_text_text;
+	
 	
 	
 	
