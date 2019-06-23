@@ -114,6 +114,7 @@ public interface INtProjectProperty
 	
 	/**
 	 * Eine auf die Projekteigenschaft bezogene Aktion.
+	 * Wird aufgerufen, wenn der entsprechende Link auf den dyn. Property erfolgte.
 	 *  
 	 * @return
 	 */

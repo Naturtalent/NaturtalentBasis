@@ -29,8 +29,8 @@ import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 
 
 /**
- * Die Aktion oeffnet die selektierte Datei mit dem Systemeditor. Vorher wird noch ueberprueft, ob ein Adapter registriert
- * ist, der das Oeffnen uebernehmen kann
+ * Die Aktion oeffnet die selektierte Datei mit dem Systemeditor. Vorher wird noch ueberprueft, ob ein Adapter 
+ * registriert ist, der das Oeffnen uebernehmen kann
  * 
  * @author dieter
  *

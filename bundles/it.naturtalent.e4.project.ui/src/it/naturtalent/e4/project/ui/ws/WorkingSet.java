@@ -1,14 +1,5 @@
 package it.naturtalent.e4.project.ui.ws;
 
-import it.naturtalent.e4.project.ui.Activator;
-import it.naturtalent.e4.project.ui.WorkbenchImages;
-import it.naturtalent.e4.project.ui.handlers.OpenResourceHandler;
-import it.naturtalent.e4.project.ui.model.ResourceFactory;
-import it.naturtalent.e4.project.ui.model.WorkbenchAdapterFactory;
-import it.naturtalent.e4.project.ui.model.WorkingSetResourceMapping;
-import it.naturtalent.e4.project.ui.utils.Util;
-
-import java.io.File;
 import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,7 +7,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -24,8 +14,11 @@ import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.ui.IElementFactory;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.wb.swt.ResourceManager;
+
+import it.naturtalent.e4.project.ui.Activator;
+import it.naturtalent.e4.project.ui.WorkbenchImages;
+import it.naturtalent.e4.project.ui.model.ResourceFactory;
+import it.naturtalent.e4.project.ui.utils.Util;
 
 /**
  * A working set holds a number of IAdaptable elements. A working set is

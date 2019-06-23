@@ -28,7 +28,7 @@ import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
  * 
  * Handler zum Oeffnen bestehender Projekte.
  */
-@Deprecated
+@Deprecated //see it.naturtalent.e4.project.ui.actions,OpenProjectAction
 public class OpenProjectHandler
 {
 	

@@ -1,8 +1,5 @@
 package it.naturtalent.e4.project.ui.utils;
 
-import it.naturtalent.e4.project.ui.Activator;
-import it.naturtalent.e4.project.ui.handlers.OpenResourceHandler;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Map;
@@ -16,12 +13,13 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Shell;
+
+import it.naturtalent.e4.project.ui.Activator;
 
 public class CreateNewProject
 {

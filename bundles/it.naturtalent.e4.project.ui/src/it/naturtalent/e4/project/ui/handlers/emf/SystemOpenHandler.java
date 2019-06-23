@@ -16,11 +16,12 @@ import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 
 /**
- * @see OpenProjectPathAction
+ * 
  * 
  * @author dieter
  *
  */
+@Deprecated //@see SystenOpenEditorAction
 public class SystemOpenHandler
 {
 	@Inject @Optional private ESelectionService selectionService;

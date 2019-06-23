@@ -27,6 +27,8 @@ import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.ui.Activator;
+import it.naturtalent.e4.project.ui.actions.OpenProjectAction;
+import it.naturtalent.e4.project.ui.actions.SystenOpenEditorAction;
 import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.actions.emf.UndoProjectAction;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
@@ -185,11 +187,14 @@ public class NtProjectProperty implements INtProjectProperty
 		return null;
 	}
 
+	/**
+	 * ein Click auf die Projekteigenschaft oeffnet den eigenen Projekteigenschaftsdialog.
+	 */
 	@Override
 	public Action createAction()
 	{
-		StructuredViewer viewer = Activator.findNavigator().getViewer();		
-		return new OpenProjectPathAction(viewer);
+		OpenProjectAction openProject = ContextInjectionFactory.make(OpenProjectAction.class, context);		
+		return openProject;
 	}
 	
 	/*
