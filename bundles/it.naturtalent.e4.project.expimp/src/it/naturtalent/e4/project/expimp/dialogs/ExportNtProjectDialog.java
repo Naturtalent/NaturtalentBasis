@@ -321,8 +321,11 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 	{
 		// Setting: Zielverzeichnisse
 		String[] sourcePaths = settings.getArray(EXPORT_DESTDIRS_SETTINGS);
-		exportComboDir.setItems(sourcePaths);
-		checkExportDirectory(sourcePaths[0]);
+		if(ArrayUtils.isNotEmpty(sourcePaths))
+		{
+			exportComboDir.setItems(sourcePaths);
+			checkExportDirectory(sourcePaths[0]);
+		}
 
 		// Setting: Quelle (Projekte oder Workingsets)
 		final boolean btnState = settings.getBoolean(EXPORT_DEST_SETTINGS);

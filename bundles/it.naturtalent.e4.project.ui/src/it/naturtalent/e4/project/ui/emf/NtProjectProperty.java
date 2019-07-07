@@ -29,7 +29,6 @@ import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.actions.OpenProjectAction;
 import it.naturtalent.e4.project.ui.actions.SystenOpenEditorAction;
-import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.actions.emf.UndoProjectAction;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
 

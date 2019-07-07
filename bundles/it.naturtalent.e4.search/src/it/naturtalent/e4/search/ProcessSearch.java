@@ -10,6 +10,12 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
+/**
+ * Processor initialisiert die projektspezifischen Suchfunktionen (Projekt-,Folder-,Filesuche) 
+ * 
+ * @author dieter
+ *
+ */
 public class ProcessSearch
 {
 
@@ -21,6 +27,7 @@ public class ProcessSearch
 	@Optional
 	EPartService ePartService;
 
+	// Registry mit den Searchpages
 	@Inject
 	@Optional
 	IProjectSearchPageRegistry searchPageregistry;
@@ -31,6 +38,7 @@ public class ProcessSearch
 	{
 		if (searchPageregistry != null)
 		{
+			// die benutzten Pages registrieren
 			Activator.searchPageregistry = searchPageregistry;
 			searchPageregistry.addSearchPage(ProjectSearchPage.PROJECTSEARCHPAGE_ID,new ProjectSearchPage());
 			searchPageregistry.addSearchPage(FolderSearchPage.FOLDERSEARCHPAGE_ID,new FolderSearchPage());

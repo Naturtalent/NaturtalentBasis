@@ -71,6 +71,7 @@ public class FileSearchPage implements ISearchInEclipsePage
 	{		
 		this.shell = parent.getShell();
 		
+		/*
 		MPart mPart = Activator.ePartService.findPart(ResourceNavigator.RESOURCE_NAVIGATOR_ID);
 		if(mPart != null)
 			resourceNavigator = (ResourceNavigator) mPart.getObject();
@@ -78,6 +79,7 @@ public class FileSearchPage implements ISearchInEclipsePage
 		// Ergebnisview anzeigen
 		mPart = Activator.ePartService.findPart(SearchResultView.SEARCHRESULT_VIEW_ID);
 		resultView = (SearchResultView) mPart.getObject();
+		*/
 		
 		
 		fileSeachComposite = new FileSearchComposite(parent, SWT.NONE); 

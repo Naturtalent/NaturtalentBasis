@@ -1,16 +1,8 @@
 package it.naturtalent.e4.search.dialogs;
 
-import it.naturtalent.e4.project.IResourceNavigator;
-import it.naturtalent.e4.project.search.IPage;
-import it.naturtalent.e4.project.search.ISearchInEclipsePage;
-import it.naturtalent.e4.project.search.ResourceSearchResult;
-import it.naturtalent.e4.search.Activator;
-import it.naturtalent.e4.search.ProjectSearchPage;
+import javax.annotation.PostConstruct;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.wizard.ProgressMonitorPart;
@@ -21,17 +13,20 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
+
+import it.naturtalent.e4.project.search.IProjectSearchPageRegistry;
+import it.naturtalent.e4.project.search.ISearchInEclipsePage;
+import it.naturtalent.e4.project.search.ResourceSearchResult;
+import org.eclipse.swt.widgets.Label;
+//import it.naturtalent.e4.search.Activator;
 
 /**
- * Zentraler Such-Dialog
+ * Suchdialog steuert auf der Grundlage des SearchPageRegistry die entsprechenden Suchfunktionen. 
+ * Jede SearchPage wird einem TabFolder zugeordnet und kann hierueber ausgewaehlt werden.
  * 
  * @author apel.dieter
  * 
@@ -39,20 +34,18 @@ import org.eclipse.swt.events.MouseMoveListener;
 public class SearchDialog extends TitleAreaDialog
 {
 
-	//private IResourceNavigator resourceNavigator;
-	
-	private ProgressMonitorPart progressMonitorPart;
+	// zentrale Registry mit den Searchpages
+	private IProjectSearchPageRegistry searchPageregistry;
 
 	private int PREFERRED_CONTENT_HEIGHT = 450;
 
-	private int PREFERRED_CONTENT_WIDTH = 650;
+	private int PREFERRED_CONTENT_WIDTH = 750;
 
+	// Seite, die fuer die momentane Suche verwendet wird
 	private ISearchInEclipsePage page;
 
 	private TabFolder tabSearchFolder;
 
-	private Text textMask;
-	private Composite composite;
 
 	/**
 	 * Create the dialog.
@@ -69,6 +62,12 @@ public class SearchDialog extends TitleAreaDialog
 	public SearchDialog(Shell parentShell)
 	{
 		super(parentShell);		
+	}
+	
+	@PostConstruct
+	public void postConstruct(@Optional IProjectSearchPageRegistry searchPageregistry)
+	{
+		this.searchPageregistry = searchPageregistry;		
 	}
 
 	/**
@@ -90,13 +89,13 @@ public class SearchDialog extends TitleAreaDialog
 		tabSearchFolder = new TabFolder(container, SWT.NONE);
 		GridData gd_tabSearchFolder = new GridData(GridData.FILL_BOTH);
 		gd_tabSearchFolder.grabExcessVerticalSpace = false;
-		gd_tabSearchFolder.heightHint = 216;
+		gd_tabSearchFolder.heightHint = 441;
 		tabSearchFolder.setLayoutData(gd_tabSearchFolder);
 
-		if (Activator.searchPageregistry != null)
+		// die SearchPages den TabFoldern zuordnen
+		if (searchPageregistry != null)
 		{
-			ISearchInEclipsePage[] pages = Activator.searchPageregistry
-					.getSearchPages();
+			ISearchInEclipsePage[] pages = searchPageregistry.getSearchPages();
 			
 			for (int i = 0; i < pages.length; i++)
 			{
@@ -109,14 +108,6 @@ public class SearchDialog extends TitleAreaDialog
 				tabItem.setControl(partControl);
 			}
 		}
-		
-		composite = new Composite(container, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, true, 1, 1));
-		
-		progressMonitorPart = new ProgressMonitorPart(container,
-				new GridLayout(), true);
-		progressMonitorPart
-				.setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		return container;
 	}
@@ -141,21 +132,16 @@ public class SearchDialog extends TitleAreaDialog
 	@Override
 	protected Point getInitialSize()
 	{
-		return new Point(450, 545);
+		return new Point(997, 623);
 	}
 
 
 	@Override
 	protected void okPressed()
 	{
-		startSearch();
-		
-		ResourceSearchResult result = (ResourceSearchResult) page.getResult();
-		if(result.getHitCount() > 0)
-		{
-			// Treffer! - Dialog beenden
-			super.okPressed();
-		}
+		page = getSelectedPage();
+		page.performSearch(null);		
+		super.okPressed();
 	}
 	
 	public ISearchInEclipsePage getSearchPage()
@@ -164,24 +150,24 @@ public class SearchDialog extends TitleAreaDialog
 	}
 
 	/*
-	 * die 'performSearch' - Funktion der Suchseite aufrufen
+	 * die Suche der ausgewaelten Seite starten
 	 */
 	public void startSearch()
 	{
 		page = getSelectedPage();
-		page.performSearch(progressMonitorPart);		
+		page.performSearch(null);		
 	}
 
-
+	// die selektierte SearchPage abfragen
 	private ISearchInEclipsePage getSelectedPage()
 	{
 		int index = tabSearchFolder.getSelectionIndex();
 		if (index == -1)
 		{
 			// ???
-			return Activator.searchPageregistry.getSearchPages()[0];
+			return searchPageregistry.getSearchPages()[0];
 		}
-		return Activator.searchPageregistry.getSearchPages()[index];
+		return searchPageregistry.getSearchPages()[index];
 	}
 
 }

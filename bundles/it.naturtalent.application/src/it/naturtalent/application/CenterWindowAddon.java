@@ -1,7 +1,9 @@
 package it.naturtalent.application;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MTrimmedWindow;
 import org.eclipse.e4.ui.workbench.UIEvents;
@@ -11,10 +13,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
+import it.naturtalent.application.services.IOpenWithEditorAdapterRepository;
+
 public class CenterWindowAddon
 {
 
 	public static final String MAINWINDOW_ID = "it.naturtalent.application.mainwindow";
+	
+	@Inject @Optional IOpenWithEditorAdapterRepository openwithAdapterRepository;
 	
 	@PostConstruct
 	public void init(final IEventBroker eventBroker)

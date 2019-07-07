@@ -23,8 +23,9 @@ import org.eclipse.ui.IWorkingSet;
 public class SelectWorkingSetDialog extends ConfigureWorkingSetDialog
 {
 
-	public SelectWorkingSetDialog(Shell parentShell,
-			IWorkingSet[] activeWorkingSets)
+	private String dialogMessage = Messages.SelectWorkingSetDialog_titel;
+	
+	public SelectWorkingSetDialog(Shell parentShell,IWorkingSet[] activeWorkingSets)
 	{
 		super(parentShell, activeWorkingSets);
 		// TODO Auto-generated constructor stub
@@ -45,7 +46,8 @@ public class SelectWorkingSetDialog extends ConfigureWorkingSetDialog
 		Control control = super.createDialogArea(parent);
 		
 		// Titel anpassen
-		setMessage(Messages.SelectWorkingSetDialog_titel);
+		//setMessage(Messages.SelectWorkingSetDialog_titel);
+		setMessage(dialogMessage);
 		setTitle(Messages.SelectWorkingSetDialog_message);
 				
 		return control;		
@@ -67,6 +69,13 @@ public class SelectWorkingSetDialog extends ConfigureWorkingSetDialog
 			}
 		}
 	}
+
+	public void setDialogMessage(String dialogMessage)
+	{
+		this.dialogMessage = dialogMessage;
+	}
+
+
 
 	
 	

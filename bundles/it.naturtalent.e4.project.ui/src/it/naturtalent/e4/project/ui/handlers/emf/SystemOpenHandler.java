@@ -12,7 +12,6 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 
-import it.naturtalent.e4.project.ui.actions.emf.OpenProjectPathAction;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 
 /**

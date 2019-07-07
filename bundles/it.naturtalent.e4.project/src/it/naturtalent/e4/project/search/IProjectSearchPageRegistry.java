@@ -1,7 +1,11 @@
 package it.naturtalent.e4.project.search;
 
-import java.util.Map;
-
+/**
+ * Interface des Registry in dem die SeachPages-Interfaces gespeichert werden.
+ * 
+ * @author dieter
+ *
+ */
 public interface IProjectSearchPageRegistry
 {
 	public void addSearchPage(String searchPageID, ISearchInEclipsePage page);

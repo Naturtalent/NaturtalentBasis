@@ -6,6 +6,12 @@ import java.util.TreeMap;
 import it.naturtalent.e4.project.search.IProjectSearchPageRegistry;
 import it.naturtalent.e4.project.search.ISearchInEclipsePage;
 
+/**
+ * Registry, in dem alle Interfaces der SeachPages (ISearchInEclipsePage) unter einer ID gespeichert werden. 
+ * 
+ * @author dieter
+ *
+ */
 public class ProjectSearchPageRegistry implements IProjectSearchPageRegistry
 {
 	static Map<String, ISearchInEclipsePage>mapSearchPages = new TreeMap<String, ISearchInEclipsePage>();

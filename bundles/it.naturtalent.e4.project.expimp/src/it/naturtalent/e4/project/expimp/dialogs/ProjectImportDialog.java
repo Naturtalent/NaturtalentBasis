@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.bind.JAXB;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -83,6 +85,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import it.naturtalent.application.IPreferenceAdapter;
 import it.naturtalent.e4.project.IProjectData;
+import it.naturtalent.e4.project.ProjectData;
 import it.naturtalent.e4.project.expimp.Messages;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.dialogs.ConfigureWorkingSetDialog;
@@ -479,7 +482,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		List<NtProject>ntProjects = new ArrayList<NtProject>();
 		File importDir = new File(importDirPath);
 		File[] subdirs = importDir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
-		
+				
 		File propertyFile;
 		if (ArrayUtils.isNotEmpty(subdirs))
 		{

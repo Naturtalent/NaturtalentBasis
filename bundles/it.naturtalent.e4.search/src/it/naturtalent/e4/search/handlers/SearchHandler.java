@@ -10,6 +10,7 @@ import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.search.Activator;
 import it.naturtalent.e4.search.SearchResultView;
 import it.naturtalent.e4.search.dialogs.SearchDialog;
+import it.naturtalent.e4.search.parts.SearchView;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.core.resources.IResource;
@@ -50,16 +51,19 @@ public class SearchHandler
 	@Execute
 	public void execute(Shell shell, MPart part, IEclipseContext context)
 	{
-		SearchDialog searchDialog = ContextInjectionFactory.make(SearchDialog.class, context);
+		// SearchView aktivieren (sichtbar machen)
+		partService.showPart(SearchView.SEARCHVIEW_ID, PartState.ACTIVATE);
 		
+		SearchDialog searchDialog = ContextInjectionFactory.make(SearchDialog.class, context);		
 		if(searchDialog.open() == SearchDialog.OK)
-		{			
+		{
+			/*
 			ISearchInEclipsePage page = searchDialog.getSearchPage();
 			ResourceSearchResult result = (ResourceSearchResult) page.getResult();
 			IAdaptable [] resources = result.getResourceResult();
 			if (ArrayUtils.isNotEmpty(resources))
 			{		
-				// Fenster mit den Suchergebnissen zeigen
+				// Fenster mit den Suchergebnissen zeigen			
 				MPart mPart = partService
 						.findPart(SearchResultView.SEARCHRESULT_VIEW_ID);
 				mPart.setVisible(true);				
@@ -74,6 +78,7 @@ public class SearchHandler
 					resultView.setInput(result);
 				}
 			}
+			*/
 		}		
 	}
 

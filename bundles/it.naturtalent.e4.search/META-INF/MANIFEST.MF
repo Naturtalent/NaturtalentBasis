@@ -5,6 +5,7 @@ Bundle-SymbolicName: it.naturtalent.e4.search;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: it.naturtalent.e4.search.Activator
 Bundle-Vendor: dieter.apel
+Export-Package: it.naturtalent.e4.search.registry
 Require-Bundle: org.eclipse.e4.core.di,
  javax.inject,
  it.naturtalent.e4.project;bundle-version="1.0.0",
@@ -25,11 +26,12 @@ Require-Bundle: org.eclipse.e4.core.di,
  org.eclipse.ui.workbench;bundle-version="3.103.0",
  it.naturtalent.e4.project.ui;bundle-version="1.0.0",
  org.eclipse.e4.ui.di;bundle-version="0.10.1",
- org.eclipse.e4.ui.model.workbench;bundle-version="1.0.0"
+ org.eclipse.e4.ui.model.workbench;bundle-version="1.0.0",
+ org.eclipse.e4.core.services
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: javax.annotation;version="1.1.0",
+Service-Component: OSGI-INF/searchpageregistry.xml
+Bundle-ActivationPolicy: lazy
+Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
+ javax.inject;version="1.0.0",
  org.eclipse.osgi.util;version="1.1.0",
  org.osgi.framework;version="1.3.0"
-Bundle-ActivationPolicy: lazy
-Export-Package: it.naturtalent.e4.search.registry
-Service-Component: OSGI-INF/searchpageregistry.xml
