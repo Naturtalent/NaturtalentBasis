@@ -5,6 +5,6 @@
     <elements xsi:type="menu:DirectToolItem" xmi:id="_dpD8cHLVEeKlyoD8Ni7Ogw" iconURI="platform:/plugin/it.naturtalent.e4.search/icons/search.gif" contributionURI="bundleclass://it.naturtalent.e4.search/it.naturtalent.e4.search.handlers.SearchHandler"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TMsxsHb7EeKA6KsololZBw" featurename="children" parentElementId="it.naturtalent.e4.project.ui.partstack.1">
-    <elements xsi:type="basic:Part" xmi:id="_ok3pIHb7EeKA6KsololZBw" elementId="it.naturtalent.search.resultpart" contributionURI="bundleclass://it.naturtalent.e4.search/it.naturtalent.e4.search.parts.SearchView" label="Suchergebnisse" closeable="true"/>
+    <elements xsi:type="basic:Part" xmi:id="_ok3pIHb7EeKA6KsololZBw" elementId="it.naturtalent.search.resultpart" visible="false" contributionURI="bundleclass://it.naturtalent.e4.search/it.naturtalent.e4.search.parts.SearchView" label="Suchergebnisse" closeable="true"/>
   </fragments>
 </fragment:ModelFragments>

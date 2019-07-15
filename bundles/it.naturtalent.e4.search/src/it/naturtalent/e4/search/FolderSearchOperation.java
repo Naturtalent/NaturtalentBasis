@@ -1,14 +1,32 @@
 package it.naturtalent.e4.search;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.internal.resources.Container;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourceAttributes;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -18,6 +36,14 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import it.naturtalent.e4.project.INtProject;
 import it.naturtalent.e4.project.search.ISearchInEclipsePage;
 
+/**
+ * Die eigentliche Foldersuchfunktion zum Ablauf in einem RunnablePrrogress.
+ * 
+ * (momentan werden Unterverzeichnisse nicht beruecksichtigt)
+ * 
+ * @author dieter
+ *
+ */
 public class FolderSearchOperation implements IRunnableWithProgress
 {
 	private SearchOptions searchOptions;
@@ -37,9 +63,11 @@ public class FolderSearchOperation implements IRunnableWithProgress
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
 	{
-		// Liste der in die Suche einzubeziehenden Projekte 
+		int hitCount = 0;
+		
+		// Liste der in die Suche einzubeziehenden Projekte (innerhalb dieser Projekte wird nach Verzeichnissen Gesucht)
 		List<IAdaptable>searchItems = searchOptions.getSearchItems();
-		monitor.beginTask("Suche in  Projekten", searchItems.size());	
+		monitor.beginTask("Suche in  Projekten", searchItems.size());	//$NON-NLS-N$
 		
 		String patternString = searchOptions.getSearchPattern();
 		boolean isCaseSensitiv = searchOptions.isCaseSensitive();
@@ -51,11 +79,9 @@ public class FolderSearchOperation implements IRunnableWithProgress
 		Pattern pattern = PatternConstructor.createPattern(patternString, isRegEx, isStringMatcher, isCaseSensitiv, isWholeWord);
 		
 		// Broker meldet der Start einer neuen Suche
-		eventBroker.post(ISearchInEclipsePage.START_SEARCH_EVENT, "keine Ergebnisse");
+		eventBroker.post(ISearchInEclipsePage.START_SEARCH_EVENT, "Start der Suche"); //$NON-NLS-N$
 		
-		
-		/*
-		// alle Suchitems durchlaufen
+		// alle Suchitems (Projecte) durchlaufen
 		for (Object item : searchItems)
 		{				
 			if (monitor.isCanceled())
@@ -65,30 +91,56 @@ public class FolderSearchOperation implements IRunnableWithProgress
 			
 			if (item instanceof IProject)
 			{
-				IProject iProject = (IProject) item;
-				String projectName;
-				try
+				IProject iProject = (IProject) item;				
+				//matchFolder(iProject, pattern);
+				
+				File projectFile = iProject.getFullPath().toFile();
+				projectFile = iProject.getLocation().toFile();
+				
+				// soll verzeichniss die mit '.' beginnen ausblenden
+				IOFileFilter notHiddenFilter = FileFilterUtils.notFileFilter(FileFilterUtils.prefixFileFilter("."));	
+				
+				// Dateien ausfiltern 
+				IOFileFilter notFileFilter = FileFilterUtils.notFileFilter(FileFilterUtils.fileFileFilter());
+				
+				// Verzeichnisfilter 
+				IOFileFilter dirFilter = FileFilterUtils.and(notHiddenFilter, TrueFileFilter.INSTANCE);
+				
+				// die zu untersuchenden Verzeichnisse auflisten
+				Collection<File>directories = FileUtils.listFilesAndDirs(projectFile, notFileFilter, dirFilter);				
+								
+				if (directories.size() > 0)
 				{
-					projectName = iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
-					Matcher m = pattern.matcher(projectName);
-					if (m.matches()) 
+					for (File projectDir : directories)
 					{
-						eventBroker.post(ISearchInEclipsePage.MATCH_PATTERN_EVENT, iProject);
-						//System.out.println("posted: "+projectName);
+						// Name des Verzeichnisses (ohne Pfadangaben) matchen
+						String dirName = projectDir.getName();
+						Matcher m = pattern.matcher(dirName);
+						if (m.matches()) 
+						{
+							// sichtbare Verzeichnisse werden akzeptiert
+							// findMember() findet keine Unterverzeichnisse
+							// fuer das Checken der Unterverzeichnisse ist moeglicherweise
+							// eine separate Funktion erforderlich
+							IResource folder = iProject.findMember(dirName);
+							if(folder != null)
+							{
+								eventBroker.post(ISearchInEclipsePage.MATCH_PATTERN_EVENT, folder);
+								hitCount++;
+							}
+						}
 					}
-				} catch (CoreException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 			
 			monitor.worked(1);
 		}
-		monitor.done();
-		*/
-
 		
+		monitor.done();
+		
+		eventBroker.post(ISearchInEclipsePage.END_SEARCH_EVENT, "Anzahl der Treffer: "+hitCount);	//$NON-NLS-N$	
 	}
+	
+
 
 }

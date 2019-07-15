@@ -53,7 +53,8 @@ public class ProjectSearchPage implements ISearchInEclipsePage
 		
 		return projectSeachComposite;
 	}
-
+	
+	
 	@Override
 	public boolean isStartSearchEnabled()
 	{
@@ -85,7 +86,7 @@ public class ProjectSearchPage implements ISearchInEclipsePage
 		try
 		{
 			// Suchfunktion ausfuehren
-			new ProgressMonitorDialog(shell).run(true, false, searchOperation);
+			new ProgressMonitorDialog(shell).run(true, true, searchOperation);
 			projectSeachComposite.saveDialogSettings(settings);
 			
 		} catch (InvocationTargetException e)
@@ -115,6 +116,12 @@ public class ProjectSearchPage implements ISearchInEclipsePage
 	public SearchResult getResult()
 	{		
 		return null;
+	}
+
+	@Override
+	public String getSearchDialogMessage()
+	{		
+		return "Projekte suchen";
 	}
 
 }

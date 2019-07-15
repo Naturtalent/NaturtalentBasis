@@ -4,16 +4,21 @@ package it.naturtalent.e4.search.parts;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.internal.resources.Project;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -29,11 +34,13 @@ import it.naturtalent.e4.project.search.ISearchInEclipsePage;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
-
+/**
+ * In dieser View werden die Suchergebisse angzeigt.
+ * Wird ein Suchergebnis selektiert, erfolgt eine entsprechende Selektion im ResourceNavigator.
+ * 
+ * @author dieter
+ *
+ */
 public class SearchView
 {
 	/*
@@ -56,8 +63,18 @@ public class SearchView
 					return iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
 				} catch (CoreException e)
 				{					
-				}
-				
+				}				
+			}
+			if (element instanceof IFolder)
+			{
+				IFolder folder = (IFolder) element;
+				IProject iProject = folder.getProject();
+				try
+				{
+					return iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
+				} catch (CoreException e)
+				{					
+				}				
 			}
 			return element.toString();
 		}
@@ -97,19 +114,27 @@ public class SearchView
 	}
 	
 	/*
-	 * das im Suchfenster selektierte Projekt auch im ResourceNavigator selektiern
+	 * das im Suchfenster selektierte Objekt auch im ResourceNavigator selektiern
 	 */
 	private void selectResourceNavigatorEntry()
 	{
-		ResourceNavigator resourceNavigator = (ResourceNavigator) Activator.findNavigator();
-		
+		ResourceNavigator resourceNavigator = (ResourceNavigator) Activator.findNavigator();		
 		if(resourceNavigator != null)
 		{
 			IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
-			final IAdaptable adaptable = (IAdaptable) selection.getFirstElement();
-
-			if (adaptable != null)
+			Object selObj = selection.getFirstElement();
+			if (selObj instanceof IAdaptable)
 			{
+				IAdaptable adaptable = (IAdaptable) selObj;		
+					
+				IAdaptable project = adaptable;
+				if (adaptable instanceof Folder)
+				{
+					// das Oeffnen des Workingset erfordert das Parentprojekt
+					Folder folder = (Folder) adaptable;
+					project = ((Folder) adaptable).getProject();					
+				}
+								
 				TreeViewer treeViewer = resourceNavigator.getViewer();
 				if (resourceNavigator.getTopLevelStatus())
 				{
@@ -119,21 +144,36 @@ public class SearchView
 						IAdaptable[] elements = workingSet.getElements();
 						for (IAdaptable element : elements)
 						{
-							if (element.equals(adaptable))
+							if (element.equals(project))
 							{
+								// Workingset des selektierten Adaptables oeffnen
 								treeViewer.expandToLevel(workingSet, 1);								
 								break;
 							}
 						}
 					}
-				}
-
-				// gesuchtes Projekt selektieren, oeffnen und Focus auf ResourceNavigator
+				}								
+				
+				// selektiertes Adaptable im Resourcenavigator oeffnen, selektieren und Focus setzen
 				Object obj = adaptable.getAdapter(Project.class);
 				if(obj != null)
+				{
+					// ein Projekt wurde selektieren
 					treeViewer.expandToLevel(obj, 1);
-				treeViewer.setSelection(new StructuredSelection(adaptable), true);
-				treeViewer.getTree().setFocus();
+					treeViewer.setSelection(new StructuredSelection(adaptable), true);
+					treeViewer.getTree().setFocus();
+				}
+				else
+				{
+					obj = adaptable.getAdapter(Folder.class);
+					if(obj != null)
+					{
+						// ein Verzeichnis wurde selektieren
+						treeViewer.expandToLevel(((Folder)obj).getProject(), 1);
+						treeViewer.setSelection(new StructuredSelection(adaptable), true);
+						treeViewer.getTree().setFocus();
+					}
+				}
 			}
 		}
 	}
@@ -151,6 +191,14 @@ public class SearchView
 	@Inject
 	@Optional
 	public void handleMatchPatternEvent(@UIEventTopic(ISearchInEclipsePage.MATCH_PATTERN_EVENT) Object searchItem)
+	{
+		// einen weiteren Matchpattern in den TableViewer uebernehmen
+		tableViewer.add(searchItem);
+	}
+
+	@Inject
+	@Optional
+	public void handleEndSearchEvent(@UIEventTopic(ISearchInEclipsePage.END_SEARCH_EVENT) Object searchItem)
 	{
 		// einen weiteren Matchpattern in den TableViewer uebernehmen
 		tableViewer.add(searchItem);

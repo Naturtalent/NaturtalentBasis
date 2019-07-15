@@ -300,4 +300,11 @@ public class FileSearchPage implements ISearchInEclipsePage
 		return new String[]{ "*" }; //$NON-NLS-1$
 	}
 
+	@Override
+	public String getSearchDialogMessage()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

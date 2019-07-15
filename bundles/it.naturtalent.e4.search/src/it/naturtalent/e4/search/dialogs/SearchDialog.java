@@ -2,6 +2,7 @@ package it.naturtalent.e4.search.dialogs;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -22,6 +23,8 @@ import it.naturtalent.e4.project.search.IProjectSearchPageRegistry;
 import it.naturtalent.e4.project.search.ISearchInEclipsePage;
 import it.naturtalent.e4.project.search.ResourceSearchResult;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 //import it.naturtalent.e4.search.Activator;
 
 /**
@@ -78,7 +81,7 @@ public class SearchDialog extends TitleAreaDialog
 	@Override
 	protected Control createDialogArea(Composite parent)
 	{
-
+		setTitle("Allgemeiner Suchdialog");
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		GridData containerLayoutData = new GridData(GridData.FILL_BOTH);
@@ -87,6 +90,17 @@ public class SearchDialog extends TitleAreaDialog
 		container.setLayoutData(containerLayoutData);
 
 		tabSearchFolder = new TabFolder(container, SWT.NONE);
+		tabSearchFolder.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				ISearchInEclipsePage selectedPage =  getSelectedPage();
+				String message = selectedPage.getSearchDialogMessage();
+				if(StringUtils.isNotEmpty(message))
+					setMessage(message);
+			}
+		});
 		GridData gd_tabSearchFolder = new GridData(GridData.FILL_BOTH);
 		gd_tabSearchFolder.grabExcessVerticalSpace = false;
 		gd_tabSearchFolder.heightHint = 441;

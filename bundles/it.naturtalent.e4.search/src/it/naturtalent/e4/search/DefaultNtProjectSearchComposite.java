@@ -157,6 +157,7 @@ public class DefaultNtProjectSearchComposite extends Composite
 		new Label(groupFocus, SWT.NONE);
 		new Label(groupFocus, SWT.NONE);
 		
+		// WorkingSet selektieren
 		btnBrowseWS.addSelectionListener(new SelectionAdapter()
 		{			
 			@Override

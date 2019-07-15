@@ -4,19 +4,30 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
 
+/**
+ * Separate Klasse zum Speichern der fuer die Suchoperation notwendigen Daten.
+ * 
+ * @author dieter
+ *
+ */
 public class SearchOptions
 {
+	// Groß-und Kleinschreibung beachten
 	private boolean isCaseSensitive = false;
 
+	// die Suchmaske
 	private String searchPattern;
 
+	// momemtan nicht verwendet
 	private boolean isWholeWordOnly;
 	
+	// eine RegularExpression anwenden 
 	private boolean isRegularExpression;
 	
 	// Liste der in die Suche einbezogenen Objekte
 	private List<IAdaptable>searchItems;
 
+	
 	public void setSearchPattern(String searchPattern)
 	{
 		this.searchPattern = searchPattern;
@@ -27,6 +38,7 @@ public class SearchOptions
 		return searchPattern;
 	}
 
+	
 	public void setCaseSensitive(boolean isCaseSensitive)
 	{
 		this.isCaseSensitive = isCaseSensitive;
@@ -37,6 +49,7 @@ public class SearchOptions
 		return isCaseSensitive;
 	}
 
+	
 	public void setWholeWordOnly(boolean isWholeWordOnly)
 	{
 		this.isWholeWordOnly = isWholeWordOnly;
@@ -47,7 +60,7 @@ public class SearchOptions
 		return isWholeWordOnly;
 	}
 		
-
+	
 	public boolean isRegularExpression()
 	{
 		return isRegularExpression;
@@ -58,11 +71,12 @@ public class SearchOptions
 		this.isRegularExpression = isRegularExpression;
 	}
 
+
 	public List<IAdaptable> getSearchItems()
 	{
 		return searchItems;
 	}
-
+	
 	public void setSearchItems(List<IAdaptable> searchItems)
 	{
 		this.searchItems = searchItems;

@@ -40,6 +40,8 @@ import org.eclipse.swt.graphics.Image;
 
 
 /**
+ * Mit einem entsprechenden Adapter kann die ViewID der ausgewaehlten View ermittelt und angezeigt werden.
+ * Diese Adapter (IShowViewAdapter) werden in einem zentralen Repository gespeichert.
  * 
  * @author dieter
  *
@@ -132,6 +134,7 @@ public class ShowViewDialog extends Dialog
 	
 	private String selectectViewID;
 	
+	// Repository mit den ShowView - Adapter
 	@Inject @Optional private IShowViewAdapterRepository showViewAdapterRepository;
 
 
