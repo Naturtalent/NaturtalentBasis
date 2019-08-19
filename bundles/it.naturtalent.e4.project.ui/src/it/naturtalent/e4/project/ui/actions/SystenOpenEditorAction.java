@@ -66,6 +66,7 @@ public class SystenOpenEditorAction extends Action
 					{					
 						if(openAdapter.isExecutable(filePath))
 						{
+							// die Datei wird ueber einen Adapter geoeffnet
 							openAdapter.execute(filePath);
 							return;
 						}
@@ -76,14 +77,13 @@ public class SystenOpenEditorAction extends Action
 					e1.printStackTrace();
 				}
 	
-				
+				// kein Adapter - oeffnen ueber Systemoeffner
 				Program prog = Program.findProgram(ext);			
 				if (prog != null)
 				{
 					try
 					{
-						File file = FileUtils.toFile(ifile
-								.getLocationURI().toURL());
+						File file = FileUtils.toFile(ifile.getLocationURI().toURL());
 						prog.execute(file.getPath());
 					} catch (MalformedURLException e)
 					{
