@@ -60,6 +60,8 @@ public class CheckListEditorComposite extends Composite
 	
 	protected boolean dialogCancel;
 	
+	protected Composite btnComposite;
+	
 	
 	// Validator fuer InputDialog
 	protected IInputValidator validator = new IInputValidator()
@@ -123,7 +125,7 @@ public class CheckListEditorComposite extends Composite
 		});
 		
 		
-		Composite btnComposite = new Composite(this, SWT.NONE);
+		btnComposite = new Composite(this, SWT.NONE);
 		btnComposite.setLayout(new FillLayout(SWT.VERTICAL));
 		
 		btnAdd = new Button(btnComposite, SWT.NONE);
