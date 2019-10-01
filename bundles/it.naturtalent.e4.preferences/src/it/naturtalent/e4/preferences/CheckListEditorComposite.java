@@ -365,6 +365,5 @@ public class CheckListEditorComposite extends Composite
 		checkboxTableViewer.setCheckedElements(checkedNames);
 		return names;
 	}
-	
 
 }
