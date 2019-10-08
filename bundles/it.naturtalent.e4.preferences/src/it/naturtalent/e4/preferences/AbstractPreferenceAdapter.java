@@ -11,7 +11,7 @@ public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
 {	
 	protected IEclipsePreferences defaultPreferenceNode;
 	protected IEclipsePreferences instancePreferenceNode;	
-	protected Composite referenceComposite = null;
+	protected Composite preferenceComposite = null;
 	
 	@Override
 	public abstract String getLabel();
@@ -48,7 +48,7 @@ public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
 	public Composite createNodeComposite(IPreferenceNode referenceNode)
 	{
 		referenceNode.setTitle(getLabel());		
-		return referenceComposite;
+		return preferenceComposite;
 	}
 
 
