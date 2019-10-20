@@ -109,7 +109,7 @@ public class CheckListEditorComposite extends Composite
 				Object selObj = selection.getFirstElement();
 				if (selObj instanceof String)
 				{
-					//selectedValue = (String) selObj;
+					// Reaktion auf DoubleClick
 					doEdit();
 				}				
 			}
@@ -120,6 +120,7 @@ public class CheckListEditorComposite extends Composite
 			@Override
 			public void selectionChanged(SelectionChangedEvent event)
 			{
+				// Reaktion auf Selektion
 				updateWidgets();				
 			}
 		});
@@ -181,6 +182,9 @@ public class CheckListEditorComposite extends Composite
 			{							
 				checkboxTableViewer.setAllChecked(false);
 				checkboxTableViewer.setChecked(event.getElement(), event.getChecked());
+				
+				// Reaktion auf CheckSelection
+				doChecked();
 			}
 		});
 	}
@@ -321,6 +325,11 @@ public class CheckListEditorComposite extends Composite
 			// CheckStatur wiederherstellen
 			checkboxTableViewer.setChecked(updateEntry, checkedState);
 		}
+	}
+	
+	protected void doChecked()
+	{
+		// Reaktion auf Checked
 	}
 
 
