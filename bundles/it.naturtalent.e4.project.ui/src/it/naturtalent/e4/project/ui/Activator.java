@@ -601,6 +601,7 @@ public class Activator implements BundleActivator
 	}
 	*/
 	
+	// ermoeglicht den Zugriff auf 'plugin.properties' ueber die definierten Keys
 	private void initPluginProperties()
 	{
 		try
