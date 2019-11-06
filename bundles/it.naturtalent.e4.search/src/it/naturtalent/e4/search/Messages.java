@@ -22,6 +22,14 @@ public class Messages extends NLS {
 	public static String ProjectSearchComposite_checkCaseSensitiv;
 	public static String ProjectSearchComposite_checkRegularExpression;
 	public static String ProjectSearchComposite_lblNewLabel_text;
+	public static String PropertySearchComposite_group_text;
+	public static String PropertySearchComposite_btnRadioDate_text;
+	public static String PropertySearchComposite_btnRadioSince_text;
+	public static String PropertySearchComposite_btnRadioBefore_text;
+	public static String PropertySearchComposite_btnRadioBetween_text;
+	public static String PropertySearchComposite_btnRadioButton_text;
+	public static String PropertySearchComposite_btnRadioButton_1_text;
+	
 	//////////////////////
 	//
 	// Constructor

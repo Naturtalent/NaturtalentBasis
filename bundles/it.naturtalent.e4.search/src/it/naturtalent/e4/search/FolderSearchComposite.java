@@ -27,7 +27,7 @@ public class FolderSearchComposite extends Composite
 {
 	
 	// Name der Foldersetting Section
-	private static final String FOLDER_SETTING_SECTION = "searchFolder"; //$NON-NLS-1$
+	private static final String FOLDER_SETTING_SECTION = "searchFolderSection"; //$NON-NLS-1$
 	
 	// SettingKeys
 	public static final String SEARCH_FOLDERPATTERN_SETTINGS = "searchfolderpattern"; //$NON-NLS-1$
@@ -85,24 +85,35 @@ public class FolderSearchComposite extends Composite
 	}
 	
 	/*
-	 * Die Foldersettings werden in einer Section von 'settings' gespeichert.
+	 * Die Dialogsettings werden vorbelegt.
+	 * Die Settings werden in einer Section von 'settings' gespeichert.
 	 * 
 	 */
 	public void setDialogSettings(IDialogSettings settings)
 	{
+		String [] searchPattern;
 		IDialogSettings section = settings.getSection(FOLDER_SETTING_SECTION);
-		if(section != null)
+		
+		if(section == null)
 		{
-			// SuchmusterArray laden
-			String [] searchPattern = section.getArray(SEARCH_FOLDERPATTERN_SETTINGS);	
-			if(searchPattern != null)
-			{
-				comboFolderPattern.setItems(searchPattern);
-				
-				// Index0 wird vorgegeben
-				comboFolderPattern.setText(comboFolderPattern.getItem(0));
-			}	
-		}		
+			// Setting wird angelegt	
+			section = new DialogSettings(FOLDER_SETTING_SECTION);
+			if(section == null)
+				return;
+			
+			settings.addSection(section);
+		}
+		
+		// SuchmusterArray laden
+		searchPattern = section.getArray(SEARCH_FOLDERPATTERN_SETTINGS);
+		if (ArrayUtils.isNotEmpty(searchPattern))
+		{
+			comboFolderPattern.setItems(searchPattern);
+
+			// Index0 wird vorgegeben
+			comboFolderPattern.setText(comboFolderPattern.getItem(0));
+		}
+		
 	}
 	
 	public void saveDialogSettings(IDialogSettings settings)

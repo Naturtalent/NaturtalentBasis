@@ -8,8 +8,8 @@ Bundle-Vendor: Dieter Apel
 Bundle-Localization: plugin
 Export-Package: it.naturtalent.application,
   it.naturtalent.application.services
-Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime,
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.ui,
  org.eclipse.e4.ui.workbench,
  it.naturtalent.icons,
  org.eclipse.e4.core.contexts,

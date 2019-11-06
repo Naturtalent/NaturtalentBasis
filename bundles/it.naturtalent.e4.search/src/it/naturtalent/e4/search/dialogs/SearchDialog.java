@@ -164,7 +164,7 @@ public class SearchDialog extends TitleAreaDialog
 	}
 
 	/*
-	 * die Suche der ausgewaelten Seite starten
+	 * die seitendefinierte Suchefunktion wird gestartet 
 	 */
 	public void startSearch()
 	{

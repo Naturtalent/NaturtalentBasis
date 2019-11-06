@@ -35,7 +35,7 @@ import it.naturtalent.e4.project.search.ISearchInEclipsePage;
  */
 public class FolderSearchPage extends ProjectSearchPage
 {
-	// mit dieser ID wird die Page im Registry eingetragen @see it.naturtalent.e4.search.ProcessSearch
+	// mit dieser ID wird die Suchseite im Registry eingetragen @see it.naturtalent.e4.search.ProcessSearch
 	public static final String FOLDERSEARCHPAGE_ID = "02foldersearch";
 
 	// UI-Composite der Verzeichnissuche
@@ -50,6 +50,7 @@ public class FolderSearchPage extends ProjectSearchPage
 	{		
 		this.shell = parent.getShell();
 		
+		// 
 		folderSeachComposite = new FolderSearchComposite(parent, SWT.NONE); 
 		folderSeachComposite.setDialogSettings(settings);
 		return folderSeachComposite;
@@ -57,8 +58,7 @@ public class FolderSearchPage extends ProjectSearchPage
 	
 	@Override
 	public String getSearchDialogMessage()
-	{
-		// TODO Auto-generated method stub
+	{		
 		return "sucht nach Verzeichnissen innerhalb der Projekte (Subdirektories werden nicht berücksichtigt)";
 	}
 	

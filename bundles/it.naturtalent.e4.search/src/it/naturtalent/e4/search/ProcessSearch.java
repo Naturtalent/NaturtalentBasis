@@ -42,7 +42,8 @@ public class ProcessSearch
 			Activator.searchPageregistry = searchPageregistry;
 			searchPageregistry.addSearchPage(ProjectSearchPage.PROJECTSEARCHPAGE_ID,new ProjectSearchPage());
 			searchPageregistry.addSearchPage(FolderSearchPage.FOLDERSEARCHPAGE_ID,new FolderSearchPage());
-			searchPageregistry.addSearchPage(FileSearchPage.FILESEARCHPAGE_ID,new FileSearchPage());
+			searchPageregistry.addSearchPage(PropertySearchPage.PROPERTYSEARCHPAGE_ID,new PropertySearchPage());
+			//searchPageregistry.addSearchPage(FileSearchPage.FILESEARCHPAGE_ID,new FileSearchPage());
 		}
 		
 		Activator.ePartService = ePartService;
