@@ -85,7 +85,7 @@ public class PropertySearchPage implements ISearchInEclipsePage
 	public void performSearch(IProgressMonitor progressMonitor)
 	{	
 		// im UI definierten SearchOptions abfragen
-		SearchOptions searchOptions = propertySeachComposite.getPropertySearchOptions();
+		SearchOptions searchOptions = propertySeachComposite.getPropertySearchOptions(null);
 		
 		// Suchoperation instanziieren
 		PropertySearchOperation searchOperation = new PropertySearchOperation(searchOptions);

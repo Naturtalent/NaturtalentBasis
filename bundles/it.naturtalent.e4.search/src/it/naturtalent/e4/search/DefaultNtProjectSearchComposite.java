@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkingSet;
 
 import it.naturtalent.e4.project.IResourceNavigator;
+import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.dialogs.ConfigureWorkingSetDialog;
 import it.naturtalent.e4.project.ui.dialogs.SelectWorkingSetDialog;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
@@ -43,7 +44,7 @@ public class DefaultNtProjectSearchComposite extends Composite
 	private static final String SEARCH_WORKINGSET_SETTINGS = "searchworkingset"; //$NON-NLS-1$
 	
 	// Liste der ausgewaehlten WorkingSets	
-	private ArrayList<IWorkingSet> assignedWorkingSets = new ArrayList<IWorkingSet>();
+	//private ArrayList<IWorkingSet> assignedWorkingSets = new ArrayList<IWorkingSet>();
 	
 	
 	// UIs
@@ -132,18 +133,6 @@ public class DefaultNtProjectSearchComposite extends Composite
 		
 		// Radiobutton Workingsets
 		btnRadioWorkingSets = new Button(groupFocus, SWT.RADIO);		
-		btnRadioWorkingSets.addSelectionListener(new SelectionAdapter()
-		{
-			@Override
-			public void widgetSelected(SelectionEvent e)
-			{
-				
-				//comboWorkingSet.setEnabled(true);
-				//btnBrowseWS.setEnabled(true);
-				//setResultAdaptables();
-				
-			}
-		});
 		btnRadioWorkingSets.setText(Messages.SearchDialog_btnRadioWorkingSet_text);
 		
 		// Combo WorkingSet
@@ -163,36 +152,41 @@ public class DefaultNtProjectSearchComposite extends Composite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{	
-				// WorkingSet Auswahldialog (initialisiert mit einem Array der vorhandenen WorkingSets)
+				String [] wsNames = null; 
+				
+				// WorkingSets der im Combo gespeicherten Namen ermitteln
+				List<IWorkingSet>comboWorkingSets = getWorkingsets();
+				
+				// mit diesen WorkingSets den SelectDialog voreinstellen
 				SelectWorkingSetDialog dialog = new SelectWorkingSetDialog(getShell(), 
-						assignedWorkingSets.toArray(new IWorkingSet[assignedWorkingSets.size()]));		
+						comboWorkingSets.toArray(new IWorkingSet[comboWorkingSets.size()]));
+				
 				dialog.create();
 				dialog.setMessage("WorkingSets für die Suche auswählen");
 				if(dialog.open() == ConfigureWorkingSetDialog.OK)
 				{
 					// die im Dialog ausgewaehlten WorkingSets abfragen 
 					IWorkingSet [] workingSets = dialog.getConfigResult();
-					assignedWorkingSets.clear();				
-					StringBuilder buildComboText = new StringBuilder(5);
 					for(IWorkingSet workingSet : workingSets)
 					{
-						// die Ws-Namen (durch Komma getrannt) zusammenfassen
-						String wsName = workingSet.getName();
-						if (assignedWorkingSets.size() > 0)
-							buildComboText.append("," + wsName); // $NON-NLS-N$
-						else
-							buildComboText.append(wsName);
-
-						// ausgewaehltes WorkingSet zur Liste hinzufuegen
-						assignedWorkingSets.add(workingSet);
+						// die WorkingSet-Namen in einem Array zusammenfassen
+						wsNames = ArrayUtils.add(wsNames, workingSet.getName());
 					}
 					
-					// Text zur Combo hinzufuegen 
-					String comboText = buildComboText.toString();
-					if(comboWorkingSet.indexOf(comboText) < 0)
-						comboWorkingSet.add(comboText);
-										
-					comboWorkingSet.setText(comboText);							
+					// WorkingSet-Namen in comboWorkingSet uebernehmen 					
+					if(ArrayUtils.isNotEmpty(wsNames))
+					{
+						// WorkingSetNamen mit Komma getrennt in ComboText eintragen
+						comboWorkingSet.setItem(0,StringUtils.join(wsNames, ","));
+						comboWorkingSet.setText(comboWorkingSet.getItem(0));
+						comboWorkingSet.setData(wsNames);
+					}
+					else
+					{
+						comboWorkingSet.removeAll();
+						comboWorkingSet.setText("");
+						comboWorkingSet.setData(null);
+					}
 				}				
 			}
 		});
@@ -213,19 +207,25 @@ public class DefaultNtProjectSearchComposite extends Composite
 			comboPattern.setText(comboPattern.getItem(0));
 		}
 		
-		// Focus settings (Projekte oder Workspaces)
+		// Suchfokus Settings (Projekte oder Workspaces)
 		Boolean focus = settings.getBoolean(SEARCH_FOCUS_SETTINGS);	
 		focus = (focus != null) ? focus : true;
 		btnRadioAllProjects.setSelection(focus);
 		btnRadioWorkingSets.setSelection(!focus);
 		
-		// WorkingSet settings
-		assignedWorkingSets.clear();	
-		String wsSettingName = settings.get(SEARCH_WORKINGSET_SETTINGS);
-		if(StringUtils.isNotEmpty(wsSettingName))
+		// WorkingSet settings		
+		String [] wsNames = settings.getArray(SEARCH_WORKINGSET_SETTINGS);
+		if(ArrayUtils.isNotEmpty(wsNames))
 		{	
-			comboWorkingSet.add(wsSettingName);			
-			comboWorkingSet.setText(wsSettingName);			
+			// WorkingSet Name im Combo eintragen			
+			comboWorkingSet.add(StringUtils.join(wsNames, ","));
+			comboWorkingSet.setText(comboWorkingSet.getItem(0));
+			comboWorkingSet.setData(wsNames);
+		}
+		
+		if(btnRadioWorkingSets.getSelection())
+		{
+			getWorkingsets();
 		}
 	}
 	
@@ -243,13 +243,14 @@ public class DefaultNtProjectSearchComposite extends Composite
 			String[] projectPattern = settings.getArray(SEARCH_PROJECTPATTERN_SETTINGS);
 			if (projectPattern == null)
 			{
-				// Setting wird initialisiert
+				// Patternsetting wird initialisiert
 				projectPattern = ArrayUtils.add(null, searchPattern);
 				settings.put(SEARCH_PROJECTPATTERN_SETTINGS,projectPattern);
 			}
-				
+			
+			// Anzahl der Patternsettings begrenzen
 			if (!ArrayUtils.contains(projectPattern, searchPattern))
-			{
+			{				
 				projectPattern = ArrayUtils.insert(0, projectPattern,searchPattern);
 				if (projectPattern.length > 9)
 					projectPattern = ArrayUtils.remove(projectPattern, 9);
@@ -257,12 +258,17 @@ public class DefaultNtProjectSearchComposite extends Composite
 			}			
 		}
 		
-		// der Selektionstatus des 'btnRadioAllProjects' wird als Setting gespeichert
+		// den Suchokus speichenr (Projekte oder WorkingSets)
 		settings.put(SEARCH_FOCUS_SETTINGS, btnRadioAllProjects.getSelection());
 		
-		// Textfeldinhalt der WorkingSet-Combo wird als Setting gespeichert
-		if(!btnRadioAllProjects.getSelection())		
-			settings.put(SEARCH_WORKINGSET_SETTINGS, comboWorkingSet.getText());
+		// WorkingSetNamen speichern, wenn Suchfokus auf WorkingSet liegt
+		if(!btnRadioAllProjects.getSelection())	
+		{
+			// Array der WS-Namen aus dem Datenbereich der Combo laden
+			Object objNameArray = comboWorkingSet.getData();
+			if (objNameArray instanceof String[])
+				settings.put(SEARCH_WORKINGSET_SETTINGS, (String[]) objNameArray);	
+		}
 	}
 	
 	/**
@@ -285,11 +291,15 @@ public class DefaultNtProjectSearchComposite extends Composite
 		else
 		{		
 			// alle Projekte der ausgewaehlten WorkingSets
-			for(IWorkingSet workingSet : assignedWorkingSets)
+			List<IWorkingSet>comboWorkingSets = getWorkingsets();
+			if((comboWorkingSets != null) && (!comboWorkingSets.isEmpty()))
 			{
-				IAdaptable[] adaptables = workingSet.getElements();
-				for (IAdaptable adaptable : adaptables)
-					focusedAdaptablesList.add(adaptable);
+				for(IWorkingSet workingSet : comboWorkingSets)
+				{
+					IAdaptable[] adaptables = workingSet.getElements();
+					for (IAdaptable adaptable : adaptables)
+						focusedAdaptablesList.add(adaptable);
+				}
 			}
 		}
 				
@@ -316,5 +326,34 @@ public class DefaultNtProjectSearchComposite extends Composite
 	protected void checkSubclass()
 	{
 		// Disable the check that prevents subclassing of SWT components
+	}
+	
+	private List<IWorkingSet> getWorkingsets()
+	{		
+		List<IWorkingSet>workingSetList = new ArrayList<IWorkingSet>();
+		
+		Object objNameArray = comboWorkingSet.getData();
+		if (objNameArray instanceof String[])
+		{
+			String[] wsNames = (String[]) objNameArray;
+			
+			WorkingSetManager workingSetManager = Activator.getWorkingSetManager();
+			IWorkingSet [] workingSets = workingSetManager.getAllWorkingSets();
+			
+			// den ComboString (kommagetrennte WS-Namen) aufsplitten in ein Array
+			for(String wsName : wsNames)
+			{
+				for(IWorkingSet workingSet : workingSets)
+				{				
+					if(StringUtils.equals(wsName,workingSet.getName()))
+					{					
+						workingSetList.add(workingSet);
+						break;
+					}
+				}			
+			}
+		}
+		
+		return workingSetList;
 	}
 }

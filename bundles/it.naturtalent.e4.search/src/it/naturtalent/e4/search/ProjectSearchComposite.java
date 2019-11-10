@@ -12,6 +12,8 @@ public class ProjectSearchComposite extends Composite
 
 	private DefaultNtProjectSearchComposite projectSearchComposite; 
 	
+	private PropertySearchComposite propertySearchComposite;
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -24,6 +26,10 @@ public class ProjectSearchComposite extends Composite
 		
 		projectSearchComposite = new DefaultNtProjectSearchComposite(this, SWT.NONE);
 		projectSearchComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		// Datumsfilter einfuegen
+		propertySearchComposite = new PropertySearchComposite(this, SWT.NONE);
+		propertySearchComposite.disposePatternEditor();
 
 	}
 	
@@ -39,7 +45,16 @@ public class ProjectSearchComposite extends Composite
 	
 	public SearchOptions getSearchOptions()
 	{
-		return projectSearchComposite.getSearchOptions();
+		// SearchOptions vom Standard-ProjektSeachComposite abfragen 
+		SearchOptions searchOptions = projectSearchComposite.getSearchOptions();
+				
+		// SearchOptions vom PropertySeachComposite abfragen (Datumsfilter)
+		SearchOptions propertyOptions = propertySearchComposite.getPropertySearchOptions(searchOptions.getSearchItems());
+		
+		// mit den gefilterten Daten aus dem PropertyComposite weiterarbeiten
+		searchOptions.setSearchItems(propertyOptions.getSearchItems());
+		
+		return searchOptions;
 	}
 
 
