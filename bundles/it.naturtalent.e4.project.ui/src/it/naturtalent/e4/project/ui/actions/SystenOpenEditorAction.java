@@ -1,6 +1,7 @@
 package it.naturtalent.e4.project.ui.actions;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IFile;
@@ -43,7 +45,7 @@ public class SystenOpenEditorAction extends Action
 	@Inject @Optional private ESelectionService selectionService;
 	@Inject @Optional private IOpenWithEditorAdapterRepository openwithAdapterRepository;
 	
-	private Log log = LogFactory.getLog(SystenOpenEditorAction.class);
+	//private Log log = LogFactory.getLog(SystenOpenEditorAction.class);
 	
 	@Override
 	public void run()
@@ -53,10 +55,12 @@ public class SystenOpenEditorAction extends Action
 		{
 			if(((IResource)obj).getType() ==  IResource.FILE)
 			{
+				String destPath = null;
 				IFile ifile = (IFile) obj;
 				String fileName = ifile.getName();
 				String ext = FilenameUtils.getExtension(fileName);
 				
+				/* Open mit Adapter nur noch im Kontextmenu 'OeffnenMit...'
 				String filePath;
 				try
 				{
@@ -67,6 +71,7 @@ public class SystenOpenEditorAction extends Action
 						if(openAdapter.isExecutable(filePath))
 						{
 							// die Datei wird ueber einen Adapter geoeffnet
+							log.info("mit Adapter öffnen");
 							openAdapter.execute(filePath);
 							return;
 						}
@@ -76,27 +81,44 @@ public class SystenOpenEditorAction extends Action
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				*/
 	
 				// kein Adapter - oeffnen ueber Systemoeffner
 				Program prog = Program.findProgram(ext);			
 				if (prog != null)
 				{
 					try
-					{
+					{						
 						File file = FileUtils.toFile(ifile.getLocationURI().toURL());
 						prog.execute(file.getPath());
 					} catch (MalformedURLException e)
 					{
-						log.error(e);
+						// Message - keine Anwendung zugeordnet
+						MessageDialog.openError(shell, Messages.OpenError,
+								Messages.bind(Messages.OpenFilesError,
+										ext));
 					}
 				}
 				else
-				{
-					MessageDialog
-							.openError(shell, Messages.OpenError,
-									Messages.bind(
-											Messages.OpenFilesError,
-											ext));
+				{					
+					try
+					{
+						IResource iResource = (IResource) obj;
+						destPath = iResource.getLocation().toOSString();
+						
+						if (SystemUtils.IS_OS_LINUX)
+							Runtime.getRuntime().exec(destPath);
+						else
+							Runtime.getRuntime().exec("cmd " + destPath);
+
+					} catch (Exception exp)
+					{
+						{
+							// Message - keine Anwendung zugeordnet
+							MessageDialog.openError(shell, Messages.OpenError,
+									Messages.bind(Messages.OpenFilesError,ext));
+						}
+					}
 				}
 			}
 			else

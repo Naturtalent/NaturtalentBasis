@@ -177,7 +177,7 @@ public class DefaultNtProjectSearchComposite extends Composite
 					if(ArrayUtils.isNotEmpty(wsNames))
 					{
 						// WorkingSetNamen mit Komma getrennt in ComboText eintragen
-						comboWorkingSet.setItem(0,StringUtils.join(wsNames, ","));
+						comboWorkingSet.add(StringUtils.join(wsNames, ","));
 						comboWorkingSet.setText(comboWorkingSet.getItem(0));
 						comboWorkingSet.setData(wsNames);
 					}

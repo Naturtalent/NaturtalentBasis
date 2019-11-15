@@ -5,6 +5,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -37,6 +39,8 @@ public class FolderSearchComposite extends Composite
 	private Button btnCheckCaseSensitiv;
 	private Button btnCheckRegularExpression;
 	private DefaultNtProjectSearchComposite defaultNtProjectSearchComposite;
+	
+	//private Log log = LogFactory.getLog(this.getClass());
 
 	/**
 	 * Create the composite.
@@ -118,12 +122,16 @@ public class FolderSearchComposite extends Composite
 	
 	public void saveDialogSettings(IDialogSettings settings)
 	{
+		//log.info("Section check");
+		
 		IDialogSettings section = settings.getSection(FOLDER_SETTING_SECTION);
 		if (section == null)
 		{
 			section = new DialogSettings(FOLDER_SETTING_SECTION);
 			settings.addSection(section);
 		}
+		
+		//log.info("Section ok");
 		
 		// speichern des Suchpatterns
 		String searchPattern = comboFolderPattern.getText();

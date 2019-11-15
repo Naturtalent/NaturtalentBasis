@@ -196,10 +196,13 @@ public class PropertySearchComposite extends Composite
 	 * Gibt die Property-Search-Optionen in einer eigenen Klasse zurueck.
 	 * 
 	 * Im Zuge diesen Funktion wird die Liste der uebergebenen Projekte, oder bei 'null' alle existierenden Projekte
-	 * nach ihrem Erstellungsdatum gefiltert. Die gefilterte Menge wird in die Struktur SearchPattern eingetragen.
+	 * nach ihrem Erstellungsdatum gefiltert. Die gefilterte Menge wird in die Struktur SearchOption eingetragen.
 	 * 
 	 * Die Filterfunktion wird ausgeschaltet wenn der RadioButton 'btnRadioBefore' und das heutige Datum im zugeordneten
 	 * DateTime Widget das heutige Datum eingetragen ist.
+	 * 
+	 * Die Funktion wir ebenfalls abgebrochen, wenn die uebergebene List zwar nicht null aber leer ist. In diesem Fall
+	 * macht die Filterung einer leeren Liste ebenfalls keinen Sinn. 
 	 * 
 	 * @return
 	 */
@@ -210,17 +213,8 @@ public class PropertySearchComposite extends Composite
 		Date fromDate = null;
 		Date toDate = null;
 
-		// Ergebnisliste mit den gefilterten Projekten vorbereiten
+		// Liste der gefilterten Projekten vorbereiten
 		List<IAdaptable>filteredProjectList = new ArrayList<IAdaptable>();
-
-		// die ungefilterte Projekt-Menge in einem Array zur Verfuegung stellen
-		if(srcProjects == null)
-			iProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		else
-		{
-			for(IAdaptable srcProject : srcProjects)
-				iProjects = (IProject[]) ArrayUtils.add(iProjects, srcProject);
-		}
 
 		// SearchOptions-Struktur vorbereiten
 		SearchOptions searchOptions = new SearchOptions();
@@ -228,17 +222,28 @@ public class PropertySearchComposite extends Composite
 		// die editierte Patternmaske eintragen
 		searchOptions.setSearchPattern(searchPattern.getPattern());
 		
-		// sonstige SearchPption Defaultwerte
+		// sonstige SearchPption Defaultwerte eintragen
 		searchOptions.setCaseSensitive(false);
 		searchOptions.setRegularExpression(false);
 		
-		// eine leere Liste und Abbruch der Funkktion, wenn die Eingangsliste leer war
-		if(srcProjects.isEmpty())
+		// ist die uebergebene nicht null aber 'leer' wird die Funktion hier beendet
+		if((srcProjects != null) && (srcProjects.isEmpty()))
 		{
+			// die eingetragene Liste der gefilterten Projekte ist natuerlich ebenfalls leer
 			searchOptions.setSearchItems(filteredProjectList);		
 			return searchOptions;
 		}
-	
+
+		// Basis der bevorstehende Filterung sind entweder 'alle'-Projekte oder die uebergebene Menge
+		if(srcProjects == null)
+			iProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		else
+		{
+			// die uebergebene, ungefilterte Projekt-Menge in ein Array umwandeln
+			for(IAdaptable srcProject : srcProjects)
+				iProjects = (IProject[]) ArrayUtils.add(iProjects, srcProject);
+		}
+		
 		// Filterprozess vorbereiten (abhaengig vom selektierten RadioButton)
 		switch (selectedDateEnum)
 		{

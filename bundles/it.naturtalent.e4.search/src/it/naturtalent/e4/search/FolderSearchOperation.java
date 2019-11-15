@@ -2,38 +2,27 @@ package it.naturtalent.e4.search;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.lang3.StringUtils;
-import org.eclipse.core.internal.resources.Container;
-import org.eclipse.core.resources.IFolder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.ResourceAttributes;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-import it.naturtalent.e4.project.INtProject;
 import it.naturtalent.e4.project.search.ISearchInEclipsePage;
 
 /**
@@ -50,6 +39,8 @@ public class FolderSearchOperation implements IRunnableWithProgress
 	
 	private IEventBroker eventBroker;
 	
+	private Log log = LogFactory.getLog(this.getClass());
+
 	
 	public FolderSearchOperation(SearchOptions searchOptions)
 	{
@@ -78,10 +69,10 @@ public class FolderSearchOperation implements IRunnableWithProgress
 		// Suchpattern kompilieren
 		Pattern pattern = PatternConstructor.createPattern(patternString, isRegEx, isStringMatcher, isCaseSensitiv, isWholeWord);
 		
-		// Broker meldet der Start einer neuen Suche
+		// Broker meldet der Start der Suche
 		eventBroker.post(ISearchInEclipsePage.START_SEARCH_EVENT, "Start der Suche"); //$NON-NLS-N$
 		
-		// alle Suchitems (Projecte) durchlaufen
+		// alle Suchitems (iProjects) durchlaufen
 		for (Object item : searchItems)
 		{				
 			if (monitor.isCanceled())
@@ -91,9 +82,11 @@ public class FolderSearchOperation implements IRunnableWithProgress
 			
 			if (item instanceof IProject)
 			{
+				
 				IProject iProject = (IProject) item;				
 				//matchFolder(iProject, pattern);
 				
+				// realer Pfad zum IProjekt im Dateisystem
 				File projectFile = iProject.getFullPath().toFile();
 				projectFile = iProject.getLocation().toFile();
 				
@@ -107,12 +100,15 @@ public class FolderSearchOperation implements IRunnableWithProgress
 				IOFileFilter dirFilter = FileFilterUtils.and(notHiddenFilter, TrueFileFilter.INSTANCE);
 				
 				// die zu untersuchenden Verzeichnisse auflisten
-				Collection<File>directories = FileUtils.listFilesAndDirs(projectFile, notFileFilter, dirFilter);				
-								
+				Collection<File>directories = FileUtils.listFilesAndDirs(projectFile, notFileFilter, dirFilter);
+				
 				if (directories.size() > 0)
 				{
+					// jedes Verzeichnis auf pattern checken
 					for (File projectDir : directories)
 					{
+						log.info("Search: (vor Matcher) "+projectDir);
+						
 						// Name des Verzeichnisses (ohne Pfadangaben) matchen
 						String dirName = projectDir.getName();
 						Matcher m = pattern.matcher(dirName);
@@ -124,11 +120,13 @@ public class FolderSearchOperation implements IRunnableWithProgress
 							// eine separate Funktion erforderlich
 							IResource folder = iProject.findMember(dirName);
 							if(folder != null)
-							{
+							{								
 								eventBroker.post(ISearchInEclipsePage.MATCH_PATTERN_EVENT, folder);
 								hitCount++;
 							}
 						}
+						
+						log.info("Search: (nach Matcher)");
 					}
 				}
 			}

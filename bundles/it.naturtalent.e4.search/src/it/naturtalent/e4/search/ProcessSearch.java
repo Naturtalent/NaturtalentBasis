@@ -43,6 +43,7 @@ public class ProcessSearch
 			searchPageregistry.addSearchPage(ProjectSearchPage.PROJECTSEARCHPAGE_ID,new ProjectSearchPage());
 			searchPageregistry.addSearchPage(FolderSearchPage.FOLDERSEARCHPAGE_ID,new FolderSearchPage());
 			searchPageregistry.addSearchPage(PropertySearchPage.PROPERTYSEARCHPAGE_ID,new PropertySearchPage());
+			searchPageregistry.addSearchPage(DiagnoseSearchPage.DIAGNOSESEARCHPAGE_ID,new DiagnoseSearchPage());
 			//searchPageregistry.addSearchPage(FileSearchPage.FILESEARCHPAGE_ID,new FileSearchPage());
 		}
 		

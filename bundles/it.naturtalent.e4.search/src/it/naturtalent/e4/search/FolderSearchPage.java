@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -44,6 +46,7 @@ public class FolderSearchPage extends ProjectSearchPage
 	// Die Dialogsettings werden als separate Sektion gespeichert
 	private IDialogSettings settings = WorkbenchSWTActivator.getDefault().getDialogSettings();
 	
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	@Override
 	public Control createControl(Composite parent)
@@ -96,7 +99,12 @@ public class FolderSearchPage extends ProjectSearchPage
 		{
 			// Suchfunktion ausfuehren
 			new ProgressMonitorDialog(shell).run(true, true, searchOperation);
+			
+			log.info("Foldersuchfunktion beendet");
+			
 			folderSeachComposite.saveDialogSettings(settings);
+			
+			log.info("Settings gespeichert");
 			
 		} catch (InvocationTargetException e)
 		{
