@@ -131,9 +131,12 @@ public class FolderSearchOperation implements IRunnableWithProgress
 				}
 			}
 			
+			log.info("alle Verzeichnisse durchlaufen");
+			
 			monitor.worked(1);
 		}
 		
+		log.info("Ende Search: count: " + hitCount);
 		monitor.done();
 		
 		eventBroker.post(ISearchInEclipsePage.END_SEARCH_EVENT, "Anzahl der Treffer: "+hitCount);	//$NON-NLS-N$	

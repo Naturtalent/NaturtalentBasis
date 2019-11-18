@@ -45,7 +45,7 @@ public class SystenOpenEditorAction extends Action
 	@Inject @Optional private ESelectionService selectionService;
 	@Inject @Optional private IOpenWithEditorAdapterRepository openwithAdapterRepository;
 	
-	//private Log log = LogFactory.getLog(SystenOpenEditorAction.class);
+	private Log log = LogFactory.getLog(SystenOpenEditorAction.class);
 	
 	@Override
 	public void run()
@@ -60,7 +60,7 @@ public class SystenOpenEditorAction extends Action
 				String fileName = ifile.getName();
 				String ext = FilenameUtils.getExtension(fileName);
 				
-				/* Open mit Adapter nur noch im Kontextmenu 'OeffnenMit...'
+				// Open mit Adapter nur noch im Kontextmenu 'OeffnenMit...'
 				String filePath;
 				try
 				{
@@ -81,7 +81,7 @@ public class SystenOpenEditorAction extends Action
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				*/
+			
 	
 				// kein Adapter - oeffnen ueber Systemoeffner
 				Program prog = Program.findProgram(ext);			
@@ -90,6 +90,7 @@ public class SystenOpenEditorAction extends Action
 					try
 					{						
 						File file = FileUtils.toFile(ifile.getLocationURI().toURL());
+						log.info("Open with: prog("+file.getPath()+")");
 						prog.execute(file.getPath());
 					} catch (MalformedURLException e)
 					{
@@ -109,7 +110,10 @@ public class SystenOpenEditorAction extends Action
 						if (SystemUtils.IS_OS_LINUX)
 							Runtime.getRuntime().exec(destPath);
 						else
+						{
+							log.info("Open with: Runtime.getRuntime().exec('cmd' "+destPath);
 							Runtime.getRuntime().exec("cmd " + destPath);
+						}
 
 					} catch (Exception exp)
 					{
