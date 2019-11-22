@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
@@ -83,12 +84,15 @@ public class FolderSearchOperation implements IRunnableWithProgress
 			if (item instanceof IProject)
 			{
 				
-				IProject iProject = (IProject) item;				
+				IProject iProject = (IProject) item;	
+				
+				if(!iProject.exists())
+					continue;
 				//matchFolder(iProject, pattern);
 				
 				// realer Pfad zum IProjekt im Dateisystem
-				File projectFile = iProject.getFullPath().toFile();
-				projectFile = iProject.getLocation().toFile();
+				//File projectFile = iProject.getFullPath().toFile();
+				File projectFile = iProject.getLocation().toFile();
 				
 				// soll verzeichniss die mit '.' beginnen ausblenden
 				IOFileFilter notHiddenFilter = FileFilterUtils.notFileFilter(FileFilterUtils.prefixFileFilter("."));	
@@ -127,6 +131,12 @@ public class FolderSearchOperation implements IRunnableWithProgress
 						}
 						
 						log.info("Search: (nach Matcher)");
+						
+						if(StringUtils.equals(iProject.getName(), "1466663363850-2"))
+						{
+							System.out.println(projectDir);
+						}
+								
 					}
 				}
 			}

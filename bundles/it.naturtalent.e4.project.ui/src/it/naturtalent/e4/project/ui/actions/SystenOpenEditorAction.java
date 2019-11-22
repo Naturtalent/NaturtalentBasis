@@ -1,7 +1,6 @@
 package it.naturtalent.e4.project.ui.actions;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
@@ -111,8 +110,11 @@ public class SystenOpenEditorAction extends Action
 							Runtime.getRuntime().exec(destPath);
 						else
 						{
-							log.info("Open with: Runtime.getRuntime().exec('cmd' "+destPath);
-							Runtime.getRuntime().exec("cmd " + destPath);
+							// in Windows nochmal ueber den Explorer versuchen
+							String[] cmdArray = new String[2];
+							cmdArray[0] = "explorer";
+							cmdArray[1] = destPath;
+							Process p = Runtime.getRuntime().exec(cmdArray);
 						}
 
 					} catch (Exception exp)
