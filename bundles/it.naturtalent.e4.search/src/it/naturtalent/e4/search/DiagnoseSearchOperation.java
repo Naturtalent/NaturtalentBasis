@@ -151,7 +151,11 @@ public class DiagnoseSearchOperation implements IRunnableWithProgress
 
 							} catch (CoreException e)
 							{
-								// TODO Auto-generated catch block
+								log.info("Fehler: kein Projektname oder Projekt geschlossen ID:"+iProject.getName());
+								eventBroker.post(
+										ISearchInEclipsePage.MATCH_PATTERN_EVENT,
+										iProject.getName());
+								hitCount++;
 								e.printStackTrace();
 							}
 

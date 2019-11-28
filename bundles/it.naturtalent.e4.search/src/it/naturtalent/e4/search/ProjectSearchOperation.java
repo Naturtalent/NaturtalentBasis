@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -33,6 +35,7 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 	
 	private IEventBroker eventBroker;
 	
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	public ProjectSearchOperation(SearchOptions searchOptions)
 	{
@@ -72,19 +75,21 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 			if (item instanceof IProject)
 			{
 				IProject iProject = (IProject) item;
-				String projectName;
+				String projectName = null;
 				try
 				{
-					projectName = iProject.getPersistentProperty(INtProject.projectNameQualifiedName);										
+					projectName = iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
 					if(StringUtils.isEmpty(projectName))
 					{	
 						// Versuch einer Fehlerkorrektur, wenn iProject alias-Name 'null' ist,
 						// dann wird versucht den Namen ueber Nt-Property zu ermitteln
 						NtProject ntProject = it.naturtalent.e4.project.ui.Activator.findNtProject(iProject.getName());						
-						projectName = ntProject.getName();
-						System.out.println(iProject.getName()+" : ERROR Name : "+projectName);
+						projectName = ntProject.getName();						
 						if(StringUtils.isEmpty(projectName))
-						 continue;
+						{
+							log.info("Fehler: nichtexistierendes Projekt ID:"+iProject.getName());
+							continue;
+						}
 					}
 					
 					Matcher m = pattern.matcher(projectName);
@@ -95,6 +100,7 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 					}
 				} catch (CoreException e)
 				{
+					log.info("Fehler: kein Projektname oder Projekt geschlossen ID:"+iProject.getName());
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}

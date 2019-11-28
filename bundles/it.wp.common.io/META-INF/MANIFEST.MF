@@ -7,7 +7,8 @@ Bundle-ClassPath: commonio/,
  lib/commons-codec-1.4.jar,
  lib/commons-io-2.4.jar,
  lib/commons-validator-1.4.0.jar,
- lib/commons-lang3-3.8.jar
+ lib/commons-lang3-3.8.jar,
+ lib/commons-net-3.6.jar
 Bundle-Activator: it.wp.common.io.Activator
 Bundle-Vendor: apache
 Require-Bundle: org.eclipse.ui,
@@ -36,6 +37,9 @@ Export-Package: it.wp.common.io,
  org.apache.commons.lang3.text.translate,
  org.apache.commons.lang3.time,
  org.apache.commons.lang3.tuple,
+ org.apache.commons.net,
+ org.apache.commons.net.ftp,
+ org.apache.commons.net.ftp.parser,
  org.apache.commons.validator,
  org.apache.commons.validator.routines,
  org.apache.commons.validator.routines.checkdigit,

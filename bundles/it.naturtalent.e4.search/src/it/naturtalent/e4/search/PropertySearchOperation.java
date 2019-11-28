@@ -15,6 +15,8 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.internal.resources.Container;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -50,6 +52,7 @@ public class PropertySearchOperation implements IRunnableWithProgress
 	
 	private IEventBroker eventBroker;
 	
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	public PropertySearchOperation(SearchOptions searchOptions)
 	{
@@ -95,7 +98,13 @@ public class PropertySearchOperation implements IRunnableWithProgress
 			
 			if (item instanceof IProject)
 			{
-				IProject iProject = (IProject) item;								
+				IProject iProject = (IProject) item;							
+				if(!iProject.exists())
+				{
+					log.info("Fehler: nichtexistierendes Projekt "+iProject.getName());
+					continue;
+				}
+
 				String projectID = iProject.getName();
 				Matcher m = pattern.matcher(projectID);
 				if (m.matches()) 

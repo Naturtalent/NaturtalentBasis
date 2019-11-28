@@ -82,13 +82,13 @@ public class FolderSearchOperation implements IRunnableWithProgress
 			}
 			
 			if (item instanceof IProject)
-			{
-				
-				IProject iProject = (IProject) item;	
-				
+			{				
+				IProject iProject = (IProject) item;					
 				if(!iProject.exists())
+				{
+					log.info("Fehler: nichtexistierendes Projekt "+iProject.getName());
 					continue;
-				//matchFolder(iProject, pattern);
+				}
 				
 				// realer Pfad zum IProjekt im Dateisystem
 				//File projectFile = iProject.getFullPath().toFile();
@@ -111,8 +111,6 @@ public class FolderSearchOperation implements IRunnableWithProgress
 					// jedes Verzeichnis auf pattern checken
 					for (File projectDir : directories)
 					{
-						log.info("Search: (vor Matcher) "+projectDir);
-						
 						// Name des Verzeichnisses (ohne Pfadangaben) matchen
 						String dirName = projectDir.getName();
 						Matcher m = pattern.matcher(dirName);
@@ -129,24 +127,13 @@ public class FolderSearchOperation implements IRunnableWithProgress
 								hitCount++;
 							}
 						}
-						
-						log.info("Search: (nach Matcher)");
-						
-						if(StringUtils.equals(iProject.getName(), "1466663363850-2"))
-						{
-							System.out.println(projectDir);
-						}
-								
 					}
 				}
 			}
 			
-			log.info("alle Verzeichnisse durchlaufen");
-			
 			monitor.worked(1);
 		}
 		
-		log.info("Ende Search: count: " + hitCount);
 		monitor.done();
 		
 		eventBroker.post(ISearchInEclipsePage.END_SEARCH_EVENT, "Anzahl der Treffer: "+hitCount);	//$NON-NLS-N$	
