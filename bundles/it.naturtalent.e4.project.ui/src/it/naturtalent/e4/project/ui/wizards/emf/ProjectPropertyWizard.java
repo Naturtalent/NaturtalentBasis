@@ -39,6 +39,7 @@ import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
 import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
 import it.naturtalent.e4.project.ui.utils.CreateNewProject;
+import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
 
 /**
@@ -182,15 +183,13 @@ public class ProjectPropertyWizard extends Wizard
 		
 		if(iProject == null)
 		{
-			// neues Projekt
-			
+			// Wizard mit einem neuen Projekt beenden			
 			// die im Wizard dem neuen Projekt zugeordneten WorkingSets in 'processDelta()' beruecksichtigen
 			List<IWorkingSet>lNewAssignedWorkingSets = propertyWizardPage.getAssignedWorkingSets();
 			if ((lNewAssignedWorkingSets != null) && (!lNewAssignedWorkingSets.isEmpty()))
 				WorkbenchContentProvider.newAssignedWorkingSets = lNewAssignedWorkingSets
 						.toArray(new IWorkingSet[lNewAssignedWorkingSets.size()]);
-			
-			
+						
 			String projectName = null;
 			if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 			{
@@ -227,34 +226,79 @@ public class ProjectPropertyWizard extends Wizard
 		}
 		else
 		{
-			// bestehendes Projekt
-			
+			// Wizard mit einem bestehenden Projekt beenden 			
 			if (iProject.isOpen())
 			{
 				ntProjectID = iProject.getName();
 				
 				IResourceNavigator navigator = Activator.findNavigator();
-				
-				// zunaechst Projekt aus allen WorkingSets entfernen
-				WorkingSetManager workingSetManager = Activator.getWorkingSetManager();
-				IAdaptable [] adaptables = {iProject};
-				workingSetManager.removeWorkingSetsElements(adaptables);
 
-				List<IWorkingSet> assignedWorkingSets = propertyWizardPage.getAssignedWorkingSets();
-				for(IWorkingSet workingSet : assignedWorkingSets)
+				// WorkingSet Zuordnung aktualisieren
+				// keine Aktion, wenn iProject 'alt' und 'neu' keinem WorkingSet zugeordnet ist
+				WorkingSetManager workingSetManager = Activator.getWorkingSetManager();
+				
+				// WorkingSets (alt - dem iProject zugeordnet) (neu - vom Wizard ausgewaehlt) 
+				List<IWorkingSet>oldassignedSets = workingSetManager.getAssignedWorkingSets(iProject);				
+				List<IWorkingSet> newAssignedSets = propertyWizardPage.getAssignedWorkingSets();
+				
+				// war iProject bisher einem WorkingSet zugeordnet
+				if((oldassignedSets != null) && (!oldassignedSets.isEmpty()))
 				{
-					IAdaptable[] wsAdaptables = workingSet.getElements();
-					wsAdaptables = ArrayUtils.add(wsAdaptables, iProject);
-					workingSet.setElements(wsAdaptables);					
+					// 'iProject' aus allen WorkingSets entfernen (alte Zuordnung aufheben)
+					IAdaptable[] adaptables = { iProject };
+					workingSetManager.removeWorkingSetsElements(adaptables);
+
+					// soll 'iProject' WorkingSets zugeordnet werden
+					if((newAssignedSets != null) && (!newAssignedSets.isEmpty())) 
+					{
+						// 'iProject' in die im Wizard festgelegten WorkingSets eintragen (neue Zuordnung)
+						List<IWorkingSet> assignedWorkingSets = propertyWizardPage.getAssignedWorkingSets();
+						for (IWorkingSet workingSet : assignedWorkingSets)
+						{
+							// iProject in den neuzugeordneten WorkingSets eintragen
+							IAdaptable[] wsAdaptables = workingSet.getElements();
+							wsAdaptables = ArrayUtils.add(wsAdaptables, iProject);
+							workingSet.setElements(wsAdaptables);
+						}			
+					}
+					else
+					{
+						// 'iProject' hat keine WorkingSet Zuordnung mehr - in 'Andere' eintragen
+						IWorkingSet otherSet = workingSetManager.getWorkingSet(IWorkingSetManager.OTHER_WORKINGSET_NAME);
+						IAdaptable[] wsAdaptables = otherSet.getElements();
+						wsAdaptables = ArrayUtils.add(wsAdaptables, iProject);						
+						workingSetManager.updateOthers();
+						
+						System.out.println("in Andere eintragen");
+					}
+				}
+				else // iProject war bisher keinem WorkingSet zugeordnet
+				{					
+					if((newAssignedSets != null) && (!newAssignedSets.isEmpty()))
+					{						
+						for (IWorkingSet workingSet : newAssignedSets)
+						{
+							// iProject in den neuzugeordneten WorkingSets eintragen
+							IAdaptable[] wsAdaptables = workingSet.getElements();
+							wsAdaptables = ArrayUtils.add(wsAdaptables, iProject);
+							workingSet.setElements(wsAdaptables);
+						}
+						
+						// 'iProject' aus dem WorkingSet 'Andere' entfernen
+						IWorkingSet otherSet = workingSetManager.getWorkingSet(IWorkingSetManager.OTHER_WORKINGSET_NAME);
+						IAdaptable[] wsAdaptables = otherSet.getElements();
+						wsAdaptables = ArrayUtils.removeElements(wsAdaptables, iProject);						
+						workingSetManager.updateOthers();
+						//System.out.println("aus Andere entfernen");
+					}
 				}
 
 				// ResourceNavigator aktualisieren
 				navigator.getViewer().refresh();
-			}
-			
+			}			
 		}
 
-		// ProjectPropertydata abspeichern
+		// ProjectPropertydata abspeichern - 'commit() - Funktion aller Adapter aufrufen
 		if((projectPropertyAdapters != null) && (!projectPropertyAdapters.isEmpty()))
 		{
 			for(INtProjectProperty projectProperty : projectPropertyAdapters)

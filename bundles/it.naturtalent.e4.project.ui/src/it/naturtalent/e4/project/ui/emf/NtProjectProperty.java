@@ -19,7 +19,6 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecp.spi.ui.util.ECPHandlerHelper;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.wizard.IWizardPage;
 
 import it.naturtalent.e4.project.INtProject;
@@ -28,7 +27,6 @@ import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.actions.OpenProjectAction;
-import it.naturtalent.e4.project.ui.actions.SystenOpenEditorAction;
 import it.naturtalent.e4.project.ui.actions.emf.UndoProjectAction;
 import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizardPage;
 

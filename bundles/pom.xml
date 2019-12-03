@@ -21,7 +21,6 @@
 		<module>it.naturtalent.e4.project.expimp</module>
 		<module>it.naturtalent.e4.project.model</module>
 		<module>it.naturtalent.e4.project.model.edit</module>
-		<module>it.naturtalent.e4.project.service</module>
 		<module>it.naturtalent.e4.project.ui</module>
 		<module>it.naturtalent.e4.project.viewmodel</module>
 		<module>it.naturtalent.e4.search</module>
