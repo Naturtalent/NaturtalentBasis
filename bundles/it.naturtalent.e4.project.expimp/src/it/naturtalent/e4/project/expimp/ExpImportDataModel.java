@@ -3,8 +3,6 @@ package it.naturtalent.e4.project.expimp;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 public class ExpImportDataModel extends BaseBean
 {
 	public static final String PROP_EXPIMPORTMODELDATA = "expimportmodeldata";

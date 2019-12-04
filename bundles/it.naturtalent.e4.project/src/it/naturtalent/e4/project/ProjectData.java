@@ -1,14 +1,9 @@
 package it.naturtalent.e4.project;
 
 
-import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.apache.commons.lang3.StringUtils;
 
 
 

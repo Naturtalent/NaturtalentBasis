@@ -1,20 +1,6 @@
 package it.naturtalent.e4.project.ui.model;
 
-import it.naturtalent.e4.project.INtProject;
-import it.naturtalent.e4.project.IProjectData;
-import it.naturtalent.e4.project.IProjectDataAdapter;
-import it.naturtalent.e4.project.ProjectData;
-import it.naturtalent.e4.project.ProjectDataAdapterRegistry;
-import it.naturtalent.e4.project.ui.Activator;
-import it.naturtalent.e4.project.ui.WorkbenchImages;
-import it.naturtalent.e4.project.ui.registry.OverlayIcon;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
-
-import javax.xml.bind.JAXB;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -24,6 +10,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Point;
+
+import it.naturtalent.e4.project.INtProject;
+import it.naturtalent.e4.project.ui.Activator;
+import it.naturtalent.e4.project.ui.WorkbenchImages;
+import it.naturtalent.e4.project.ui.registry.OverlayIcon;
 
 /**
  * An IWorkbenchAdapter that represents IProject.
