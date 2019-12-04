@@ -7,9 +7,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang.time.DateFormatUtils;
+
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -48,7 +49,6 @@ import org.eclipse.wb.swt.ResourceManager;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
-import it.naturtalent.e4.project.IProjectDataAdapter;
 import it.naturtalent.e4.project.ui.Messages;
 import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
 
