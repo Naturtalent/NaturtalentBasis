@@ -1,18 +1,14 @@
 package it.naturtalent.e4.project.expimp.actions;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.bind.JAXB;
+//import javax.xml.bind.JAXB;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.eclipse.core.resources.IProject;
@@ -24,8 +20,6 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkingSet;
 
-import it.naturtalent.e4.project.IProjectData;
-import it.naturtalent.e4.project.ProjectPropertyData;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
 import it.naturtalent.e4.project.ui.utils.CreateNewProject;
@@ -186,6 +180,12 @@ public class ImportProjectPrepareOperation implements IRunnableWithProgress
 	 */
 	private Map<String,List<String>> getPropertyFactoriesMap(File importDir, final Set<String>selectedImportProjectIDs)
 	{
+		
+		System.out.println("it.naturtalent.e4.project.expimp.actions.ImportProjectPrepareOperation.getPropertyFactoriesMap() - entfernen wegen JAXB");
+		
+		return null;
+		
+		/*
 		Map<String,List<String>>propertyFactories = new HashMap<String, List<String>>();
 		
 		// Filtert die fuer den Import ausgewahlten NtProjekt-Verzeichnisse
@@ -240,6 +240,8 @@ public class ImportProjectPrepareOperation implements IRunnableWithProgress
 		}
 		
 		return propertyFactories;
+		
+		*/
 	}
 
 

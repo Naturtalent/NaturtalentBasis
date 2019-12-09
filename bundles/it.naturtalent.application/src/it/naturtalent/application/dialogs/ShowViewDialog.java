@@ -195,8 +195,7 @@ public class ShowViewDialog extends Dialog
 				Object selObj = selection.getFirstElement();
 				if (selObj instanceof String)
 				{
-					TreePath tp = ((TreeSelection) treeViewer.getSelection())
-							.getPaths()[0];
+					TreePath tp = ((TreeSelection) treeViewer.getSelection()).getPaths()[0];
 					if (treeViewer.getExpandedState(tp))
 						treeViewer.collapseToLevel(tp, 1);
 					else
@@ -212,10 +211,10 @@ public class ShowViewDialog extends Dialog
 			}
 		});
 
+		// die verfuegbaren Showadapter im Dialog anzeigen
 		if (showViewAdapterRepository != null)
 		{
-			Map<String, List<IShowViewAdapter>> adapters = showViewAdapterRepository
-					.getShowViewAdaptersMap();
+			Map<String, List<IShowViewAdapter>> adapters = showViewAdapterRepository.getShowViewAdaptersMap();
 			treeViewer.setInput(adapters);
 		}
 
@@ -252,7 +251,7 @@ public class ShowViewDialog extends Dialog
 		if((selection != null) && (selection.getFirstElement() instanceof IShowViewAdapter))
 		{
 			IShowViewAdapter adapter = (IShowViewAdapter) selection.getFirstElement();
-			selectectViewID = adapter.partID();			
+			selectectViewID = adapter.partID();						
 		}
 		
 		super.okPressed();

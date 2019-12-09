@@ -2,7 +2,7 @@ package it.naturtalent.e4.project;
 
 import java.beans.PropertyChangeEvent;
 
-import javax.xml.bind.annotation.XmlRootElement;
+//import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author dieter
@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author dieter
  *
  */
-@XmlRootElement(name="propertyData")
+//@XmlRootElement(name="propertyData")
 public class ProjectPropertyData extends BaseBean
 {
 	// Properties

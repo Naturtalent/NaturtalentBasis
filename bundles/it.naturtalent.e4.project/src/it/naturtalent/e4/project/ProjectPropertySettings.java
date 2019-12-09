@@ -1,29 +1,19 @@
 package it.naturtalent.e4.project;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URI;
 import java.util.HashSet;
 
-import javax.xml.bind.JAXB;
+//import javax.xml.bind.JAXB;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.IWorkbench;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 
 
@@ -54,9 +44,13 @@ public class ProjectPropertySettings
 	 */
 	public ProjectPropertyData get(IProject iProject)
 	{
+		System.out.println("it.naturtalent.e4.project.ProjectPropertySettings get() - entfernen wegen JAXB");
+		
+		/*
 		InputStream in = getProjectDataInputStream(iProject);
 		if (in != null)
 			return (ProjectPropertyData) JAXB.unmarshal(in, ProjectPropertyData.class);
+			*/
 		
 		return null;
 	}
@@ -72,6 +66,10 @@ public class ProjectPropertySettings
 	public void putProperty(final IProject iProject,
 			final ProjectPropertyData propertyData) throws CoreException
 	{
+		
+		System.out.println("it.naturtalent.e4.project.ProjectPropertySettings.putProperty() - entfernen wegen JAXB");
+		
+		/*
 		// AdapterID bezeichnet die Datendatei
 		String name = ProjectPropertyData.PROP_PROPERTYDATACLASS;
 		if (StringUtils.isNotEmpty(name))
@@ -95,7 +93,8 @@ public class ProjectPropertySettings
 				iFile.setContents(in, IFile.FORCE, null);
 			else
 				iFile.create(in, IFile.FORCE, null);				
-		}		
+		}	
+		*/	
 	}
 	
 	
@@ -107,6 +106,10 @@ public class ProjectPropertySettings
 	 */
 	public void put(final IProject iProject, final ProjectPropertyData propertyData)
 	{
+		
+		System.out.println("it.naturtalent.e4.project.ProjectPropertySettings.put() - entfernen wegen JAXB");
+		
+		/*
 		// AdapterID bezeichnet die Datendatei
 		String name = ProjectPropertyData.PROP_PROPERTYDATACLASS;
 		if (StringUtils.isNotEmpty(name))
@@ -138,7 +141,9 @@ public class ProjectPropertySettings
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
+		*/
 
 	}
 	

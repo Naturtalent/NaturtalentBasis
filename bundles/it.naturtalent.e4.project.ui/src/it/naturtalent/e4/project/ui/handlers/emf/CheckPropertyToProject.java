@@ -9,7 +9,6 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.emf.common.util.EList;
 
 import it.naturtalent.e4.project.INtProject;
-import it.naturtalent.e4.project.ProjectData;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.model.project.NtProjects;
 import it.naturtalent.e4.project.ui.Activator;
@@ -25,8 +24,7 @@ public class CheckPropertyToProject
 	@Execute
 	public void execute()
 	{
-		IProject[] iProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		ProjectData projectData;
+		IProject[] iProjects = ResourcesPlugin.getWorkspace().getRoot().getProjects();		
 		String name = null;		
 		int counter = 0;
 		for (IProject iProject : iProjects)

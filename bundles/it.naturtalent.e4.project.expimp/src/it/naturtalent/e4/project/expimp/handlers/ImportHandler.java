@@ -1,20 +1,11 @@
 package it.naturtalent.e4.project.expimp.handlers;
 
-import it.naturtalent.e4.project.IProjectData;
-import it.naturtalent.e4.project.NtProject;
-import it.naturtalent.e4.project.ProjectData;
-import it.naturtalent.e4.project.expimp.IImportHandler;
-import it.naturtalent.e4.project.expimp.dialogs.ImportDialog;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.xml.bind.JAXB;
+//import javax.xml.bind.JAXB;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -25,6 +16,10 @@ import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.swt.widgets.Shell;
+
+import it.naturtalent.e4.project.NtProject;
+import it.naturtalent.e4.project.expimp.IImportHandler;
+import it.naturtalent.e4.project.expimp.dialogs.ImportDialog;
 
 @Deprecated
 public class ImportHandler implements IImportHandler
@@ -127,6 +122,12 @@ public class ImportHandler implements IImportHandler
 	
 	private Map<String,String>getImportedAliasNames(File [] importFiles)
 	{
+		
+		System.out.println("it.naturtalent.e4.project.expimp.handlers.ImportHandler.importFiles()");
+		
+		return null;
+		
+		/*
 		Map<String, String> mapImportProjectNames = new HashMap<String, String>();
 
 		for (File impFile : importFiles)
@@ -153,6 +154,8 @@ public class ImportHandler implements IImportHandler
 		}
 
 		return mapImportProjectNames;
+		
+		*/
 	}	
 	
 

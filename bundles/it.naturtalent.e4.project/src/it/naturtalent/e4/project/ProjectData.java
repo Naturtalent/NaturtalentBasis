@@ -3,11 +3,11 @@ package it.naturtalent.e4.project;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
+//import javax.xml.bind.annotation.XmlRootElement;
 
 
 
-@XmlRootElement(name="projectData")
+//@XmlRootElement(name="projectData")
 public class ProjectData extends AbstractProjectData implements Cloneable
 {
 

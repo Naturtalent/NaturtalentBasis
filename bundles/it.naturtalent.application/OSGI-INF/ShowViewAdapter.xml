@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="it.naturtalent.e4.application">
-   <implementation class="it.naturtalent.e4.application.ShowViewAdapterRepository"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="it.naturtalent.e4.application.ShowAdapter">
+   <implementation class="it.naturtalent.application.ShowViewAdapterRepository"/>
    <service>
-      <provide interface="it.naturtalent.e4.application.IShowViewAdapterRepository"/>
+      <provide interface="it.naturtalent.application.IShowViewAdapterRepository"/>
    </service>
 </scr:component>

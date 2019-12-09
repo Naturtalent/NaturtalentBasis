@@ -1,27 +1,14 @@
 package it.naturtalent.e4.project;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.lang.reflect.InvocationTargetException;
-
-import javax.xml.bind.JAXB;
+//import javax.xml.bind.JAXB;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 @Deprecated
 public abstract class AbstractProjectDataAdapter implements IProjectDataAdapter
@@ -117,6 +104,10 @@ public abstract class AbstractProjectDataAdapter implements IProjectDataAdapter
 	@Override
 	public void save()
 	{
+		
+		System.out.println("it.naturtalent.e4.project.AbstractProjectDataAdapter.save() - entfernen wegen JAXB");
+		
+		/*
 		if ((data != null) && (data instanceof IProjectData))
 		{
 			final IProjectData projectData = (IProjectData) data;
@@ -186,6 +177,7 @@ public abstract class AbstractProjectDataAdapter implements IProjectDataAdapter
 				}
 			}
 		}
+		*/
 	}
 	
 	

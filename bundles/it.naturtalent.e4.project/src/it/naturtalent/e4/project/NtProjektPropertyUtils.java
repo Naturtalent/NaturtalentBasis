@@ -1,12 +1,18 @@
 package it.naturtalent.e4.project;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+//import javax.xml.bind.JAXB;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -60,6 +66,7 @@ public class NtProjektPropertyUtils
 	 * @param settingPropertyFactoryNames
 	 */
 	
+	/*
 	public static void saveProjectPropertyFactories(final Map<String, String[]>propertyDataMap)
 	{
 		if(!propertyDataMap.isEmpty())
@@ -109,6 +116,8 @@ public class NtProjektPropertyUtils
 			}
 		}
 	}
+	*/
+	
 	
 	public static void saveProjectPropertyFactories(String projectID, String [] settingPropertyFactoryNames)
 	{
@@ -131,6 +140,7 @@ public class NtProjektPropertyUtils
 			projectPropertySettings.put(iProject, projectPropertyData);
 		}
 	}
+
 	
 	/**
 	 * Die ProjectPropertyInformationen (PropertyFactories) werden in einem Datenmodell 'ProjectPropertyData'
