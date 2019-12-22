@@ -1,20 +1,13 @@
 package it.naturtalent.e4.search;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
@@ -25,9 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
-import it.naturtalent.e4.project.INtProject;
 import it.naturtalent.e4.project.IResourceNavigator;
-import it.naturtalent.e4.project.search.ISearchInEclipsePage;
 
 /**
  * Erweitert die Suchseite fuer Projekte um die Moeglichkeit 'Verzeichnisse' innerhalb der Projekte zu suchen.
@@ -43,17 +34,20 @@ public class FolderSearchPage extends ProjectSearchPage
 	// UI-Composite der Verzeichnissuche
 	private FolderSearchComposite folderSeachComposite;
 	
-	// Die Dialogsettings werden als separate Sektion gespeichert
+	// Die Dialogsettings werden separater SettingSection gespeichert
 	private IDialogSettings settings = WorkbenchSWTActivator.getDefault().getDialogSettings();
 	
 	private Log log = LogFactory.getLog(this.getClass());
 	
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	@Override
 	public Control createControl(Composite parent)
 	{		
 		this.shell = parent.getShell();
 		
-		// 
+		// Foldercomposite erzeugen und mit den Settings fuellen
 		folderSeachComposite = new FolderSearchComposite(parent, SWT.NONE); 
 		folderSeachComposite.setDialogSettings(settings);
 		return folderSeachComposite;
@@ -74,23 +68,20 @@ public class FolderSearchPage extends ProjectSearchPage
 	{
 		// SearchOptionen vom Composite abfragen
 		SearchOptions searchFolderOptions = folderSeachComposite.getFolderSearchOptions();
-		SearchOptions searchProjectOptions = folderSeachComposite.getProjectSearchOptions();
-				
-		// sollte auf keine Projekte fokussiert sein, werden alle NtProjekte einbezogen
-		List<IAdaptable>searchItems = searchProjectOptions.getSearchItems();
-		if((searchItems == null) || (searchItems.isEmpty()))
-		{
-			IResourceNavigator resourceNavigator = it.naturtalent.e4.project.ui.Activator.findNavigator();
-			IAdaptable [] allAdaptables = resourceNavigator.getAggregateWorkingSet().getElements();
-			if(ArrayUtils.isNotEmpty(allAdaptables))
-				searchProjectOptions.setSearchItems(Arrays.asList(allAdaptables));				
-		}
+
+		// SearchOptionen vervollstaendigen mit den Zielprojekten (alle NtProjekte werden einbezogen)
+		IResourceNavigator resourceNavigator = it.naturtalent.e4.project.ui.Activator.findNavigator();
+		IAdaptable [] allAdaptables = resourceNavigator.getAggregateWorkingSet().getElements();
+		if(ArrayUtils.isNotEmpty(allAdaptables))
+			searchFolderOptions.setSearchItems(Arrays.asList(allAdaptables));		
 		
-		// die einzubeziehenden Projekte suchen (wenn Eingaben im ProjektGroup erfolgten)
-		preProjectSearch(searchProjectOptions);
+		// mit der Datumsfiltereinstellungen vom Composite abfragen
+		DateFilterOptions filterOptions = folderSeachComposite.getFilterOptions();
 		
-		// die Liste der einzubeziehenden Suchobjekte wird an die Foldersuchoptionen uebergeben		
-		searchFolderOptions.setSearchItems(searchProjectOptions.getSearchItems());
+		// DatumsFilterfunktion ausfuehren und Ergebisliste in 'searchOptions' austauschen
+		List<IAdaptable>dateFiltered = filterOptions.filterResources(searchFolderOptions.getSearchItems());
+		if(dateFiltered != null)
+			searchFolderOptions.setSearchItems(dateFiltered);	
 		
 		// Suchoperation instanziieren
 		FolderSearchOperation searchOperation = new FolderSearchOperation(searchFolderOptions);
@@ -100,11 +91,7 @@ public class FolderSearchPage extends ProjectSearchPage
 			// Suchfunktion ausfuehren
 			new ProgressMonitorDialog(shell).run(true, true, searchOperation);
 			
-			log.info("Foldersuchfunktion beendet");
-			
 			folderSeachComposite.saveDialogSettings(settings);
-			
-			log.info("Settings gespeichert");
 			
 		} catch (InvocationTargetException e)
 		{
@@ -134,6 +121,7 @@ public class FolderSearchPage extends ProjectSearchPage
 	 * Projekte vorausgewaehlt und die Liste der verfuegbaren Projekte entsprechen aktualisiert.
 	 * 
 	 */
+	/*
 	private void preProjectSearch(SearchOptions searchProjectOptions)
 	{
 		List<IAdaptable>foundedItems = new ArrayList<IAdaptable>();
@@ -181,6 +169,7 @@ public class FolderSearchPage extends ProjectSearchPage
 			}
 		}
 	}
+	*/
 	
 	
 }

@@ -3,6 +3,10 @@ package it.naturtalent.e4.project.ui.dialogs;
 import it.naturtalent.e4.project.IResourceNavigator;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -38,7 +42,9 @@ import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.wb.swt.ResourceManager;
+import it.naturtalent.e4.project.ui.utils.FileModifiedComposite;
 
+@Deprecated
 public class PropertyFolderDialog extends TitleAreaDialog
 {
 	private final FormToolkit formToolkit = new FormToolkit(Display.getDefault());
@@ -99,6 +105,7 @@ public class PropertyFolderDialog extends TitleAreaDialog
 		container.setLayout(new GridLayout(3, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
+		/*
 		Hyperlink hprlnkPath = formToolkit.createHyperlink(container, "Pfad", SWT.NONE);
 		hprlnkPath.addHyperlinkListener(new HyperlinkAdapter()
 		{
@@ -125,12 +132,22 @@ public class PropertyFolderDialog extends TitleAreaDialog
 		txtPath.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtPath.setText(selectedFolder.getLocation().toOSString());
 		
+		File dir =  new File(selectedFolder.getLocation().toOSString());
+		long modified = getLatestModifiedDate(dir);
+		Calendar projCal = Calendar.getInstance();
+		projCal.setTimeInMillis(modified);
+		//SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyy");
+		String date1 = format1.format(projCal.getTime()); 
+		System.out.println(date1);
+		
 		ImageHyperlink mghprlnkClipboard = formToolkit.createImageHyperlink(container, SWT.NONE);
 		mghprlnkClipboard.setToolTipText("Pfad in Zwischenablage kopieren");
 		mghprlnkClipboard.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		mghprlnkClipboard.setImage(ResourceManager.getPluginImage("it.naturtalent.e4.project.ui", "icons/copy_edit.gif"));
 		formToolkit.paintBordersFor(mghprlnkClipboard);
 		mghprlnkClipboard.setText("");
+		
 		mghprlnkClipboard.addHyperlinkListener(new HyperlinkAdapter()
 		{
 		public void linkActivated(HyperlinkEvent e)
@@ -140,6 +157,16 @@ public class PropertyFolderDialog extends TitleAreaDialog
 							{ TextTransfer.getInstance() });
 			}
 		});
+		*/
+		
+		FileModifiedComposite fileModifiedComposite = new FileModifiedComposite(container, SWT.NONE);
+		//fileModifiedComposite.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		fileModifiedComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		//formToolkit.adapt(fileModifiedComposite);
+		//formToolkit.paintBordersFor(fileModifiedComposite);
+		new Label(container, SWT.NONE);
+		
+		
 		return area;
 	}
 
@@ -165,6 +192,22 @@ public class PropertyFolderDialog extends TitleAreaDialog
 		return new Point(450, 300);
 	}
 	
+	private static long getLatestModifiedDate(File dir)
+	{
+		File[] files = dir.listFiles();
+		long latestDate = 0;
+		for (File file : files)
+		{
+			long fileModifiedDate = file.isDirectory()
+					? getLatestModifiedDate(file)
+					: file.lastModified();
+			if (fileModifiedDate > latestDate)
+			{
+				latestDate = fileModifiedDate;
+			}
+		}
+		return Math.max(latestDate, dir.lastModified());
+	}
 
 
 }

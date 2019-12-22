@@ -3,10 +3,14 @@ package it.naturtalent.e4.search;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
+
+import java.util.ArrayList;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
@@ -15,6 +19,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * UI der Foldersuchseite.
@@ -38,7 +43,10 @@ public class FolderSearchComposite extends Composite
 	private Combo comboFolderPattern;
 	private Button btnCheckCaseSensitiv;
 	private Button btnCheckRegularExpression;
-	private DefaultNtProjectSearchComposite defaultNtProjectSearchComposite;
+	
+	// Datumsfilter 
+	private DateFilterComposite dateFilterComposite;
+	
 	
 	//private Log log = LogFactory.getLog(this.getClass());
 
@@ -74,17 +82,18 @@ public class FolderSearchComposite extends Composite
 		Label lblSpace1 = new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		
+		Label lblDateFilterMsg = new Label(this, SWT.NONE);		
+		lblDateFilterMsg.setText("! Datumsfilter sind betriebssystemabhängig und relativ zum letzten Import");
+		new Label(this, SWT.NONE);
+		
 		Label lblSpace2 = new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		
-		// Gruppe 'auf Projekte einschraenken'
-		Group groupProject = new Group(this, SWT.NONE);
-		groupProject.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false, 2, 1));
-		groupProject.setText("die einbezogenen Projekte einschränken");
+		// Datumsfilter einfuegen
+		dateFilterComposite = new DateFilterComposite(this, SWT.NONE);
+		new Label(this, SWT.NONE);
 		
-		// fuer die Einschraenkung der Projekte wird 'DefaultNtProjectSearchComposite' eingebunden
-		defaultNtProjectSearchComposite = new DefaultNtProjectSearchComposite(groupProject, SWT.NONE);
-		defaultNtProjectSearchComposite.setBounds(0, 0, 900, 221);
+		//projectSearchComposite.setFocus();
 
 	}
 	
@@ -95,21 +104,17 @@ public class FolderSearchComposite extends Composite
 	 */
 	public void setDialogSettings(IDialogSettings settings)
 	{
-		String [] searchPattern;
-		IDialogSettings section = settings.getSection(FOLDER_SETTING_SECTION);
-		
+		IDialogSettings section = settings.getSection(FOLDER_SETTING_SECTION);		
 		if(section == null)
 		{
-			// Setting wird angelegt	
+			// SettingSection neu erzeugt	
 			section = new DialogSettings(FOLDER_SETTING_SECTION);
-			if(section == null)
-				return;
-			
 			settings.addSection(section);
 		}
+		dateFilterComposite.setDialogSettings(section);
 		
-		// SuchmusterArray laden
-		searchPattern = section.getArray(SEARCH_FOLDERPATTERN_SETTINGS);
+		// die gespeicherten Suchmuster als in Array laden
+		String [] searchPattern = section.getArray(SEARCH_FOLDERPATTERN_SETTINGS);
 		if (ArrayUtils.isNotEmpty(searchPattern))
 		{
 			comboFolderPattern.setItems(searchPattern);
@@ -120,18 +125,16 @@ public class FolderSearchComposite extends Composite
 		
 	}
 	
+	// Dialogsettings in separater Section speichern
 	public void saveDialogSettings(IDialogSettings settings)
 	{
-		//log.info("Section check");
-		
 		IDialogSettings section = settings.getSection(FOLDER_SETTING_SECTION);
 		if (section == null)
 		{
 			section = new DialogSettings(FOLDER_SETTING_SECTION);
 			settings.addSection(section);
 		}
-		
-		//log.info("Section ok");
+		dateFilterComposite.saveDialogSettings(section);
 		
 		// speichern des Suchpatterns
 		String searchPattern = comboFolderPattern.getText();
@@ -167,7 +170,7 @@ public class FolderSearchComposite extends Composite
 		searchOptions.setSearchPattern(comboFolderPattern.getText());
 		searchOptions.setCaseSensitive(btnCheckCaseSensitiv.getSelection());
 		searchOptions.setRegularExpression(btnCheckRegularExpression.getSelection());
-		//searchOptions.setSearchItems(getFocusedAdaptables());
+		searchOptions.setSearchItems(new ArrayList<IAdaptable>());
 		
 		return searchOptions;
 	}
@@ -177,10 +180,18 @@ public class FolderSearchComposite extends Composite
 	 * 
 	 * @return
 	 */
+	/*
 	public SearchOptions getProjectSearchOptions()
 	{
 		return defaultNtProjectSearchComposite.getSearchOptions();
 	}
+	*/
+	
+	public DateFilterOptions getFilterOptions()
+	{
+		return dateFilterComposite.getFilterOptions();
+	}
+
 
 	@Override
 	protected void checkSubclass()

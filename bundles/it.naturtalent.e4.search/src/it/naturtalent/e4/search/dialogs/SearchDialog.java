@@ -40,7 +40,7 @@ public class SearchDialog extends TitleAreaDialog
 	// zentrale Registry mit den Searchpages
 	private IProjectSearchPageRegistry searchPageregistry;
 
-	private int PREFERRED_CONTENT_HEIGHT = 450;
+	private int PREFERRED_CONTENT_HEIGHT = 650;
 
 	private int PREFERRED_CONTENT_WIDTH = 750;
 
@@ -103,7 +103,7 @@ public class SearchDialog extends TitleAreaDialog
 		});
 		GridData gd_tabSearchFolder = new GridData(GridData.FILL_BOTH);
 		gd_tabSearchFolder.grabExcessVerticalSpace = false;
-		gd_tabSearchFolder.heightHint = 441;
+		gd_tabSearchFolder.heightHint = 500;
 		tabSearchFolder.setLayoutData(gd_tabSearchFolder);
 
 		// die SearchPages den TabFoldern zuordnen

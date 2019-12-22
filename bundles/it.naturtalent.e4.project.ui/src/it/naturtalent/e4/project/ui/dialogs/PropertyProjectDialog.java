@@ -64,6 +64,7 @@ import it.naturtalent.e4.project.ui.Messages;
 import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
 import it.naturtalent.e4.project.ui.wizards.ProjectWizard;
 
+@Deprecated
 public class PropertyProjectDialog extends TitleAreaDialog
 {
 	private IProject iProject;

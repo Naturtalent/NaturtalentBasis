@@ -36,6 +36,11 @@ import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.model.project.util.ProjectValidator;
 import it.naturtalent.e4.project.ui.actions.emf.NewProjectAction;
 
+/**
+ * Angepasster Renderer fuer den Projektnamen. 
+ * @author dieter
+ *
+ */
 public class NtProjectNameRendering extends TextControlSWTRenderer
 {	
 	private IEventBroker eventBroker;	
@@ -51,7 +56,7 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 		{
 			text.selectAll();
 			
-			// Textselektion soll nur einmal erfolgen (Listener und Contexteintrag entfernen)			
+			// Textselektion soll nur einmal erfolgen (Listener und E4Contexteintrag entfernen)			
 			text.removeModifyListener(firstTimeSelection);
 			E4Workbench.getServiceContext().remove(NewProjectAction.PREDIFINED_PROJECTNAME);
 		}
@@ -127,6 +132,7 @@ public class NtProjectNameRendering extends TextControlSWTRenderer
 			}
 		}
 		
+		// ist ein vordefinierter Name hinterlegt wird der Projektname selektiert
 		if(StringUtils.isNotEmpty((String)E4Workbench.getServiceContext().get(NewProjectAction.PREDIFINED_PROJECTNAME)))
 			text.addModifyListener(firstTimeSelection);				
 		

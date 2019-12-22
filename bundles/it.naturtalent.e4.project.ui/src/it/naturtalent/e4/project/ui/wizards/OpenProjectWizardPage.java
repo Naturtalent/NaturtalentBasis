@@ -2,6 +2,7 @@ package it.naturtalent.e4.project.ui.wizards;
 
 import it.naturtalent.e4.project.ProjectData;
 
+@Deprecated
 public class OpenProjectWizardPage extends DefaultProjectWizardPage
 {
 

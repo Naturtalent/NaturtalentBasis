@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -20,21 +19,16 @@ import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkingSet;
 
 import it.naturtalent.e4.project.INtProjectProperty;
 import it.naturtalent.e4.project.INtProjectPropertyFactory;
-import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.IResourceNavigator;
-import it.naturtalent.e4.project.NtProjektPropertyUtils;
 import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
-import it.naturtalent.e4.project.ui.emf.ProjectModelEventKey;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
 import it.naturtalent.e4.project.ui.parts.emf.NtProjectView;
@@ -77,27 +71,8 @@ public class ProjectPropertyWizard extends Wizard
 	{
 		this.context = context;
 		this.iProject = iProject;
-		
-		/*
-		if(context != null)
-		{
-			this.context = context;
-			
-	
-			propertyWizardPage = ContextInjectionFactory.make(ProjectPropertyWizardPage.class, context);
-			addPage(propertyWizardPage);
-			
-		
-			projectProperties = NtProjektPropertyUtils.getProjectProperties(
-					ntProjektDataFactoryRepository, iProject);
-		
-		}
-		*/
-		
-		
 	}
 	
-
 	
 	/**
 	 * Mit den uebergeben PropertyFactories werden die zuzuordnenden ProjectProperties erzeugt und in der Liste
@@ -157,20 +132,6 @@ public class ProjectPropertyWizard extends Wizard
 						}												
 					}							
 				}
-				
-				/*
-				else
-				{
-					// NtProjectProperty der Page 'OpenProjectWizardPage'
-					// separat zuordnen
-					if (StringUtils.equals(
-							projectProperty.getClass().getName(),
-							NtProjectProperty.class.getName()))
-						propertyWizardPage.setProjectProperty(
-								(NtProjectProperty) projectProperty);
-				}
-				*/
-
 			}
 		}
 	}
@@ -332,13 +293,6 @@ public class ProjectPropertyWizard extends Wizard
 		return super.performCancel();
 	}
 
-	/*
-	public void setProjectProperties(List<INtProjectProperty> projectProperties) {
-		this.projectProperties = projectProperties;
-	}
-	*/
-	
-	
 
 	public IProject getiProject()
 	{
@@ -354,8 +308,4 @@ public class ProjectPropertyWizard extends Wizard
 	{
 		this.iProject = iProject;
 	}
-	
-	
-	
-
 }

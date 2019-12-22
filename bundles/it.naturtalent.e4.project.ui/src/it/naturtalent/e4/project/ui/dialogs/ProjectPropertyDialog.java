@@ -36,6 +36,7 @@ import it.naturtalent.e4.project.ui.emf.NtProjectPropertyFactory;
  * Dialog zum Definieren der ProjektProperties
  * 
  */
+@Deprecated
 public class ProjectPropertyDialog extends TitleAreaDialog
 {
 	
@@ -73,6 +74,7 @@ public class ProjectPropertyDialog extends TitleAreaDialog
 	/**
 	 * Create the dialog.
 	 * @param parentShell
+	 * @wbp.parser.constructor
 	 */
 	public ProjectPropertyDialog()
 	{

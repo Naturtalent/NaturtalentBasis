@@ -50,6 +50,7 @@ import org.eclipse.core.databinding.beans.BeanProperties;
  * @author dieter
  *
  */
+@Deprecated
 public class DefaultProjectWizardPage extends WizardPage
 {
 	private DataBindingContext m_bindingContext;

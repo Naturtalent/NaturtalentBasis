@@ -35,8 +35,6 @@ public class NewHandler
 	public void execute(IEclipseContext context)
 	{			
 		List<INewActionAdapter>newAdapters = newActionAdapterRepository.getNewWizardAdapters();
-		System.out.println("new "+newAdapters.size());
-		
 		NewDialog dialog = ContextInjectionFactory.make(NewDialog.class, context);
 		if(dialog.open() == NewDialog.OK)
 		{			

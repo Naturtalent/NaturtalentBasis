@@ -27,9 +27,15 @@ public class Messages extends NLS {
 	public static String PropertySearchComposite_btnRadioSince_text;
 	public static String PropertySearchComposite_btnRadioBefore_text;
 	public static String PropertySearchComposite_btnRadioBetween_text;
-	public static String PropertySearchComposite_btnRadioButton_text;
-	public static String PropertySearchComposite_btnRadioButton_1_text;
+	public static String PropertySearchComposite_btnRadioCreate_text;
+	public static String PropertySearchComposite_btnRadioModify_text;
 	public static String PropertySearchComposite_dateTime_pattern;
+	public static String PropertySearchComposite_modifygroup_text;
+	public static String DateFilterComposite_lblNewLabel_text;
+	public static String DateFilterComposite_btnRadioNoFilter_text;
+	public static String DateFilterComposite_btnCreate_toolTipText;
+	public static String DateFilterComposite_btnRadioButton_toolTipText;
+	
 	
 	//////////////////////
 	//

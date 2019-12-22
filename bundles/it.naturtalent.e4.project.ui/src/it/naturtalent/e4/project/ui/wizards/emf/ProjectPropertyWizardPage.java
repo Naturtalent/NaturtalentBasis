@@ -12,6 +12,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecp.ui.view.ECPRendererException;
@@ -36,10 +37,13 @@ import org.osgi.service.event.EventHandler;
 import it.naturtalent.e4.project.INtProjectPropertyFactoryRepository;
 import it.naturtalent.e4.project.IResourceNavigator;
 import it.naturtalent.e4.project.ui.Activator;
+import it.naturtalent.e4.project.ui.actions.emf.NewProjectAction;
 import it.naturtalent.e4.project.ui.dialogs.SelectWorkingSetDialog;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
 import it.naturtalent.e4.project.ui.emf.ProjectModelEventKey;
 import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
+import it.naturtalent.icons.core.Icon;
+import it.naturtalent.icons.core.IconSize;
 
 /**
  * Standardseite des ProjektPropertyWizards.
@@ -95,8 +99,8 @@ public class ProjectPropertyWizardPage extends WizardPage
 	public ProjectPropertyWizardPage()
 	{
 		super(NT_WIZARDPAGE);
-		setTitle("Project Wizard");
-		setDescription("Projekt definieren");
+		setTitle("Project Wizard"); //$NON-NLS-N$
+		setDescription("Projekt bearbeiten"); //$NON-NLS-N$
 	}
 	
 	@PostConstruct
@@ -108,6 +112,15 @@ public class ProjectPropertyWizardPage extends WizardPage
 		this.ntProjectPropertyFactoryRepository = ntProjectPropertyFactoryRepository;
 		this.eventBroker = eventBroker;		
 		eventBroker.subscribe(ProjectModelEventKey.PROJECT_VALIDATION_MODELEVENT, modelValidationEventHandler);
+		
+		// im E4Context hinterlegter Name ist Indiz fuer 'neues' - Projekt
+		if ((StringUtils.isNotEmpty((String) E4Workbench.getServiceContext()
+				.get(NewProjectAction.PREDIFINED_PROJECTNAME)))
+				|| (iProject == null))
+		{
+			setDescription("neues Projekt erzeugen"); //$NON-NLS-N$
+			setImageDescriptor(Icon.WIZBAN_NEW.getImageDescriptor(IconSize._75x66_TitleDialogIconSize));
+		}
 	}
 
 	/**

@@ -30,8 +30,8 @@ import it.naturtalent.e4.project.ui.ws.IWorkingSetManager;
 import it.naturtalent.e4.project.ui.ws.WorkingSetManager;
 
 /**
- * Default UI zur Suche innerhalb der NtProjects. Ueber den Focus koennen alle Projekte des Workspace oder WorkingSets als Grundlage
- * der Suche ausgewaehlt werden.
+ * Default-Composite der Projektsuche. 
+ * Ueber den Focus koennen WorkingSets als Filterstufe in die Suche einbezogen werden.
  *  
  * @author dieter
  *
@@ -66,6 +66,7 @@ public class DefaultNtProjectSearchComposite extends Composite
 	 * @param parent
 	 * @param style
 	 */
+	// ToDo - keine eigenstaendige Klasse - mit ProjectSaerchComposite zusammenfassen
 	public DefaultNtProjectSearchComposite(Composite parent, int style)
 	{
 		super(parent, style);
@@ -238,7 +239,7 @@ public class DefaultNtProjectSearchComposite extends Composite
 	{
 		// speichern des Suchpatterns
 		String searchPattern = comboPattern.getText();
-		if (StringUtils.isNotEmpty(searchPattern))
+		if (StringUtils.isNotEmpty(searchPattern)) 
 		{
 			String[] projectPattern = settings.getArray(SEARCH_PROJECTPATTERN_SETTINGS);
 			if (projectPattern == null)
@@ -248,17 +249,20 @@ public class DefaultNtProjectSearchComposite extends Composite
 				settings.put(SEARCH_PROJECTPATTERN_SETTINGS,projectPattern);
 			}
 			
-			// Anzahl der Patternsettings begrenzen
-			if (!ArrayUtils.contains(projectPattern, searchPattern))
-			{				
-				projectPattern = ArrayUtils.insert(0, projectPattern,searchPattern);
-				if (projectPattern.length > 9)
-					projectPattern = ArrayUtils.remove(projectPattern, 9);
-				settings.put(SEARCH_PROJECTPATTERN_SETTINGS,projectPattern);
-			}			
+			if(!ArrayUtils.contains(projectPattern, searchPattern))
+			{
+				// Anzahl der Patternsettings begrenzen
+				if (!ArrayUtils.contains(projectPattern, searchPattern))
+				{
+					projectPattern = ArrayUtils.insert(0, projectPattern,searchPattern);
+					if (projectPattern.length > 9)
+						projectPattern = ArrayUtils.remove(projectPattern, 9);
+					settings.put(SEARCH_PROJECTPATTERN_SETTINGS,projectPattern);
+				}
+			}
 		}
 		
-		// den Suchokus speichenr (Projekte oder WorkingSets)
+		// den Suchfokus speichenr (Projekte oder WorkingSets)
 		settings.put(SEARCH_FOCUS_SETTINGS, btnRadioAllProjects.getSelection());
 		
 		// WorkingSetNamen speichern, wenn Suchfokus auf WorkingSet liegt

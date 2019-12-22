@@ -25,6 +25,7 @@ import it.naturtalent.e4.project.ui.wizards.emf.ProjectPropertyWizard;
 
 /**
  * Mit dieser Aktion wird ein neues Projekt erzeugt.
+ * Diese Aktion wird vom Adapter 'NewProjectAdapter' zurueckgegeben.
  * 
  * @author dieter
  *
@@ -49,95 +50,56 @@ public class NewProjectAction extends Action
 	@Override
 	public void run()
 	{
-		// Dialog buchbarer Projekteigenschaften
-		/*
-		ProjectPropertyDialog propertyDialog = new ProjectPropertyDialog(shell);
-		
-	
-		
-		// alle verfuegbaren PropertyFactories an Dialog uebergeben
-		if (ntProjektDataFactoryRepository != null)
-			propertyDialog.setNtProjectPropertyFactories( ntProjektDataFactoryRepository
-					.getAllProjektDataFactories());
-		
-		// buchbarer Projekteigenschaften im Dialog auswaehlen		
-		if(propertyDialog.open() == ProjectPropertyDialog.OK)		
+		// ProjectWizard erzeugen
+		final ProjectPropertyWizard projectPropertyWizard = ContextInjectionFactory
+				.make(ProjectPropertyWizard.class, context);
+
+		// evtl. selektiertes IProject zuruecksetzen - neues Projekt soll erzeugt werden
+		projectPropertyWizard.setiProject(null);
+
+		// die mit ProjectPropertyDialog ausgewaehlten Projekteigenschaften dem
+		// ProjectWizard mitteilen
+		// List<INtProjectPropertyFactory>checkedPropertiesFactories =
+		// propertyDialog.getCheckedPropertyFactories();
+		// projectPropertyWizard.setPropertyFactories(checkedPropertiesFactories);
+		projectPropertyWizard.setPropertyFactories(ntProjektDataFactoryRepository.getAllProjektDataFactories());
+
+		// Name des neuen Projekts mit dem momentan selektierten vorbelegen
+		final ResourceNavigator navigator = (ResourceNavigator) Activator.findNavigator();
+		IStructuredSelection selection = (IStructuredSelection) navigator.getViewer().getSelection();
+		Object selObject = selection.getFirstElement();
+		if (selObject instanceof IResource)
 		{
-		*/
-		
-			// ProjectWizard erzeugen
-			final ProjectPropertyWizard projectPropertyWizard = ContextInjectionFactory.make(ProjectPropertyWizard.class, context);
-			
-			// evtl. selektiertes IProject zuruecksetzen - neues Projekt soll erzeugt werden
-			projectPropertyWizard.setiProject(null);
-			
-			// die mit ProjectPropertyDialog ausgewaehlten Projekteigenschaften dem ProjectWizard mitteilen 	
-			//List<INtProjectPropertyFactory>checkedPropertiesFactories = propertyDialog.getCheckedPropertyFactories();
-			//projectPropertyWizard.setPropertyFactories(checkedPropertiesFactories);
-			projectPropertyWizard.setPropertyFactories(
-				ntProjektDataFactoryRepository.getAllProjektDataFactories());
-			
-			// Name des neuen Projekts mit dem momentan selektierten vorbelegen
-			final ResourceNavigator navigator = (ResourceNavigator) Activator.findNavigator();
-			IStructuredSelection selection = (IStructuredSelection) navigator.getViewer().getSelection();
-			Object selObject = selection.getFirstElement();
-			if (selObject instanceof IResource)
+			IResource iResource = (IResource) selObject;
+			IProject iProject = iResource.getProject();
+
+			try
 			{
-				IResource iResource = (IResource) selObject;
-				IProject iProject = iResource.getProject();
-				
-				try
-				{
-					// Projektname soll im Eingabefeld des Wizards selektiert werden
-					String name = iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
-					projectPropertyWizard.setPredefinedProjectName(name);
-					E4Workbench.getServiceContext().set(NewProjectAction.PREDIFINED_PROJECTNAME, name);
-					//context.set(PREDIFINED_PROJECTNAME, name);
-				} catch (CoreException e)
-				{					
-				}
+				// Projektname soll im Eingabefeld des Wizards selektiert werden
+				String name = iProject.getPersistentProperty(INtProject.projectNameQualifiedName);
+				projectPropertyWizard.setPredefinedProjectName(name);
+
+				// den Namen im E4Context abgelegen - see NtProjectNameRendering()
+				E4Workbench.getServiceContext().set(NewProjectAction.PREDIFINED_PROJECTNAME, name);				
+			} catch (CoreException e)
+			{
 			}
-			
-			// DialogWizard zum Beabeiten des NtProjekts
-			WizardDialog projectWizardDialog = new WizardDialog(shell, projectPropertyWizard);			
-			if(projectWizardDialog.open() == WizardDialog.OK)
-			{
-				// die Klassennamen der zugeordneten PropertyFactories auflisten
-				String [] settingPropertyFactoryNames = null;
-				
-				/*
+		}
 
-				for (INtProjectPropertyFactory propertyFactory : selectedPropertiesFactories)
-				{
-					settingPropertyFactoryNames = ArrayUtils.add(settingPropertyFactoryNames,
-							propertyFactory.getClass().getName());
-				}
-
-				
-			
-				// PropertyFactories im Datenbereich des NtProjekts speichern 
-				ProjectPropertyData projectPropertyData = new ProjectPropertyData();
-				projectPropertyData.setPropertyFactories(settingPropertyFactoryNames);
-				ProjectPropertySettings projectPropertySettings = new ProjectPropertySettings();
-				IProject iProject = projectPropertyWizard.getiProject();
-				projectPropertySettings.put(iProject, projectPropertyData);
-				
-				//navigator = (ResourceNavigator) Activator.findNavigator();				
-				selection = new StructuredSelection(iProject);		
-				navigator.selectReveal(selection);
-				
-				*/
-			}	
-		//}
-
-
+		// ProjectWizard oeffnen 
+		new WizardDialog(shell, projectPropertyWizard).open();
 	}
 
 
-	
+	/*
+	 * 
+	 * Ein neues Projekt sollte eigentlich immer erzeugt werden koennen.
+	 * 
+	 */
 	@Override
 	public boolean isHandled()
 	{		
+		/*
 		if(selectionService != null)
 		{
 			Object obj = selectionService.getSelection();
@@ -149,6 +111,7 @@ public class NewProjectAction extends Action
 						return false;
 			}				
 		}
+		*/
 				
 		return true;		
 	}

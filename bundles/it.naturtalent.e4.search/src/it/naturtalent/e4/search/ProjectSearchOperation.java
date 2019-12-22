@@ -47,13 +47,23 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 		eventBroker = currentApplication.getContext().get(IEventBroker.class);
 	}
 
+	/*
+	 * die eigenliche Suchfunktion ausfuehren 
+	 * (mit den SearchOtions werden alle fuer die Suchfunktion notwendigen Daten geliefert)
+	 * 
+	 */
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
 	{
 		int hitCount = 0;
-		List<IAdaptable>searchItems = searchOptions.getSearchItems();
-		monitor.beginTask("Suche in  Projekten", searchItems.size());	
 		
+		// die Menge in der gesucht wird ('Items' - hier: Liste der Projekte)
+		List<IAdaptable>searchItems = searchOptions.getSearchItems();
+		
+		// die Anzahl der Items bestimmt den Progressmonitor
+		monitor.beginTask("Suche in  Projekten", searchItems.size()); //$NON-NLS-N$
+		
+		// mit weiteren Parametern der SearchOptions den Pattern erzeugen
 		String patternString = searchOptions.getSearchPattern();
 		boolean isCaseSensitiv = searchOptions.isCaseSensitive();
 		boolean isRegEx = searchOptions.isRegularExpression();
@@ -62,9 +72,9 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 		Pattern pattern = PatternConstructor.createPattern(patternString, isRegEx, isStringMatcher, isCaseSensitiv, isWholeWord);
 		
 		// Broker meldet der Start einer neuen Suche
-		eventBroker.post(ISearchInEclipsePage.START_SEARCH_EVENT, "Start der Suche");
+		eventBroker.post(ISearchInEclipsePage.START_SEARCH_EVENT, "Start der Suche"); //$NON-NLS-N$
 		
-		// alle Suchitems durchlaufen
+		// alle Items (hier: Projekte) durchlaufen
 		for (Object item : searchItems)
 		{				
 			if (monitor.isCanceled())
@@ -87,20 +97,22 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 						projectName = ntProject.getName();						
 						if(StringUtils.isEmpty(projectName))
 						{
-							log.info("Fehler: nichtexistierendes Projekt ID:"+iProject.getName());
+							log.info("Fehler: nichtexistierendes Projekt ID:"+iProject.getName()); //$NON-NLS-N$
 							continue;
 						}
 					}
 					
+					// jeden Projektnamen mit dem Pattern vergleichen
 					Matcher m = pattern.matcher(projectName);
 					if (m.matches()) 
 					{
+						// Projektname passt zum Pattern, 
 						eventBroker.post(ISearchInEclipsePage.MATCH_PATTERN_EVENT, iProject);
 						hitCount++;
 					}
 				} catch (CoreException e)
 				{
-					log.info("Fehler: kein Projektname oder Projekt geschlossen ID:"+iProject.getName());
+					log.info("Fehler: kein Projektname oder Projekt geschlossen ID:"+iProject.getName()); //$NON-NLS-N$
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -111,7 +123,7 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 		
 		monitor.done();
 
-		eventBroker.post(ISearchInEclipsePage.END_SEARCH_EVENT, "Anzahl der Treffer: "+hitCount);		
+		eventBroker.post(ISearchInEclipsePage.END_SEARCH_EVENT, "Anzahl der Treffer: "+hitCount);	//$NON-NLS-N$	
 	}
 
 }

@@ -1,13 +1,10 @@
 package it.naturtalent.e4.project.ui;
 
-import java.util.List;
-
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.graphics.Image;
 
 import it.naturtalent.application.services.INewActionAdapter;
 import it.naturtalent.e4.project.ui.actions.NewFolderAction;
-import it.naturtalent.e4.project.ui.actions.emf.NewProjectAction;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 

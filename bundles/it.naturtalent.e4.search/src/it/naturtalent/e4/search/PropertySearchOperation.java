@@ -73,7 +73,7 @@ public class PropertySearchOperation implements IRunnableWithProgress
 		List<IAdaptable>searchItems = searchOptions.getSearchItems();
 		monitor.beginTask("Suche in  Projekten", searchItems.size());	//$NON-NLS-N$
 		
-		// null-Pattern durch "*" verhindern
+		// null-Pattern wird durch "*" verhindert
 		String patternString = searchOptions.getSearchPattern();
 		patternString = StringUtils.isNotEmpty(patternString) ? patternString : "*"; 
 		

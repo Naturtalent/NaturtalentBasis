@@ -34,7 +34,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.Widget;
 
 import it.naturtalent.application.Messages;
 import it.naturtalent.application.services.INewActionAdapter;
@@ -45,8 +47,8 @@ import it.naturtalent.icons.core.IconSize;
 
 /**
  * Mit diesem Dialog kann ausgewählt werden, welches Objekt neu erzeugt werden soll. Die zur Auswahl angebotenen
- * Aktionen werden ueber entsprechende Adapter, die wiederum im zentralen Repository gespeichert sind, gesteuert werden.
- * Der globale Zugriff auf dieses Repository erfolgt ueber einen OSGI-Service.
+ * Aktionen werden ueber entsprechende Adapter, die wiederum im zentralen Repository gespeichert sind, 
+ * gesteuert. Der globale Zugriff auf dieses Repository erfolgt ueber einen OSGI-Service.
  * 
  * @author dieter
  *
@@ -87,16 +89,6 @@ public class NewDialog extends TitleAreaDialog
 		{	
 			if(element instanceof INewActionAdapter)
 				return ((INewActionAdapter)element).getImage();
-
-			
-			
-			/*
-			if(element instanceof NewWizardAdapterTreeNode)
-				return Icon.MENU_NEW_FOLDER.getImage(IconSize._16x16_DefaultIconSize);
-			
-			if(element instanceof INewActionAdapter)
-				return Icon.MENU_NEW_PROJECT.getImage(IconSize._16x16_DefaultIconSize);
-				*/
 			
 			return null;
 		}
@@ -134,9 +126,9 @@ public class NewDialog extends TitleAreaDialog
 			rootNode = null;
 			if (newInput instanceof List)
 			{
-				List<INewActionAdapter>adapters = ewActionAdaptersRepository.getNewWizardAdapters();
+				//List<INewActionAdapter>adapters = ewActionAdaptersRepository.getNewWizardAdapters();
 				//List<INewWizardAdapter>adapters = getMock();
-				createHierachy(adapters);
+				createHierachy((List<INewActionAdapter>) newInput);
 			}
 		}
 
@@ -279,7 +271,8 @@ public class NewDialog extends TitleAreaDialog
 	private static IEclipseContext context;
 	
 	/**
-	 * Create the dialog.
+	 * Konstruktion
+	 * 
 	 * @param parentShell
 	 */
 	@Inject
@@ -296,7 +289,7 @@ public class NewDialog extends TitleAreaDialog
 	protected Control createDialogArea(Composite parent)
 	{		
 		setTitle(Messages.NewWizardDialog_this_title);
-		setTitleImage(Icon.WIZBAN_NEW.getImage(IconSize._75x66_TitleDialogIconSize)); //$NON-NLS-N$
+		setTitleImage(Icon.WIZBAN_NEW.getImage(IconSize._75x66_TitleDialogIconSize));
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -350,17 +343,33 @@ public class NewDialog extends TitleAreaDialog
 		treeViewer.setLabelProvider(new ViewerLabelProvider());
 		treeViewer.setContentProvider(new TreeContentProvider());
 		
+		// viewer mit den aktiven Adaptern laden
 		if (ewActionAdaptersRepository != null)
-		{
-			List<INewActionAdapter> wizardAdapters = ewActionAdaptersRepository
-					.getNewWizardAdapters();
-
-			treeViewer.setInput(wizardAdapters);
+		{			
+			List<INewActionAdapter> wizardAdapters = ewActionAdaptersRepository.getNewWizardAdapters();
+			wizardAdapters = getActiveAdaptes(wizardAdapters);
+			treeViewer.setInput(wizardAdapters);			
 		}
-				
+		
 		return area;
 	}
-
+	
+	/*
+	 * Filtert die Adamter nach dessen Actionen ausfuehrbar sind.
+	 */
+	private List<INewActionAdapter> getActiveAdaptes(List<INewActionAdapter> wizardAdapters)
+	{
+		List<INewActionAdapter> activeAdapters = new ArrayList<INewActionAdapter>();
+		for(INewActionAdapter wizardAdapter : wizardAdapters)
+		{
+			Action action = (Action) ContextInjectionFactory.make(wizardAdapter.getActionClass(), context);
+			if(action.isHandled())			
+				activeAdapters.add(wizardAdapter);			
+		}
+		
+		return activeAdapters;
+	}
+	
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
