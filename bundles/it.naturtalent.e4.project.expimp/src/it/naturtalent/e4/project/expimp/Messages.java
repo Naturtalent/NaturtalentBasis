@@ -57,11 +57,14 @@ public class Messages extends NLS {
 	public static String AbstractImportDialog_this_message;
 	public static String AbstractImportDialog_this_title;
 	public static String AbstractImportDialog_lblSourcFile_text;
-	public static String AbstractImportDialog_tblclmnName_text;
+	public static String AbstractImportDialog_tblclmnName_text; 
 	public static String AbstractImportDialog_btnSelect_text;
 	public static String AbstractImportDialog_btnSelectAll_text;
 	public static String AbstractImportDialog_btnNoSelection_text;
 	public static String AbstractImportDialog_btnCheckOverwrite_text;
+	public static String AbstractImportDialog_btnNewButton_text;
+	public static String AbstractImportDialog_btnResetFilter_toolTipText;
+
 	////////////////////////////////////////////////////////////////////////////
 	//
 	// Constructor

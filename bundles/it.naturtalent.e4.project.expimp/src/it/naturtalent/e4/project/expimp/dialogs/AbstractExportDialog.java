@@ -49,7 +49,6 @@ import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 
 
-@Deprecated
 public abstract class AbstractExportDialog extends TitleAreaDialog //implements EventHandler
 {
 	private DataBindingContext m_bindingContext;	
@@ -59,9 +58,9 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	
 	private IDialogSettings dialogSettings;
 	
-	private Button okButton;
+	protected Button okButton;
 	
-	private CheckboxTableViewer tableViewer;
+	protected CheckboxTableViewer tableViewer;
 	
 	private ExpImportDataModel model = new ExpImportDataModel();
 	
@@ -69,7 +68,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	
 	protected File expFile;
 	
-	private ExportDestinationComposite exportDestinationComposite;
+	protected ExportDestinationComposite exportDestinationComposite;
 	
 	protected String exportPath;
 	
@@ -101,7 +100,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	{		
 		setTitleImage(Icon.WIZBAN_EXPORT.getImage(IconSize._75x66_TitleDialogIconSize));
 		setTitle("Export");
-		setMessage("die ausgewaehlten Einträge in einer Datei speichern");
+		setMessage("die ausgewählten Einträge in einer Datei speichern");
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -146,7 +145,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 				update();
 			}
 		});
-		btnSelectAll.setText("alle auswaehlen");
+		btnSelectAll.setText("alle auswählen"); //$NON-NLS-N$
 		
 		btnNoSelect = new Button(compositeButton, SWT.NONE);
 		btnNoSelect.addSelectionListener(new SelectionAdapter()
@@ -158,7 +157,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 				update();
 			}
 		});
-		btnNoSelect.setText("keine auswaehlen");
+		btnNoSelect.setText("keine auswählen");
 		
 	
 		// ab jetzt ueberwacht der Broker Eingaben in 'ExportDestinationComposite'
@@ -185,7 +184,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);				
 	}
 	
-	private void update()
+	protected void update()
 	{
 		if(tableViewer.getCheckedElements().length == 0)
 		{
@@ -245,7 +244,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 			expFile = new File(exportPath);
 			if(expFile.exists())
 			{
-				if(!MessageDialog.openQuestion(getShell(), "Export", "vorhandene Datei überschreiben ?"))
+				if(!MessageDialog.openQuestion(getShell(), "Export", "vorhandene Datei überschreiben ?")) //$NON-NLS-N$
 						return;				
 			}
 			doExport();

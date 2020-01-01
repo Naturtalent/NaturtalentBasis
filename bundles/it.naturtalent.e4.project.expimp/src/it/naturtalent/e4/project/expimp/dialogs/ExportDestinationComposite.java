@@ -61,7 +61,7 @@ public class ExportDestinationComposite extends Composite
 		
 		controlDecorationDestDir = new ControlDecoration(comboDestDir, SWT.LEFT | SWT.TOP);
 		controlDecorationDestDir.setImage(Icon.OVERLAY_ERROR.getImage(IconSize._7x8_OverlayIconSize));		
-		controlDecorationDestDir.setDescriptionText("kein Verzeichnis ausgewaehlt");
+		controlDecorationDestDir.setDescriptionText("kein Verzeichnis ausgewählt"); //$NON-NLS-N$
 		
 		btnSelectDir = new Button(this, SWT.NONE);
 		btnSelectDir.addSelectionListener(new SelectionAdapter()
@@ -72,7 +72,7 @@ public class ExportDestinationComposite extends Composite
 				DirectoryDialog dlg = new DirectoryDialog(getShell());
 				
 				// Change the title bar text
-				dlg.setText("Exportverzeichnis");
+				dlg.setText("Exportverzeichnis"); //$NON-NLS-N$
 				dlg.setFilterPath(comboDestDir.getText());
 				
 				String exportDirectory = dlg.open();
@@ -80,11 +80,11 @@ public class ExportDestinationComposite extends Composite
 				updateWidgets();					
 			}
 		});
-		btnSelectDir.setText("auswaehlen");
+		btnSelectDir.setText("auswählen"); //$NON-NLS-N$
 		
 		Label lblDestFile = new Label(this, SWT.NONE);
 		lblDestFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblDestFile.setText("Dateiname");
+		lblDestFile.setText("Dateiname"); //$NON-NLS-N$
 		
 		textDestFile = new Text(this, SWT.BORDER);		
 		textDestFile.addModifyListener(new ModifyListener()
@@ -98,7 +98,7 @@ public class ExportDestinationComposite extends Composite
 		
 		controlDecorationDestFile = new ControlDecoration(textDestFile, SWT.LEFT | SWT.TOP);
 		controlDecorationDestFile.setImage(Icon.OVERLAY_ERROR.getImage(IconSize._7x8_OverlayIconSize));
-		controlDecorationDestFile.setDescriptionText("kein Dateiname definiert");
+		controlDecorationDestFile.setDescriptionText("kein Dateiname definiert"); //$NON-NLS-N$
 		new Label(this, SWT.NONE);
 
 		// UserHome als Defaultexportverzeichnis

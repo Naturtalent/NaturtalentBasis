@@ -25,7 +25,11 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -45,6 +49,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 
 import it.naturtalent.e4.project.expimp.ExpImportData;
 import it.naturtalent.e4.project.expimp.ExpImportDataModel;
@@ -53,6 +58,13 @@ import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 
 
+
+/**
+ * Grundgeruest eines Importdialogs.
+ * 
+ * @author dieter
+ *
+ */
 public abstract class AbstractImportDialog extends TitleAreaDialog
 {
 	private DataBindingContext m_bindingContext;
@@ -65,7 +77,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 
 	private IDialogSettings dialogSettings;
 		
-	private Text txtSource;
+	protected Text txtSource;
 	private Table table;
 	protected CheckboxTableViewer checkBoxTableViewer;
 
@@ -78,10 +90,34 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	protected ExpImportData [] selectedData;
 	
 	private Button okButton;
+	protected Button cancelButton;
 	protected Button btnCheckOverwrite;
+	
+	private Button btnResetFilter;
+	private Text textFilter;
+	private String stgFilter;	
+	
+	// sammelt die gecheckten Element 
+	private Object [] checkedElements = null;
+	
+	// Ein Filter fuer die Importdaten
+	private class NameFilter extends ViewerFilter
+	{
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element)
+		{					
+			if (element instanceof ExpImportData)
+			{	
+				String name = ((ExpImportData)element).getLabel();
+				if(StringUtils.isNotEmpty(stgFilter))					
+					return StringUtils.containsIgnoreCase(name, stgFilter);					
+			}
+			
+			return true;
+		}
+	}
 
-
-	// Labelprovider mit der Moeglichkeit zum 'eingrauen' der Ordner 
+	// Labelprovider mit der Moeglichkeit zum 'eingrauen' von ImportElementen
 	protected class GrayedTableLabelProvider extends LabelProvider 
 	{
 		public GrayedTableLabelProvider()
@@ -161,29 +197,41 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				importPath = null;
-				FileDialog dlg = new FileDialog(getShell());
-
-				// Change the title bar text
-				dlg.setText("Importverzeichnis");
-				dlg.setFilterExtensions(new String[]{"*.xmi","*.xml"}); //$NON-NLS-1$
-				dlg.setFilterPath(importPath);
-				
-				String importFile = dlg.open();
-				if (importFile != null)
-				{			
-					importPath = importFile;
-					txtSource.setText(importFile);
-					
-					readImportSource();
-					
-				}
+				handleSelectButton();
 				update();
 			}
 		});
 		btnSelect.setText(Messages.AbstractImportDialog_btnSelect_text);
 		
+		textFilter = new Text(container, SWT.BORDER);		
+		textFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 3, 1));
+		textFilter.addModifyListener(new ModifyListener()
+		{
+			public void modifyText(ModifyEvent e)
+			{			
+				stgFilter = textFilter.getText();	
+				checkBoxTableViewer.refresh();
+				if(ArrayUtils.isNotEmpty(checkedElements))
+					checkBoxTableViewer.setCheckedElements(checkedElements);
+			}
+		});
+		
+		btnResetFilter = new Button(container, SWT.NONE);
+		btnResetFilter.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				stgFilter = null;
+				textFilter.setText("");				
+			}
+		});
+		btnResetFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnResetFilter.setToolTipText(Messages.AbstractImportDialog_btnResetFilter_toolTipText);
+		btnResetFilter.setText(Messages.AbstractImportDialog_btnNewButton_text);
+		
 		checkBoxTableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
+		checkBoxTableViewer.setFilters(new ViewerFilter []{new NameFilter()});
 		checkBoxTableViewer.addCheckStateListener(new ICheckStateListener()
 		{
 			public void checkStateChanged(CheckStateChangedEvent event)
@@ -199,10 +247,22 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			{
 				Object element= event.getElement();
 				
+				TableItem tableItem = (TableItem) checkBoxTableViewer.testFindItem(element);
+				boolean checkState = tableItem.getChecked();
+				if(checkState)
+					checkedElements = ArrayUtils.add(checkedElements, element);
+				else
+					checkedElements = ArrayUtils.removeElement(checkedElements, element);
+				
+				// eingegraute Element koennen nicht gecheckt werden
 				if(checkBoxTableViewer.getGrayed(element))
+				{
 					checkBoxTableViewer.setChecked(element, false);
+					checkedElements = ArrayUtils.removeElement(checkedElements, element);
+				}
 			}
 		});
+
 
 		table = checkBoxTableViewer.getTable();
 		table.setLinesVisible(true);
@@ -220,6 +280,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		compositeButton.setLayout(new FillLayout(SWT.HORIZONTAL));
 		compositeButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 4, 1));
 		
+		// alle Elemente auf checked
 		Button btnSelectAll = new Button(compositeButton, SWT.NONE);
 		btnSelectAll.addSelectionListener(new SelectionAdapter()
 		{
@@ -234,6 +295,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 				{
 					Object item = checkBoxTableViewer.getElementAt(i);
 					checkBoxTableViewer.setChecked(item, !checkBoxTableViewer.getGrayed(item));
+					checkedElements = ArrayUtils.add(checkedElements, item);
 				}
 
 				update();
@@ -241,6 +303,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		});
 		btnSelectAll.setText(Messages.AbstractImportDialog_btnSelectAll_text);
 		
+		// alle Elemente auf unchecked
 		Button btnNoSelection = new Button(compositeButton, SWT.NONE);
 		btnNoSelection.addSelectionListener(new SelectionAdapter()
 		{
@@ -248,6 +311,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			public void widgetSelected(SelectionEvent e)
 			{
 				checkBoxTableViewer.setAllChecked(false);
+				checkedElements = null;
 				update();
 			}
 		});
@@ -272,6 +336,30 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		
 		return area;
 	}
+	
+	// Auswahle einer Importdatei mit dem FileDialog
+	protected void handleSelectButton()
+	{
+		importPath = null;
+		FileDialog dlg = new FileDialog(getShell());
+
+		// Change the title bar text
+		dlg.setText("Importverzeichnis");
+		dlg.setFilterExtensions(new String[]{"*.xmi","*.xml"}); //$NON-NLS-1$
+		dlg.setFilterPath(importPath);
+		
+		String importFile = dlg.open();
+		if (importFile != null)
+		{			
+			importPath = importFile;
+			txtSource.setText(importFile);
+			
+			readImportSource();
+			
+		}
+	
+
+	}
 
 	/**
 	 * Create contents of the button bar.
@@ -282,8 +370,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	{
 		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
 		okButton.setEnabled(false);
-		Button button = createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
+		cancelButton = createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
 		m_bindingContext = initDataBindings();
 		
 	}
@@ -292,7 +379,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	public abstract void readImportSource();
 	
 	// Daten werden importiert
-	public abstract void doImport();
+	public abstract void doImport(ExpImportData [] selectedData);
 	
 	public abstract void removeExistedObjects(List<EObject>importObjects);
 	
@@ -305,6 +392,10 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		m_bindingContext = initDataBindings();
 	}
 
+	public List<ExpImportData> getModelData()
+	{
+		return model.getData();
+	}
 	
 	
 	protected void init()
@@ -332,7 +423,16 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	{
 		if ((dialogSettings != null) && (StringUtils.isNotEmpty(importPath)))
 			dialogSettings.put(importSettingKey, importPath);
-		
+
+		if(ArrayUtils.isNotEmpty(checkedElements) && StringUtils.isNotEmpty(importPath))
+		{
+			selectedData = new ExpImportData[checkedElements.length];
+			System.arraycopy(checkedElements, 0, selectedData, 0,checkedElements.length);
+			
+			doImport(selectedData);
+		}
+
+		/*
 		Object [] result = checkBoxTableViewer.getCheckedElements();
 		if(ArrayUtils.isNotEmpty(result) && StringUtils.isNotEmpty(importPath))
 		{
@@ -341,6 +441,8 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			
 			doImport();
 		}
+		*/
+		
 		
 		super.okPressed();
 	}

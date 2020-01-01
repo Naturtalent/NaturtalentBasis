@@ -70,7 +70,7 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 
 	private File resultExportDir;
 
-	private CCombo exportComboDir;
+	protected CCombo exportComboDir;
 
 	private Button btnWorkingSet;
 
@@ -78,17 +78,22 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 
 	private CheckboxTreeViewer checkboxTreeViewer;
 
-	private Button okButton;
+	protected Button okButton;
+	
+	protected Composite compositeExportdir;
 
 	// DialogSettings Zielverzeichnis
 	private static final String EXPORT_DESTDIRS_SETTINGS = "export_sourcedirs_settings"; //$NON-NLS-1$
+	protected String destDirSetting = EXPORT_DESTDIRS_SETTINGS;
 
 	// DialogSetting Exportmodus (WorkingSet / Projekte)
 	private static final String EXPORT_DEST_SETTINGS = "export_source_settings"; //$NON-NLS-1$
+	protected String destSetting = EXPORT_DEST_SETTINGS;
+	
 	// private static final String EXPORT_OPTION_SETTINGS =
 	// "export_option_settings"; //$NON-NLS-1$
 
-	private IDialogSettings settings = WorkbenchSWTActivator.getDefault().getDialogSettings();
+	protected IDialogSettings settings = WorkbenchSWTActivator.getDefault().getDialogSettings();
 
 	WorkingSetManager wsManager = it.naturtalent.e4.project.ui.Activator.getWorkingSetManager();
 
@@ -122,7 +127,7 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 		container.setLayoutData(gd_container);
 
 		// Exportverzeichnis auswaehlen
-		Composite compositeExportdir = new Composite(container, SWT.NONE);
+		compositeExportdir = new Composite(container, SWT.NONE);
 		compositeExportdir.setLayoutData(
 				new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		compositeExportdir.setLayout(new GridLayout(3, false));
@@ -317,10 +322,10 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 	/*
 	 * UI-Elemente mit Settingwerten initialisieren
 	 */
-	private void init()
+	protected void init()
 	{
 		// Setting: Zielverzeichnisse
-		String[] sourcePaths = settings.getArray(EXPORT_DESTDIRS_SETTINGS);
+		String[] sourcePaths = settings.getArray(destDirSetting);
 		if(ArrayUtils.isNotEmpty(sourcePaths))
 		{
 			exportComboDir.setItems(sourcePaths);
@@ -328,7 +333,7 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 		}
 
 		// Setting: Quelle (Projekte oder Workingsets)
-		final boolean btnState = settings.getBoolean(EXPORT_DEST_SETTINGS);
+		final boolean btnState = settings.getBoolean(destSetting);
 
 		// DialogButtons entsprechend dis-/enablen
 		btnProject.setSelection(btnState);
@@ -368,9 +373,26 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 			exportComboDir.setText(dirPath);
 	}
 
-	private void updateWidgets()
+	protected boolean updateWidgets()
 	{
-		okButton.setEnabled((ArrayUtils.isNotEmpty(getCheckedProjects())));
+		if (okButton != null)
+		{
+			okButton.setEnabled(true);
+
+			if (StringUtils.isEmpty(exportComboDir.getText()))
+			{
+				okButton.setEnabled(false);
+				return false;
+			}
+
+			if (ArrayUtils.isEmpty(checkboxTreeViewer.getCheckedElements()))
+			{
+				okButton.setEnabled(false);
+				return false;
+			}
+		}
+		return true;
+
 	}
 
 	/*
@@ -423,7 +445,7 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 	 * Rueckgabe eines Arrays mit den gecheckten Projekten. Gecheckte
 	 * WorkingSets werden ignoriert.
 	 */
-	private IProject[] getCheckedProjects()
+	protected IProject[] getCheckedProjects()
 	{
 		Object[] result = checkboxTreeViewer.getCheckedElements();
 
@@ -447,7 +469,7 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 	 * Projekt/Workingset - Zielverzeichnis (es wird nur eine maximale Anzahl
 	 * (n=5) gespeichert - ZielOptionen (Filesystem, Zip-Datei)
 	 */
-	private void storeSettings()
+	protected void storeSettings()
 	{
 		String[] sourcePaths = null;
 
@@ -459,10 +481,10 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 		if (sourcePaths.length >= 6)
 			sourcePaths = ArrayUtils.removeAll(sourcePaths, 5);
 
-		settings.put(EXPORT_DESTDIRS_SETTINGS, sourcePaths);
+		settings.put(destDirSetting, sourcePaths);
 
 		// Status btnProject (Quelle Projekt / WorkingSet)
-		settings.put(EXPORT_DEST_SETTINGS, btnProject.getSelection());
+		settings.put(destSetting, btnProject.getSelection());
 	}
 
 	public IProject[] getResultExportSource()
