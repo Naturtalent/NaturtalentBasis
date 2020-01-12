@@ -64,6 +64,7 @@ public class Messages extends NLS {
 	public static String AbstractImportDialog_btnCheckOverwrite_text;
 	public static String AbstractImportDialog_btnNewButton_text;
 	public static String AbstractImportDialog_btnResetFilter_toolTipText;
+	
 
 	////////////////////////////////////////////////////////////////////////////
 	//

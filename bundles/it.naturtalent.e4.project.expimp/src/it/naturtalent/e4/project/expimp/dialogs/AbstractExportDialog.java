@@ -1,8 +1,6 @@
 package it.naturtalent.e4.project.expimp.dialogs;
 
-
 import java.io.File;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -17,18 +15,20 @@ import org.eclipse.e4.ui.internal.workbench.E4Workbench;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.IWorkbench;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
@@ -41,33 +41,35 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 
 import it.naturtalent.e4.project.expimp.ExpImportData;
 import it.naturtalent.e4.project.expimp.ExpImportDataModel;
-import it.naturtalent.e4.project.expimp.ecp.ECPExportHandlerHelper;
 import it.naturtalent.icons.core.Icon;
 import it.naturtalent.icons.core.IconSize;
 
-
-public abstract class AbstractExportDialog extends TitleAreaDialog //implements EventHandler
+public abstract class AbstractExportDialog extends TitleAreaDialog
 {
 	private DataBindingContext m_bindingContext;	
 	
 	public static final String EXPORTPATH_SETTING = "exportpathsetting"; //$NON-NLS-N$ 
 	protected String exportSettingKey = EXPORTPATH_SETTING;
-	
+
 	private IDialogSettings dialogSettings;
 	
 	protected Button okButton;
 	
-	protected CheckboxTableViewer tableViewer;
+	protected CheckboxTableViewer checkboxTableViewer;
 	
 	private ExpImportDataModel model = new ExpImportDataModel();
 	
+	// die gecheckten Elemente
 	protected ExpImportData [] selectedData;
 	
+	// Pfad der Exportdatei
 	protected File expFile;
-	
+
 	protected ExportDestinationComposite exportDestinationComposite;
 	
 	protected String exportPath;
@@ -75,12 +77,33 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	
 	protected static Shell shell;
 	
-		
 	private Table table;
-	private Composite compositeButton;
+	private Text textFilter;
 	private Button btnSelectAll;
 	private Button btnNoSelect;
 	private TableColumn tblclmnName;
+	private String stgFilter;
+	
+	// sammelt die gecheckten Element 
+	private Object [] checkedElements = null;
+	
+	// Ein Filter fuer die Exportdaten
+	private class NameFilter extends ViewerFilter
+	{
+		@Override
+		public boolean select(Viewer viewer, Object parentElement, Object element)
+		{					
+			if (element instanceof ExpImportData)
+			{	
+				String name = ((ExpImportData)element).getLabel();
+				if(StringUtils.isNotEmpty(stgFilter))					
+					return StringUtils.containsIgnoreCase(name, stgFilter);					
+			}
+			
+			return true;
+		}
+	}
+
 	
 	/**
 	 * Create the dialog.
@@ -88,7 +111,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	 */
 	public AbstractExportDialog(Shell parentShell)
 	{
-		super(parentShell);		
+		super(parentShell);
 	}
 	
 	/**
@@ -97,22 +120,49 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent)
-	{		
+	{
 		setTitleImage(Icon.WIZBAN_EXPORT.getImage(IconSize._75x66_TitleDialogIconSize));
 		setTitle("Export");
 		setMessage("die ausgewählten Einträge in einer Datei speichern");
+
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		GridData gd_container = new GridData(GridData.FILL_BOTH);
-		gd_container.verticalAlignment = SWT.TOP;
-		container.setLayoutData(gd_container);
+		container.setLayout(new GridLayout(2, false));
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		exportDestinationComposite = new ExportDestinationComposite(container, SWT.NONE);
-		exportDestinationComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));	
+		exportDestinationComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		
-		tableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
-		tableViewer.addCheckStateListener(new ICheckStateListener()
+		textFilter = new Text(container, SWT.BORDER);
+		textFilter.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textFilter.addModifyListener(new ModifyListener()
+		{
+			public void modifyText(ModifyEvent e)
+			{			
+				stgFilter = textFilter.getText();	
+				checkboxTableViewer.refresh();
+				if(ArrayUtils.isNotEmpty(checkedElements))
+					checkboxTableViewer.setCheckedElements(checkedElements);
+			}
+		});
+		
+		Button btnLoeschen = new Button(container, SWT.NONE);
+		btnLoeschen.setToolTipText("Filter zurücksetzen");
+		btnLoeschen.addSelectionListener(new SelectionAdapter()
+		{
+			@Override
+			public void widgetSelected(SelectionEvent e)
+			{
+				stgFilter = null;
+				textFilter.setText("");		
+			}
+		});
+		btnLoeschen.setText("löschen");
+		
+		checkboxTableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
+		checkboxTableViewer.setFilters(new ViewerFilter []{new NameFilter()});
+		checkboxTableViewer.setComparator(new ViewerComparator());
+		checkboxTableViewer.addCheckStateListener(new ICheckStateListener()
 		{
 			public void checkStateChanged(CheckStateChangedEvent event)
 			{
@@ -120,20 +170,42 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 			}
 		});
 		
-		table = tableViewer.getTable();
-		GridData gd_table = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-		gd_table.heightHint = 432;
-		table.setLayoutData(gd_table);
+		checkboxTableViewer.addCheckStateListener(new ICheckStateListener()
+		{			
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event)
+			{
+				Object element= event.getElement();
+				
+				TableItem tableItem = (TableItem) checkboxTableViewer.testFindItem(element);
+				boolean checkState = tableItem.getChecked();
+				if(checkState)
+					checkedElements = ArrayUtils.add(checkedElements, element);
+				else
+					checkedElements = ArrayUtils.removeElement(checkedElements, element);
+				
+				// eingegraute Element koennen nicht gecheckt werden
+				if(checkboxTableViewer.getGrayed(element))
+				{
+					checkboxTableViewer.setChecked(element, false);
+					checkedElements = ArrayUtils.removeElement(checkedElements, element);
+				}
+			}
+		});
+		
+		table = checkboxTableViewer.getTable();
+		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 2, 1));
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 		
 		tblclmnName = new TableColumn(table, SWT.NONE);
 		tblclmnName.setWidth(400);
 		tblclmnName.setText("Name");
+
 		
-		
-		compositeButton = new Composite(container, SWT.NONE);
+		Composite compositeButton = new Composite(container, SWT.NONE);
 		compositeButton.setLayout(new FillLayout(SWT.HORIZONTAL));
+		compositeButton.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1));
 		
 		btnSelectAll = new Button(compositeButton, SWT.NONE);
 		btnSelectAll.addSelectionListener(new SelectionAdapter()
@@ -141,11 +213,11 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				tableViewer.setAllChecked(true);
+				checkboxTableViewer.setAllChecked(true);
 				update();
 			}
 		});
-		btnSelectAll.setText("alle auswählen"); //$NON-NLS-N$
+		btnSelectAll.setText("alle auswählen");
 		
 		btnNoSelect = new Button(compositeButton, SWT.NONE);
 		btnNoSelect.addSelectionListener(new SelectionAdapter()
@@ -153,13 +225,12 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				tableViewer.setAllChecked(false);
+				checkboxTableViewer.setAllChecked(false);
 				update();
 			}
 		});
 		btnNoSelect.setText("keine auswählen");
-		
-	
+
 		// ab jetzt ueberwacht der Broker Eingaben in 'ExportDestinationComposite'
 		MApplication currentApplication = E4Workbench.getServiceContext().get(IWorkbench.class).getApplication();
 		IEventBroker eventBroker = currentApplication.getContext().get(IEventBroker.class);
@@ -168,10 +239,10 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 			
 		m_bindingContext = initDataBindings();
 		init();
-		
+
 		return area;
 	}
-	
+
 	/**
 	 * Create contents of the button bar.
 	 * @param parent
@@ -181,12 +252,21 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	{
 		okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,true);
 		okButton.setEnabled(false);
-		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);				
+		createButton(parent, IDialogConstants.CANCEL_ID,IDialogConstants.CANCEL_LABEL, false);
+	}
+
+	/**
+	 * Return the initial size of the dialog.
+	 */
+	@Override
+	protected Point getInitialSize()
+	{
+		return new Point(450, 765);
 	}
 	
 	protected void update()
 	{
-		if(tableViewer.getCheckedElements().length == 0)
+		if(checkboxTableViewer.getCheckedElements().length == 0)
 		{
 			okButton.setEnabled(false);
 			return;
@@ -204,7 +284,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 				exportDestinationComposite.setExportPath(exportPath);
 		}		
 	}
-	
+
 	public void setModelData(List<ExpImportData>expimpdata)
 	{
 		if(m_bindingContext != null)
@@ -217,16 +297,10 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 	{
 		return selectedData;
 	}
-
-	public abstract void doExport();
 	
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize()
+	public String getExportPath()
 	{
-		return new Point(450, 727);
+		return exportPath;
 	}
 
 	@Override
@@ -235,49 +309,13 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 		if ((dialogSettings != null) && (StringUtils.isNotEmpty(exportPath)))
 			dialogSettings.put(exportSettingKey, exportPath);
 		
-		Object [] result = tableViewer.getCheckedElements();
-		if(ArrayUtils.isNotEmpty(result) && StringUtils.isNotEmpty(exportPath))
+		if(ArrayUtils.isNotEmpty(checkedElements) && StringUtils.isNotEmpty(exportPath))
 		{
-			selectedData = new ExpImportData[result.length];
-			System.arraycopy(result, 0, selectedData, 0,result.length);
-			
-			expFile = new File(exportPath);
-			if(expFile.exists())
-			{
-				if(!MessageDialog.openQuestion(getShell(), "Export", "vorhandene Datei überschreiben ?")) //$NON-NLS-N$
-						return;				
-			}
-			doExport();
+			selectedData = new ExpImportData[checkedElements.length];
+			System.arraycopy(checkedElements, 0, selectedData, 0,checkedElements.length);
 		}
 				
 		super.okPressed();
-	}
-	
-	/**
-	 * Export EMF Modeldata 'eObjects' in die ausgewaehlte Datei. 
-	 * 	  
-	 * @param exportPath
-	 * @param eObjects
-	 */
-	public void exportEMFModeData()
-	{
-		// die zum Export selektioerten EObjects auflisten
-		final List<EObject>eObjects = new LinkedList<EObject>();				
-		for(ExpImportData expImpData : selectedData)
-		{
-			Object obj = expImpData.getData();
-			if (obj instanceof EObject)				
-				eObjects.add(EcoreUtil.copy((EObject) obj));				
-		}	
-				
-		// Dateiname des Properties generieren und Daten exportieren
-		shell.getDisplay().syncExec(new Runnable()
-		{
-			public void run()
-			{
-				ECPExportHandlerHelper.export(shell, eObjects, exportPath);
-			}
-		});
 	}
 
 	protected DataBindingContext initDataBindings() {
@@ -285,11 +323,11 @@ public abstract class AbstractExportDialog extends TitleAreaDialog //implements 
 		//
 		ObservableListContentProvider listContentProvider = new ObservableListContentProvider();
 		IObservableMap observeMap = BeansObservables.observeMap(listContentProvider.getKnownElements(), ExpImportData.class, "label");
-		tableViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
-		tableViewer.setContentProvider(listContentProvider);
+		checkboxTableViewer.setLabelProvider(new ObservableMapLabelProvider(observeMap));
+		checkboxTableViewer.setContentProvider(listContentProvider);
 		//
 		IObservableList dataModelObserveList = BeanProperties.list("data").observe(model);
-		tableViewer.setInput(dataModelObserveList);
+		checkboxTableViewer.setInput(dataModelObserveList);
 		//
 		return bindingContext;
 	}

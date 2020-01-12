@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Text;
 public class ExportDestinationComposite extends Composite
 {
 	private Text textDestFile;
+	private Label lblDestFile;
 	private Button btnSelectDir;
 	
 	private CCombo comboDestDir;
@@ -82,7 +83,7 @@ public class ExportDestinationComposite extends Composite
 		});
 		btnSelectDir.setText("auswählen"); //$NON-NLS-N$
 		
-		Label lblDestFile = new Label(this, SWT.NONE);
+		lblDestFile = new Label(this, SWT.NONE);
 		lblDestFile.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblDestFile.setText("Dateiname"); //$NON-NLS-N$
 		
@@ -113,9 +114,12 @@ public class ExportDestinationComposite extends Composite
 		
 		if(StringUtils.isEmpty(comboDestDir.getText()))
 			controlDecorationDestDir.show();
-				
-		if(StringUtils.isEmpty(textDestFile.getText()))
-			controlDecorationDestFile.show();
+		
+		if (!textDestFile.isDisposed())
+		{
+			if (StringUtils.isEmpty(textDestFile.getText()))
+				controlDecorationDestFile.show();
+		}
 		
 		postEventBroker();
 	}
@@ -129,13 +133,20 @@ public class ExportDestinationComposite extends Composite
 			String expDir = comboDestDir.getText();
 			if(StringUtils.isNotEmpty(expDir))
 			{
-				String expFile = textDestFile.getText();								
-				if(StringUtils.isNotEmpty(expFile))
+				if (!textDestFile.isDisposed())
 				{
-					File dir = new File(expDir);
-					expFile = FilenameUtils.removeExtension(expFile)+".xmi";
-					File path = new File(dir,expFile);
-					exportPath = path.getPath();
+					String expFile = textDestFile.getText();
+					if (StringUtils.isNotEmpty(expFile))
+					{
+						File dir = new File(expDir);
+						expFile = FilenameUtils.removeExtension(expFile) + ".xmi";
+						File path = new File(dir, expFile);
+						exportPath = path.getPath();
+					}
+				}
+				else
+				{
+					exportPath = expDir; 
 				}
 			}			
 			eventBroker.post(EXPORTDESTINATION_EVENT, exportPath);
@@ -161,13 +172,32 @@ public class ExportDestinationComposite extends Composite
 	public void setExportPath(String exportPath)
 	{
 		comboDestDir.setText("");
-		textDestFile.setText("");		
-		if(StringUtils.isNotEmpty(exportPath))
+		
+		if (!textDestFile.isDisposed())
 		{
-			comboDestDir.setText(FilenameUtils.getFullPath(exportPath));
-			comboDestDir.add(comboDestDir.getText());
-			textDestFile.setText(FilenameUtils.getName(exportPath));
-		}	
+			textDestFile.setText("");
+			if (StringUtils.isNotEmpty(exportPath))
+			{
+				// 'exportPath' - aufsplitten in Verzeichnis und Datei
+				comboDestDir.setText(FilenameUtils.getFullPath(exportPath));
+				comboDestDir.add(comboDestDir.getText());
+				textDestFile.setText(FilenameUtils.getName(exportPath));
+			}
+		}
+		else
+		{
+			// 'exportPath' unveraendert in die Combo eintragen
+			comboDestDir.setText(exportPath);
+			comboDestDir.add(exportPath);
+		}
+			
+	}
+	
+	// eine Dateieingabe ausblenden - Composite ermoeglicht nur noch die Auswahl eines Verzeichnisses
+	public void disposeFileWidget()
+	{
+		textDestFile.dispose();
+		lblDestFile.dispose();
 	}
 
 	public void setEventBroker(IEventBroker eventBroker)

@@ -197,7 +197,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
-				handleSelectButton();
+				handleSelectButton();				
 				update();
 			}
 		});
@@ -383,7 +383,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	
 	public abstract void removeExistedObjects(List<EObject>importObjects);
 	
-	// Die ExpImportDaten in Modell einlesen	
+	// Die ExpImportDaten in Modell einlesen und im Viewer anzeigen	
 	public void setModelData(List<ExpImportData>expimpdata)
 	{
 		if(m_bindingContext != null)
