@@ -148,9 +148,7 @@ public class NtProjectView
 	}
 
 	/**
-	 * Die Selektion einer Resource im ResourceNavigator wurde empfangen.
-	 * Aenderungen den dem letzten selektierten NtProject werden festgeschrieben
-	 * 
+	 * WorkingSet wurde selektiert - Projekt-Properties ausblenden
 	 * @param selectedResource
 	 */
 	@Inject
@@ -160,9 +158,10 @@ public class NtProjectView
 	{	
 		if (workingSet != null)
 		{
-			EClass loginClass = ProjectPackage.eINSTANCE.getNtProject();
-			NtProject ntProject = (NtProject) EcoreUtil.create(loginClass);
-			showDetails(ntProject);
+			//EClass loginClass = ProjectPackage.eINSTANCE.getNtProject();
+			//NtProject ntProject = (NtProject) EcoreUtil.create(loginClass);
+			//showDetails(ntProject);
+			showDetails(null);
 		}
 	}
 
@@ -216,7 +215,10 @@ public class NtProjectView
 	}
 	
 	/*
-	 * Modellaenderungen festschreiben
+	 * Aenderungen am Projekt festschreiben.
+	 * 
+	 * Im Prinzip wird bei jeder Selektionsaenderung (auch die Deselektion ist eine Aenderung) geprueft, ob eine 
+	 * Aenderung am Modell eingetreten ist und wenn ja, wird diese festgeschrieben. 
 	 * 
 	 */
 	private void commitLastSelection(IProject iProject, EPartService partService, EModelService modelService)
@@ -229,10 +231,8 @@ public class NtProjectView
 				// gab es ueberhaupt eine Modellaenderung
 				if (Activator.getECPProject().hasDirtyContents())
 				{
-
 					NtProject ntProject = (NtProject) selectedNtProject;
-					iProject = ResourcesPlugin.getWorkspace().getRoot()
-							.getProject(ntProject.getId());
+					iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(ntProject.getId());
 					if (iProject.exists())
 					{
 						try
@@ -273,7 +273,9 @@ public class NtProjectView
 	
 
 	/**
-	 * Das Object 'eObject' (NtProject) anzeigen
+	 * Das Object 'eObject' (NtProject) anzeigen.
+	 * 
+	 * Seite ist unsichtbar, wenn Parameter 'null'
 	 * 
 	 * @param eObject
 	 */
@@ -295,6 +297,7 @@ public class NtProjectView
 				
 				render = ECPSWTViewRenderer.INSTANCE.render(projectComposite, eObject);
 				
+				projectComposite.setVisible(true);				
 				projectComposite.setExpandHorizontal(true);
 				projectComposite.setExpandVertical(true);
 				projectComposite.setContent(render.getSWTControl());
@@ -315,6 +318,7 @@ public class NtProjectView
 				// NtProperties anzeigen
 				render = ECPSWTViewRenderer.INSTANCE.render(propertyComposite,property);
 				
+				propertyComposite.setVisible(true);				
 				propertyComposite.setExpandHorizontal(true);
 				propertyComposite.setExpandVertical(true);
 				propertyComposite.setContent(render.getSWTControl());
@@ -326,7 +330,13 @@ public class NtProjectView
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}	
+		}
+		else
+		{
+			// Seite (alle Composites) nicht sichtbar
+			projectComposite.setVisible(false);
+			propertyComposite.setVisible(false);
+		}
 	}
 	
 	/*

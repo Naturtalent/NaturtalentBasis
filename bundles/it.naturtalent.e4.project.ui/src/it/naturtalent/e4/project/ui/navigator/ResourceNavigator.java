@@ -411,7 +411,7 @@ public class ResourceNavigator implements IResourceNavigator
 			{		
 				if (selectionService != null)
 				{					
-					autocommit();
+					//autocommit();
 										
 					IStructuredSelection selection = ((IStructuredSelection) event.getSelection());
 					Object selObj = selection.getFirstElement();
@@ -421,8 +421,7 @@ public class ResourceNavigator implements IResourceNavigator
 						// @see SystemOpenHandler
 
 						if (eventBroker != null)
-							eventBroker.send(NAVIGATOR_EVENT_SELECTED,
-									selection.toList());
+							eventBroker.send(NAVIGATOR_EVENT_SELECTED,selection.toList());
 						
 						if (selObj instanceof IResource)
 						{
@@ -489,7 +488,7 @@ public class ResourceNavigator implements IResourceNavigator
 	 * Als 'bisherig' wird das im Detailfenster 'ProjctView' angezeigte definiert. 
 	 */
 	
-	
+	@Deprecated
 	private void autocommit()
 	{
 		// wird im 'ProjectView' momentan die Eigenschaft eines Projekts angezeigt 

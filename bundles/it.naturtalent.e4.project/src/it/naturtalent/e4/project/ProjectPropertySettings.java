@@ -42,15 +42,17 @@ public class ProjectPropertySettings
 	 * @param iProject
 	 * @return
 	 */
+	@Deprecated
 	public ProjectPropertyData get(IProject iProject)
 	{
-		System.out.println("it.naturtalent.e4.project.ProjectPropertySettings get() - entfernen wegen JAXB");
+		System.out.println("it.naturtalent.e4.project.ProjectPropertySettings get() - entfernen wegen JAXB Deprecation in Java 8");
 		
 		/*
 		InputStream in = getProjectDataInputStream(iProject);
 		if (in != null)
 			return (ProjectPropertyData) JAXB.unmarshal(in, ProjectPropertyData.class);
 			*/
+
 		
 		return null;
 	}

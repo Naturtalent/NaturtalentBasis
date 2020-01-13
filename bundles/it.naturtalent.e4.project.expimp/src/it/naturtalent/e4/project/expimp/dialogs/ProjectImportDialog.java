@@ -2,6 +2,7 @@ package it.naturtalent.e4.project.expimp.dialogs;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.InvocationTargetException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.ui.internal.workbench.swt.WorkbenchSWTActivator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -23,7 +25,9 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -36,6 +40,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -194,13 +199,16 @@ public class ProjectImportDialog extends TitleAreaDialog
 	// Textfeld zur Eingabe eines Suchstrings
 	private Text txtSeek;
 	
+	private Shell parentShell;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
 	public ProjectImportDialog(Shell parentShell)
-	{
-		super(parentShell);		
+	{		
+		super(parentShell);
+		this.parentShell = parentShell;
 	}
 
 	/**
@@ -439,7 +447,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 	 * 
 	 * @param importDirPath
 	 */
-	private void initViewer(String importDirPath)
+	private void initViewer(final String importDirPath)
 	{
 		List <NtProject>ntProjects = readImportFiles(importDirPath);		
 		checkboxTableViewer.setInput(ntProjects);	
@@ -487,6 +495,8 @@ public class ProjectImportDialog extends TitleAreaDialog
 	private void disableExistObjects(List<NtProject>importedNtProjects)
 	{		
 		boolean showExistsMessage = false;
+		setErrorMessage(null);
+		
 		for(NtProject ntProject : importedNtProjects)
 		{
 			String id = ntProject.getId();
@@ -499,7 +509,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 		}
 		
 		if(showExistsMessage)
-			setErrorMessage("nicht alle Projekte können importiert werden, da sie bereits existieren");
+			setErrorMessage("nicht alle Projekte können importiert werden, da sie bereits existieren"); //$NON-NLS-N$
 		
 		checkboxTableViewer.refresh();
 	}

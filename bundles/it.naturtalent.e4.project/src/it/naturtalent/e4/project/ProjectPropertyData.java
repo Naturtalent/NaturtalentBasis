@@ -20,6 +20,7 @@ import java.beans.PropertyChangeEvent;
  * @author dieter
  *
  */
+@Deprecated
 //@XmlRootElement(name="propertyData")
 public class ProjectPropertyData extends BaseBean
 {

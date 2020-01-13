@@ -28,6 +28,7 @@ import it.naturtalent.e4.project.ui.Activator;
 import it.naturtalent.e4.project.ui.emf.NtProjectProperty;
 import it.naturtalent.e4.project.ui.navigator.WorkbenchContentProvider;
 
+@Deprecated
 public class OpenProjectWizard extends Wizard
 {
 	
