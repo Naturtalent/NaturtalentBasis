@@ -269,13 +269,23 @@ public class ProjectImportDialog extends TitleAreaDialog
 				String dir = dlg.open();
 				if (dir != null)
 				{
+					
+					dir = checkImportDirectory(dir);					
+					if(StringUtils.isNotEmpty(dir))
+					{
+						
+					
+					
+					
 					// das ausgewaehlte Verzeichnis in die Combobox uebernehmen
 					comboSourceDir.setText(dir);
 					
 					// Viewer mit den Projekten aus der 'browse'-Button Selektion initialisieen
-					initViewer(comboSourceDir.getText());					
+					//initViewer(comboSourceDir.getText());
+					initViewer(dir);
 					
 					updateWidgets();
+					}
 				}
 			}
 		});
@@ -583,6 +593,61 @@ public class ProjectImportDialog extends TitleAreaDialog
 		if(okButton != null)
 			okButton.setEnabled(checkboxTableViewer.getCheckedElements().length > 0);
 	}
+
+	
+	private String checkImportDirectory(String dir)
+	{
+		File checkDir = new File(dir);
+		if(StringUtils.contains(checkDir.getPath(), ExportNtProjectDialog.EXPORT_DIRECTORY))
+			return dir;
+		
+		List<File>impDirs = new ArrayList<File>();
+		File[] subdirs = checkDir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
+		if (ArrayUtils.isNotEmpty(subdirs))
+		{
+			for(File subDir : subdirs)
+			{			
+				if(StringUtils.contains(subDir.getPath(), ExportNtProjectDialog.EXPORT_DIRECTORY))
+					impDirs.add(subDir);
+				
+			}
+			
+			if(impDirs.size() == 1)
+				return impDirs.get(0).getPath();
+			
+			SelectImportDirectoryDialog selectDirectoryDialog = new SelectImportDirectoryDialog(parentShell);
+			selectDirectoryDialog.create();
+			selectDirectoryDialog.setImportDirectories(impDirs);
+			if(selectDirectoryDialog.open() == SelectImportDirectoryDialog.OK)
+				return selectDirectoryDialog.getSelectedDir().getPath();
+		}
+		
+		return null;
+	}
+	
+	/*
+	private String checkImportDirectory(String dir)
+	{
+		String checkedDir;
+		StringBuilder dirPathBuilder = new StringBuilder();
+		String [] tokens = StringUtils.split(dir, File.separator);
+		for(String token : tokens)
+		{
+			dirPathBuilder.append(token);
+			dirPathBuilder.append(File.separator);
+			if(StringUtils.contains(dirPathBuilder.toString(), ExportNtProjectDialog.EXPORT_DIRECTORY))
+				break;
+		}
+				
+		checkedDir = dirPathBuilder.toString();
+		checkedDir = StringUtils.removeEnd(checkedDir, File.separator);
+		if(StringUtils.contains(checkedDir, ExportNtProjectDialog.EXPORT_DIRECTORY))
+			return checkedDir;
+		
+		
+		return null;
+	}
+	*/
 
 	@Override
 	protected void okPressed()
