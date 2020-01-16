@@ -87,7 +87,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	protected List<ExpImportData>lexpimpdata;
 	
 	private ExpImportDataModel model = new ExpImportDataModel();	
-	protected ExpImportData [] selectedData;
+	private ExpImportData [] selectedData;
 	
 	private Button okButton;
 	protected Button cancelButton;
@@ -379,9 +379,9 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	public abstract void readImportSource();
 	
 	// Daten werden importiert
-	public abstract void doImport(ExpImportData [] selectedData);
+	//public abstract void doImport(ExpImportData [] selectedData);
 	
-	public abstract void removeExistedObjects(List<EObject>importObjects);
+	//public abstract void removeExistedObjects(List<EObject>importObjects);
 	
 	// Die ExpImportDaten in Modell einlesen und im Viewer anzeigen	
 	public void setModelData(List<ExpImportData>expimpdata)
@@ -429,7 +429,7 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 			selectedData = new ExpImportData[checkedElements.length];
 			System.arraycopy(checkedElements, 0, selectedData, 0,checkedElements.length);
 			
-			doImport(selectedData);
+			//doImport(selectedData);
 		}
 
 		/*
@@ -447,7 +447,6 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 		super.okPressed();
 	}
 	
-
 	/**
 	 * Return the initial size of the dialog.
 	 */
@@ -456,8 +455,19 @@ public abstract class AbstractImportDialog extends TitleAreaDialog
 	{
 		return new Point(450, 673);
 	}
-
 	
+	
+	
+	public String getImportPath()
+	{
+		return importPath;
+	}
+
+	public ExpImportData[] getSelectedData()
+	{
+		return selectedData;
+	}
+
 	protected DataBindingContext initDataBindings() {
 		DataBindingContext bindingContext = new DataBindingContext();
 		//
