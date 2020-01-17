@@ -85,6 +85,10 @@ public class ProjectSearchOperation implements IRunnableWithProgress
 			if (item instanceof IProject)
 			{
 				IProject iProject = (IProject) item;
+				
+				if(!iProject.exists())
+					continue;
+					
 				String projectName = null;
 				try
 				{
