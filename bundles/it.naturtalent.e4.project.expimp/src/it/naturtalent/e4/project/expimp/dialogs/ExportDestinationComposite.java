@@ -70,14 +70,15 @@ public class ExportDestinationComposite extends Composite
 			@Override
 			public void widgetSelected(SelectionEvent e)
 			{
+				// Verzeichnisdialog erstellen
 				DirectoryDialog dlg = new DirectoryDialog(getShell());
-				
-				// Change the title bar text
 				dlg.setText("Exportverzeichnis"); //$NON-NLS-N$
 				dlg.setFilterPath(comboDestDir.getText());
-				
+
+				// Verzeichnis auswaehlen
 				String exportDirectory = dlg.open();
 				comboDestDir.setText(StringUtils.isNotEmpty(exportDirectory) ? exportDirectory : ""); //$NON-NLS-1$
+				
 				updateWidgets();					
 			}
 		});
@@ -121,15 +122,18 @@ public class ExportDestinationComposite extends Composite
 				controlDecorationDestFile.show();
 		}
 		
+		// Pfadstatus an ParentUI posten
 		postEventBroker();
 	}
 	
+	// posted den aktuellen Pfadstatus der File-/Vezeichniseinheit
 	private void postEventBroker()
 	{
 		String exportPath = null;
 		
 		if(eventBroker != null)
 		{
+			// Pfad 'null' wenn kein Verzeichnis selektiert ist
 			String expDir = comboDestDir.getText();
 			if(StringUtils.isNotEmpty(expDir))
 			{
@@ -138,6 +142,7 @@ public class ExportDestinationComposite extends Composite
 					String expFile = textDestFile.getText();
 					if (StringUtils.isNotEmpty(expFile))
 					{
+						// vollstaendiger Pfad mit Dateinamenserweiterung 'xmi'
 						File dir = new File(expDir);
 						expFile = FilenameUtils.removeExtension(expFile) + ".xmi";
 						File path = new File(dir, expFile);
@@ -146,6 +151,7 @@ public class ExportDestinationComposite extends Composite
 				}
 				else
 				{
+					// nur das Verzeichnis, wenn kein Dateiname eingegeben wurde
 					exportPath = expDir; 
 				}
 			}			

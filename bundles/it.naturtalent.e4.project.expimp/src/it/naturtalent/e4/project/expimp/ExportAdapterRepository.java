@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ExportAdapterRepository implements IExportAdapterRepository
 {
 	
-	private static final String GENERAL_CONTEXT = "General";
+	private static final String GENERAL_CONTEXT = "Allgemein";
 	
 	private static List<IExportAdapter>exportAdapters = new ArrayList<IExportAdapter>();
 	

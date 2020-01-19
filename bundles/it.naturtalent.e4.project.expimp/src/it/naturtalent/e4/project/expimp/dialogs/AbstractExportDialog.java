@@ -130,6 +130,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 		container.setLayout(new GridLayout(2, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
+		// Composite zur Eingabe der Directory-/Filedaten 
 		exportDestinationComposite = new ExportDestinationComposite(container, SWT.NONE);
 		exportDestinationComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		
@@ -162,6 +163,8 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 		checkboxTableViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
 		checkboxTableViewer.setFilters(new ViewerFilter []{new NameFilter()});
 		checkboxTableViewer.setComparator(new ViewerComparator());
+		
+		/*
 		checkboxTableViewer.addCheckStateListener(new ICheckStateListener()
 		{
 			public void checkStateChanged(CheckStateChangedEvent event)
@@ -169,6 +172,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 				update();
 			}
 		});
+		*/
 		
 		checkboxTableViewer.addCheckStateListener(new ICheckStateListener()
 		{			
@@ -190,6 +194,8 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 					checkboxTableViewer.setChecked(element, false);
 					checkedElements = ArrayUtils.removeElement(checkedElements, element);
 				}
+				
+				update();
 			}
 		});
 		
@@ -214,6 +220,10 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 			public void widgetSelected(SelectionEvent e)
 			{
 				checkboxTableViewer.setAllChecked(true);
+				List<ExpImportData>lData =  model.getData();
+				checkedElements = new ExpImportData[lData.size()];
+				checkedElements = lData.toArray(checkedElements);
+				
 				update();
 			}
 		});
@@ -226,6 +236,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 			public void widgetSelected(SelectionEvent e)
 			{
 				checkboxTableViewer.setAllChecked(false);
+				checkedElements = null;
 				update();
 			}
 		});
@@ -266,12 +277,15 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 	
 	protected void update()
 	{
-		if(checkboxTableViewer.getCheckedElements().length == 0)
+		if (!checkboxTableViewer.getTable().isDisposed())
 		{
-			okButton.setEnabled(false);
-			return;
+			if (checkboxTableViewer.getCheckedElements().length == 0)
+			{
+				okButton.setEnabled(false);
+				return;
+			}
+			okButton.setEnabled(StringUtils.isNotEmpty(exportPath));
 		}
-		okButton.setEnabled(StringUtils.isNotEmpty(exportPath));
 	}
 	
 	protected void init()
