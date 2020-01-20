@@ -318,6 +318,7 @@ public class DateFilterComposite extends Composite
 				{
 					// Radio mit dem SettingKey selektieren und Type in Options setzen
 					typeButton.setSelection(true);
+					filterOptions.setFilterType(DateFilterEnum.valueOf(typeKey));	
 					filterOptions.setFilterMap(DateFilterEnum.valueOf(typeKey));
 				}
 				else
