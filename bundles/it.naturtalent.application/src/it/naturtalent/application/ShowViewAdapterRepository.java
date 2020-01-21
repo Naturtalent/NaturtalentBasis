@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 public class ShowViewAdapterRepository implements IShowViewAdapterRepository
 {
 
-	private static final String GENERAL_CONTEXT = "General";
+	private static final String GENERAL_CONTEXT = "Allgemein";
 	
 	private static List<IShowViewAdapter>showViewAdapters = new ArrayList<IShowViewAdapter>();
 	

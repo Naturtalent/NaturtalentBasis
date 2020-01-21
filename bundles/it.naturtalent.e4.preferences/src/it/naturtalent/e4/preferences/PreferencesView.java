@@ -32,7 +32,7 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 
 public class PreferencesView
 {
-	private static final String GENERAL_WIZARD_LABEL = "General";
+	private static final String GENERAL_WIZARD_LABEL = "Allgemein";
 	private IPreferenceRegistry preferenceRegistry;
 	private TreeViewer treeViewer;
 	private PreferenceNodeComposite preferenceNodeComposite;

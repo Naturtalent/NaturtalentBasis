@@ -64,12 +64,6 @@
          unpack="false"/>
 
    <plugin
-         id="it.naturtalent.e4.project.viewmodel"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="it.naturtalent.application"
          download-size="0"
          install-size="0"
@@ -117,12 +111,6 @@
 
    <plugin
          id="it.naturtalent.e4.search"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="it.naturtalent.e4.update"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

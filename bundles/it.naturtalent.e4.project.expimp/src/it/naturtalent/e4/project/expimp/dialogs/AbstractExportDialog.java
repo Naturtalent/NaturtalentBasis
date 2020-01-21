@@ -288,6 +288,7 @@ public abstract class AbstractExportDialog extends TitleAreaDialog
 		}
 	}
 	
+	// mit Dialogsettings vorbelegen 
 	protected void init()
 	{
 		dialogSettings= WorkbenchSWTActivator.getDefault().getDialogSettings();		
