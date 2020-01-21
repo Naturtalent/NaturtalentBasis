@@ -85,7 +85,7 @@ public class DateFilterOptions
 		// der aktuell eingestellte Filterzeitpunkt im Calendarformat
 		Calendar filterCal0 = Calendar.getInstance();
 		Date [] date = filterMap.get(filterType);
-		if(date[0] == null)
+		if(ArrayUtils.isEmpty(date) || date[0] == null)
 		{
 			MessageDialog.openError(Display.getDefault().getActiveShell(),
 					"Datumsfilter", "Datumsangabe unklar");// $NON-NLS-N$
@@ -191,6 +191,10 @@ public class DateFilterOptions
 	private long getResourceDate(IResource resource)
 	{
 		long resourceDate = 0L;		
+		
+		if(!resource.exists())
+			return resourceDate;
+
 		
 		// letzte Aenderung an der Resource checken
 		if(filterBase == BaseFilterEnum.MODIFY_BASED)
