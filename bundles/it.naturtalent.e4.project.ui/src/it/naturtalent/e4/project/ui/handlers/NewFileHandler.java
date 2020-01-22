@@ -12,6 +12,7 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Shell;
 
+@Deprecated
 public class NewFileHandler extends SelectedResourcesUtils
 {
 

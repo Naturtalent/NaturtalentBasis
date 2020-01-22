@@ -19,6 +19,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Shell;
 
+@Deprecated
 public class NewFileAction extends Action
 {
 
