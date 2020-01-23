@@ -121,8 +121,7 @@ public class DeleteResources
 										Activator.projectQueue.remove(iProject.getName());
 											
 										// project loeschen
-										iProject.delete(true, true, new SubProgressMonitor(
-												monitor, 1));
+										iProject.delete(true, true, new SubProgressMonitor(monitor, 1));
 																				
 									}
 									break;

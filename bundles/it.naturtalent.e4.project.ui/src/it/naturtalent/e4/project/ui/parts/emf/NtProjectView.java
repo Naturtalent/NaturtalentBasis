@@ -206,12 +206,14 @@ public class NtProjectView
 		if(eObject == null)
 		{
 			// ein 'leeres' NtProject anzeigen
-			EClass projectClass = ProjectPackage.eINSTANCE.getNtProject();
-			NtProject ntProject = (NtProject) EcoreUtil.create(projectClass);
-			showDetails(ntProject);
+			//EClass projectClass = ProjectPackage.eINSTANCE.getNtProject();
+			//NtProject ntProject = (NtProject) EcoreUtil.create(projectClass);
+			///showDetails(ntProject);
+			showDetails(null);
 		}
 		
 		else showDetails(selectedNtProject);
+
 	}
 	
 	/*

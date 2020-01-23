@@ -82,9 +82,7 @@ public class DeleteResourceHandler extends SelectedResourcesUtils
 					null,
 					Messages.DeleteResourceHandler_resourcesdelete,
 					MessageDialog.NONE,
-					new String[]
-						{ IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL },
-					0);
+					new String[]{ IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL },0);
 			if(dialog.open() == MessageDialog.OK)
 			{								
 				DeleteResources.deleteResources(shell, selectedResources, ntProjektDataFactoryRepository);				
