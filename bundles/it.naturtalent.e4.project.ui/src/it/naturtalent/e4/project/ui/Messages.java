@@ -253,6 +253,10 @@ public class Messages extends NLS {
 	public static String ProjectQueueDialog_this_message;
 	public static String ProjectQueueDialog_btnNewButton_text;
 	public static String ProjectQueueDialog_btnNewButton_text_1;
+	public static String NetzwerkPreferenceComposite_tblclmnNewColumn_text1;
+	public static String NetzwerkPreferenceComposite_tblclmnNewColumn_text2;
+	public static String NetzwerkPreferenceComposite_tblclmnNewColumn_text3;
+
 	
 	
 	

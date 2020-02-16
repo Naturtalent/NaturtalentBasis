@@ -68,6 +68,8 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 			case ProjectPackage.NT_PROJECTS: return createNtProjects();
 			case ProjectPackage.DYN_PROPERTY_ITEM: return createDynPropertyItem();
 			case ProjectPackage.NT_PROPERTY: return createNtProperty();
+			case ProjectPackage.PROXY: return createProxy();
+			case ProjectPackage.PROXIES: return createProxies();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -78,6 +80,7 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NtProject createNtProject()
 	{
 		NtProjectImpl ntProject = new NtProjectImpl();
@@ -89,6 +92,7 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NtProjects createNtProjects()
 	{
 		NtProjectsImpl ntProjects = new NtProjectsImpl();
@@ -100,6 +104,7 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public DynPropertyItem createDynPropertyItem()
 	{
 		DynPropertyItemImpl dynPropertyItem = new DynPropertyItemImpl();
@@ -111,6 +116,7 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public NtProperty createNtProperty()
 	{
 		NtPropertyImpl ntProperty = new NtPropertyImpl();
@@ -122,6 +128,31 @@ public class ProjectFactoryImpl extends EFactoryImpl implements ProjectFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public Proxy createProxy()
+	{
+		ProxyImpl proxy = new ProxyImpl();
+		return proxy;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Proxies createProxies()
+	{
+		ProxiesImpl proxies = new ProxiesImpl();
+		return proxies;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ProjectPackage getProjectPackage()
 	{
 		return (ProjectPackage)getEPackage();

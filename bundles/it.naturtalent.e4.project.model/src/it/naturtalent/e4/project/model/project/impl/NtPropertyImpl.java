@@ -136,6 +136,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getWorkingset()
 	{
 		return workingset;
@@ -146,6 +147,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setWorkingset(String newWorkingset)
 	{
 		String oldWorkingset = workingset;
@@ -159,6 +161,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId()
 	{
 		return id;
@@ -169,6 +172,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId)
 	{
 		String oldId = id;
@@ -182,6 +186,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getCreated()
 	{
 		return created;
@@ -192,6 +197,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setCreated(String newCreated)
 	{
 		String oldCreated = created;
@@ -205,6 +211,7 @@ public class NtPropertyImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<DynPropertyItem> getProperties()
 	{
 		if (properties == null)

@@ -6,22 +6,23 @@ import org.eclipse.swt.widgets.Composite;
 import it.naturtalent.application.IPreferenceAdapter;
 import it.naturtalent.application.IPreferenceNode;
 
-
 public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
-{	
+{
 	protected IEclipsePreferences defaultPreferenceNode;
-	protected IEclipsePreferences instancePreferenceNode;	
+
+	protected IEclipsePreferences instancePreferenceNode;
+
 	protected Composite preferenceComposite = null;
-	
+
 	@Override
 	public abstract String getLabel();
 
-	//@Override
-	//public abstract String getKey();
+	// @Override
+	// public abstract String getKey();
 
 	@Override
 	public String getNodePath()
-	{		
+	{
 		return null;
 	}
 
@@ -47,14 +48,13 @@ public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
 	@Override
 	public Composite createNodeComposite(IPreferenceNode referenceNode)
 	{
-		referenceNode.setTitle(getLabel());		
+		referenceNode.setTitle(getLabel());
 		return preferenceComposite;
 	}
 
-
 	@Override
 	public IEclipsePreferences getDefaultPreference()
-	{		
+	{
 		return defaultPreferenceNode;
 	}
 
@@ -62,18 +62,18 @@ public abstract class AbstractPreferenceAdapter implements IPreferenceAdapter
 	public void setDefaultPreference(IEclipsePreferences defaultPreference)
 	{
 		this.defaultPreferenceNode = defaultPreference;
-		
+
 	}
 
 	@Override
 	public IEclipsePreferences getInstancePreference()
-	{		
+	{
 		return instancePreferenceNode;
 	}
 
 	@Override
 	public void setInstancePreference(IEclipsePreferences instancePreference)
 	{
-		this.instancePreferenceNode = instancePreference;		
+		this.instancePreferenceNode = instancePreference;
 	}
 }

@@ -106,6 +106,10 @@ public class ProjectValidator extends EObjectValidator
 				return validateDynPropertyItem((DynPropertyItem)value, diagnostics, context);
 			case ProjectPackage.NT_PROPERTY:
 				return validateNtProperty((NtProperty)value, diagnostics, context);
+			case ProjectPackage.PROXY:
+				return validateProxy((Proxy)value, diagnostics, context);
+			case ProjectPackage.PROXIES:
+				return validateProxies((Proxies)value, diagnostics, context);
 			default:
 				return true;
 		}
@@ -170,6 +174,26 @@ public class ProjectValidator extends EObjectValidator
 	public boolean validateNtProperty(NtProperty ntProperty, DiagnosticChain diagnostics, Map<Object, Object> context)
 	{
 		return validate_EveryDefaultConstraint(ntProperty, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateProxy(Proxy proxy, DiagnosticChain diagnostics, Map<Object, Object> context)
+	{
+		return validate_EveryDefaultConstraint(proxy, diagnostics, context);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean validateProxies(Proxies proxies, DiagnosticChain diagnostics, Map<Object, Object> context)
+	{
+		return validate_EveryDefaultConstraint(proxies, diagnostics, context);
 	}
 
 	/**

@@ -174,11 +174,62 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link it.naturtalent.e4.project.model.project.Proxy} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProxyItemProvider proxyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link it.naturtalent.e4.project.model.project.Proxy}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProxyAdapter()
+	{
+		if (proxyItemProvider == null)
+		{
+			proxyItemProvider = new ProxyItemProvider(this);
+		}
+
+		return proxyItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link it.naturtalent.e4.project.model.project.Proxies} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProxiesItemProvider proxiesItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link it.naturtalent.e4.project.model.project.Proxies}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProxiesAdapter()
+	{
+		if (proxiesItemProvider == null)
+		{
+			proxiesItemProvider = new ProxiesItemProvider(this);
+		}
+
+		return proxiesItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public ComposeableAdapterFactory getRootAdapterFactory()
 	{
 		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
@@ -190,6 +241,7 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory)
 	{
 		this.parentAdapterFactory = parentAdapterFactory;
@@ -244,6 +296,7 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void addListener(INotifyChangedListener notifyChangedListener)
 	{
 		changeNotifier.addListener(notifyChangedListener);
@@ -255,6 +308,7 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void removeListener(INotifyChangedListener notifyChangedListener)
 	{
 		changeNotifier.removeListener(notifyChangedListener);
@@ -266,6 +320,7 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void fireNotifyChanged(Notification notification)
 	{
 		changeNotifier.fireNotifyChanged(notification);
@@ -282,12 +337,15 @@ public class ProjectItemProviderAdapterFactory extends ProjectAdapterFactory imp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void dispose()
 	{
 		if (ntProjectItemProvider != null) ntProjectItemProvider.dispose();
 		if (ntProjectsItemProvider != null) ntProjectsItemProvider.dispose();
 		if (dynPropertyItemItemProvider != null) dynPropertyItemItemProvider.dispose();
 		if (ntPropertyItemProvider != null) ntPropertyItemProvider.dispose();
+		if (proxyItemProvider != null) proxyItemProvider.dispose();
+		if (proxiesItemProvider != null) proxiesItemProvider.dispose();
 	}
 
 }

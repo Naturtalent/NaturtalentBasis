@@ -59,6 +59,24 @@ public interface ProjectFactory extends EFactory
 	NtProperty createNtProperty();
 
 	/**
+	 * Returns a new object of class '<em>Proxy</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Proxy</em>'.
+	 * @generated
+	 */
+	Proxy createProxy();
+
+	/**
+	 * Returns a new object of class '<em>Proxies</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Proxies</em>'.
+	 * @generated
+	 */
+	Proxies createProxies();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

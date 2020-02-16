@@ -148,7 +148,14 @@ public class ProjectUIProcessor
 		Activator.projectDataFactory = projectDataFactory;	
 		
 		if(preferenceRegistry != null)
+		{
 			preferenceRegistry.getPreferenceAdapters().add(new ProjectPreferenceAdapter());
+			preferenceRegistry.getPreferenceAdapters().add(new NetzwerkPreferenceAdapter());
+		}
+		
+		// die praeferenzierten Netzwerkproxies in die Systemproperties 'Properties' uebernehmen
+		NetzwerkPreferenceAdapter.setProxySystemProperties();
+		
 	}
 	
 	/*

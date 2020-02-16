@@ -3,6 +3,10 @@
 <plugin>
    <extension
          point="org.eclipse.emf.ecp.view.model.provider.xmi.file">
+<file filePath="viewmodels/Proxy.view"/>
+
+
+
 <file filePath="viewmodels/DynPropertyItem.view"/>
 
 <file filePath="viewmodels/NtProperty.view"/>

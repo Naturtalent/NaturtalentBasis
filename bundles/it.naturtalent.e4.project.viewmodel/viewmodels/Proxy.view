@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<org.eclipse.emf.ecp.view.model:View xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:org.eclipse.emf.ecp.view.group.model="http://org/eclipse/emf/ecp/view/group/model" xmlns:org.eclipse.emf.ecp.view.model="http://org/eclipse/emf/ecp/view/model/1180" xmi:id="_FirOQEv7EeqzVok1c8bLcg" name="Proxy">
+  <rootEClass href="http://www.example.org/project#//Proxy"/>
+  <children xsi:type="org.eclipse.emf.ecp.view.group.model:Group" xmi:id="_IilHkExAEeqYr4zHhCiutw" name="Proxies">
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Fi1mUEv7EeqzVok1c8bLcg" name="Control inUse">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Fi1mUUv7EeqzVok1c8bLcg">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//Proxy/inUse"/>
+      </domainModelReference>
+    </children>
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Fi1mUkv7EeqzVok1c8bLcg" name="Control schemata" readonly="true">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Fi1mU0v7EeqzVok1c8bLcg">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//Proxy/schemata"/>
+      </domainModelReference>
+    </children>
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Fi1mVEv7EeqzVok1c8bLcg" name="Control host">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Fi1mVUv7EeqzVok1c8bLcg">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//Proxy/host"/>
+      </domainModelReference>
+    </children>
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Fi1mVkv7EeqzVok1c8bLcg" name="Control port">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Fi1mV0v7EeqzVok1c8bLcg">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//Proxy/port"/>
+      </domainModelReference>
+    </children>
+  </children>
+  <children xsi:type="org.eclipse.emf.ecp.view.group.model:Group" xmi:id="_eECd4ExAEeqYr4zHhCiutw" name="Benutzer">
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="__YlLQExBEeqYr4zHhCiutw" name="Control authentification">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_DHDoIExCEeqYr4zHhCiutw">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//Proxy/authentification"/>
+      </domainModelReference>
+    </children>
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_Fi1mXEv7EeqzVok1c8bLcg" name="Control password">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_Fi1mXUv7EeqzVok1c8bLcg">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//Proxy/password"/>
+      </domainModelReference>
+    </children>
+    <children xsi:type="org.eclipse.emf.ecp.view.model:Control" xmi:id="_04X74ExBEeqYr4zHhCiutw" name="Control user">
+      <domainModelReference xsi:type="org.eclipse.emf.ecp.view.model:FeaturePathDomainModelReference" xmi:id="_5ctCsExBEeqYr4zHhCiutw">
+        <domainModelEFeature xsi:type="ecore:EAttribute" href="http://www.example.org/project#//Proxy/user"/>
+      </domainModelReference>
+    </children>
+  </children>
+  <ecorePaths>/it.naturtalent.e4.project.model/model/ntproject.ecore</ecorePaths>
+</org.eclipse.emf.ecp.view.model:View>

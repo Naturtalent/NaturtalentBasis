@@ -121,6 +121,7 @@ public class NtProjectImpl extends MinimalEObjectImpl.Container implements NtPro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getId()
 	{
 		return id;
@@ -131,6 +132,7 @@ public class NtProjectImpl extends MinimalEObjectImpl.Container implements NtPro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setId(String newId)
 	{
 		String oldId = id;
@@ -144,6 +146,7 @@ public class NtProjectImpl extends MinimalEObjectImpl.Container implements NtPro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName()
 	{
 		return name;
@@ -154,6 +157,7 @@ public class NtProjectImpl extends MinimalEObjectImpl.Container implements NtPro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName)
 	{
 		String oldName = name;
@@ -167,6 +171,7 @@ public class NtProjectImpl extends MinimalEObjectImpl.Container implements NtPro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getDescription()
 	{
 		return description;
@@ -177,6 +182,7 @@ public class NtProjectImpl extends MinimalEObjectImpl.Container implements NtPro
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setDescription(String newDescription)
 	{
 		String oldDescription = description;

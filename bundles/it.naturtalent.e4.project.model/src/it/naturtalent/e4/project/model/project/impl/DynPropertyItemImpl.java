@@ -94,6 +94,7 @@ public class DynPropertyItemImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getName()
 	{
 		return name;
@@ -104,6 +105,7 @@ public class DynPropertyItemImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setName(String newName)
 	{
 		String oldName = name;
@@ -117,6 +119,7 @@ public class DynPropertyItemImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public String getClassName()
 	{
 		return className;
@@ -127,6 +130,7 @@ public class DynPropertyItemImpl extends MinimalEObjectImpl.Container implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public void setClassName(String newClassName)
 	{
 		String oldClassName = className;

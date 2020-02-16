@@ -95,6 +95,16 @@ public class ProjectAdapterFactory extends AdapterFactoryImpl
 				return createNtPropertyAdapter();
 			}
 			@Override
+			public Adapter caseProxy(Proxy object)
+			{
+				return createProxyAdapter();
+			}
+			@Override
+			public Adapter caseProxies(Proxies object)
+			{
+				return createProxiesAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object)
 			{
 				return createEObjectAdapter();
@@ -172,6 +182,36 @@ public class ProjectAdapterFactory extends AdapterFactoryImpl
 	 * @generated
 	 */
 	public Adapter createNtPropertyAdapter()
+	{
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link it.naturtalent.e4.project.model.project.Proxy <em>Proxy</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see it.naturtalent.e4.project.model.project.Proxy
+	 * @generated
+	 */
+	public Adapter createProxyAdapter()
+	{
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link it.naturtalent.e4.project.model.project.Proxies <em>Proxies</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see it.naturtalent.e4.project.model.project.Proxies
+	 * @generated
+	 */
+	public Adapter createProxiesAdapter()
 	{
 		return null;
 	}

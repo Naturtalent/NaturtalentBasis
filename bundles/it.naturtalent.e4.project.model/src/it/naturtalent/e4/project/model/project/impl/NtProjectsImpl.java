@@ -71,6 +71,7 @@ public class NtProjectsImpl extends MinimalEObjectImpl.Container implements NtPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EList<NtProject> getNtProject()
 	{
 		if (ntProject == null)

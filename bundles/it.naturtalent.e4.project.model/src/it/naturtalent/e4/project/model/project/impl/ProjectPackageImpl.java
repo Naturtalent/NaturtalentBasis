@@ -18,6 +18,8 @@ import it.naturtalent.e4.project.model.project.NtProjects;
 import it.naturtalent.e4.project.model.project.NtProperty;
 import it.naturtalent.e4.project.model.project.ProjectFactory;
 import it.naturtalent.e4.project.model.project.ProjectPackage;
+import it.naturtalent.e4.project.model.project.Proxies;
+import it.naturtalent.e4.project.model.project.Proxy;
 import it.naturtalent.e4.project.model.project.util.ProjectValidator;
 
 /**
@@ -55,6 +57,20 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * @generated
 	 */
 	private EClass ntPropertyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass proxyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass proxiesEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -116,6 +132,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 			(theProjectPackage,
 			 new EValidator.Descriptor()
 			 {
+				 @Override
 				 public EValidator getEValidator()
 				 {
 					 return ProjectValidator.INSTANCE;
@@ -135,6 +152,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNtProject()
 	{
 		return ntProjectEClass;
@@ -145,6 +163,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNtProject_Id()
 	{
 		return (EAttribute)ntProjectEClass.getEStructuralFeatures().get(0);
@@ -155,6 +174,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNtProject_Name()
 	{
 		return (EAttribute)ntProjectEClass.getEStructuralFeatures().get(1);
@@ -165,6 +185,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNtProject_Description()
 	{
 		return (EAttribute)ntProjectEClass.getEStructuralFeatures().get(2);
@@ -175,6 +196,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EOperation getNtProject__HasName__DiagnosticChain_Map()
 	{
 		return ntProjectEClass.getEOperations().get(0);
@@ -185,6 +207,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNtProjects()
 	{
 		return ntProjectsEClass;
@@ -195,6 +218,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getNtProjects_NtProject()
 	{
 		return (EReference)ntProjectsEClass.getEStructuralFeatures().get(0);
@@ -205,6 +229,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getDynPropertyItem()
 	{
 		return dynPropertyItemEClass;
@@ -215,6 +240,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDynPropertyItem_Name()
 	{
 		return (EAttribute)dynPropertyItemEClass.getEStructuralFeatures().get(0);
@@ -225,6 +251,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getDynPropertyItem_ClassName()
 	{
 		return (EAttribute)dynPropertyItemEClass.getEStructuralFeatures().get(1);
@@ -235,6 +262,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EClass getNtProperty()
 	{
 		return ntPropertyEClass;
@@ -245,6 +273,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNtProperty_Workingset()
 	{
 		return (EAttribute)ntPropertyEClass.getEStructuralFeatures().get(0);
@@ -255,6 +284,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNtProperty_Id()
 	{
 		return (EAttribute)ntPropertyEClass.getEStructuralFeatures().get(1);
@@ -265,6 +295,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EAttribute getNtProperty_Created()
 	{
 		return (EAttribute)ntPropertyEClass.getEStructuralFeatures().get(2);
@@ -275,6 +306,7 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
 	public EReference getNtProperty_Properties()
 	{
 		return (EReference)ntPropertyEClass.getEStructuralFeatures().get(3);
@@ -285,6 +317,117 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@Override
+	public EClass getProxy()
+	{
+		return proxyEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProxy_Schemata()
+	{
+		return (EAttribute)proxyEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProxy_Host()
+	{
+		return (EAttribute)proxyEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProxy_Port()
+	{
+		return (EAttribute)proxyEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProxy_Authentification()
+	{
+		return (EAttribute)proxyEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProxy_User()
+	{
+		return (EAttribute)proxyEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProxy_Password()
+	{
+		return (EAttribute)proxyEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getProxy_InUse()
+	{
+		return (EAttribute)proxyEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getProxies()
+	{
+		return proxiesEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getProxies_Proxies()
+	{
+		return (EReference)proxiesEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ProjectFactory getProjectFactory()
 	{
 		return (ProjectFactory)getEFactoryInstance();
@@ -328,6 +471,18 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 		createEAttribute(ntPropertyEClass, NT_PROPERTY__ID);
 		createEAttribute(ntPropertyEClass, NT_PROPERTY__CREATED);
 		createEReference(ntPropertyEClass, NT_PROPERTY__PROPERTIES);
+
+		proxyEClass = createEClass(PROXY);
+		createEAttribute(proxyEClass, PROXY__IN_USE);
+		createEAttribute(proxyEClass, PROXY__SCHEMATA);
+		createEAttribute(proxyEClass, PROXY__HOST);
+		createEAttribute(proxyEClass, PROXY__PORT);
+		createEAttribute(proxyEClass, PROXY__AUTHENTIFICATION);
+		createEAttribute(proxyEClass, PROXY__USER);
+		createEAttribute(proxyEClass, PROXY__PASSWORD);
+
+		proxiesEClass = createEClass(PROXIES);
+		createEReference(proxiesEClass, PROXIES__PROXIES);
 	}
 
 	/**
@@ -387,6 +542,18 @@ public class ProjectPackageImpl extends EPackageImpl implements ProjectPackage
 		initEAttribute(getNtProperty_Id(), ecorePackage.getEString(), "id", null, 0, 1, NtProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNtProperty_Created(), ecorePackage.getEString(), "created", null, 0, 1, NtProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getNtProperty_Properties(), this.getDynPropertyItem(), null, "properties", null, 0, -1, NtProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(proxyEClass, Proxy.class, "Proxy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getProxy_InUse(), ecorePackage.getEBoolean(), "inUse", null, 0, 1, Proxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProxy_Schemata(), ecorePackage.getEString(), "schemata", null, 0, 1, Proxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProxy_Host(), ecorePackage.getEString(), "host", null, 0, 1, Proxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProxy_Port(), ecorePackage.getEString(), "port", null, 0, 1, Proxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProxy_Authentification(), ecorePackage.getEBoolean(), "authentification", null, 0, 1, Proxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProxy_User(), ecorePackage.getEString(), "user", null, 0, 1, Proxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProxy_Password(), ecorePackage.getEString(), "password", null, 0, 1, Proxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(proxiesEClass, Proxies.class, "Proxies", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProxies_Proxies(), this.getProxy(), null, "proxies", null, 0, -1, Proxies.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

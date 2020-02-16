@@ -29,5 +29,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//NtProperty/created"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference ntproject.ecore#//NtProperty/properties"/>
     </genClasses>
+    <genClasses ecoreClass="ntproject.ecore#//Proxy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//Proxy/schemata"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//Proxy/host"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//Proxy/port"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//Proxy/auth"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//Proxy/password"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute ntproject.ecore#//Proxy/inUse"/>
+    </genClasses>
+    <genClasses ecoreClass="ntproject.ecore#//Proxies">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference ntproject.ecore#//Proxies/proxies"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
