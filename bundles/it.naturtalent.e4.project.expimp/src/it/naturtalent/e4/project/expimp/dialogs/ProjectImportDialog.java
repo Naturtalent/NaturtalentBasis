@@ -177,8 +177,8 @@ public class ProjectImportDialog extends TitleAreaDialog
 	}
 	
 	private Table table;
-	private CheckboxTableViewer checkboxTableViewer;
-	private Combo comboSourceDir;
+	protected CheckboxTableViewer checkboxTableViewer;
+	protected Combo comboSourceDir;
 	private Button okButton;
 	private EObject [] resultImportEobjects;	
 	private Button btnWorkingSets;
@@ -452,47 +452,67 @@ public class ProjectImportDialog extends TitleAreaDialog
 		return area;
 	}
 	
+
 	/**
 	 * Den Viewer mit den Projekte des Importverzeichnisses initialisieren.
 	 * 
 	 * @param importDirPath
 	 */
-	private void initViewer(final String importDirPath)
+	protected void initViewer(final String importDirPath)
 	{
-		List <NtProject>ntProjects = readImportFiles(importDirPath);		
+		List <NtProject>ntProjects = readDefaultPropertyFiles(importDirPath);		
 		checkboxTableViewer.setInput(ntProjects);	
 		disableExistObjects(ntProjects);
 	}
 	
 	/**
 	 * Defaulteigenschaft der NtProjekte aus den NtProjekt-Unterverzeichnissen einlesen.
-	 * Zurueckgegeben wird eine Liste mit den Eigenschaften der importierbaren NtProjekte.
+	 * Zurueckgegeben wird eine Liste mit NtProjekten die die Defautleigenschaften des Projekt beinhalten.
 	 * 
 	 * @param importDirPath
 	 * @return
 	 */
-	private List <NtProject>readImportFiles(String importDirPath)
-	{
-		List<NtProject>ntProjects = new ArrayList<NtProject>();
-		File importDir = new File(importDirPath);
-		File[] subdirs = importDir.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
-				
-		File propertyFile;
-		if (ArrayUtils.isNotEmpty(subdirs))
+	protected List <NtProject>readDefaultPropertyFiles(String importDirPath)
+	{		
+		List<NtProject> ntProjects = new ArrayList<NtProject>();
+		try
 		{
-			for (File dir : subdirs)
-			{
-				// Defaulteigenschaft aus der Datei
-				// 'NtProjectProperty.EXPIMP_NTPROJECTDATA_FILE' lesen
-				propertyFile = new File(dir,NtProjectProperty.EXPIMP_NTPROJECTDATA_FILE);
-				if (propertyFile.exists())
+			new ProgressMonitorDialog(parentShell).run(true, false, new IRunnableWithProgress()
+			{				
+				@Override
+				public void run(IProgressMonitor monitor)
+						throws InvocationTargetException, InterruptedException
 				{
-					EList<EObject> eObjects = ExpImpUtils.loadEObjectFromResource(propertyFile);
-					ntProjects.add((NtProject) eObjects.get(0));
+					File importDir = new File(importDirPath);
+
+					// 'subdirs' sind die IProjekte selbst
+					File[] subdirs = importDir
+							.listFiles((FileFilter) DirectoryFileFilter.DIRECTORY);
+
+					File propertyFile;
+					if (ArrayUtils.isNotEmpty(subdirs))
+					{
+						for (File dir : subdirs)
+						{
+							// Datei mit der Defaulteigenschaft
+							propertyFile = new File(dir,
+									NtProjectProperty.EXPIMP_NTPROJECTDATA_FILE);
+							if (propertyFile.exists())
+							{
+								EList<EObject> eObjects = ExpImpUtils
+										.loadEObjectFromResource(propertyFile);
+								ntProjects.add((NtProject) eObjects.get(0));
+							}
+						}
+					}
 				}
-			}
+			});
+		} catch (InvocationTargetException | InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
+
 		return ntProjects;
 	}
 	
@@ -502,7 +522,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 	 * In diesem Fall wird eine Message angezeigt.
 	 *      
 	 */
-	private void disableExistObjects(List<NtProject>importedNtProjects)
+	protected void disableExistObjects(List<NtProject>importedNtProjects)
 	{		
 		boolean showExistsMessage = false;
 		setErrorMessage(null);
@@ -671,7 +691,7 @@ public class ProjectImportDialog extends TitleAreaDialog
 	}
 	
 	
-	private void storeSettings()
+	protected void storeSettings()
 	{
 		List<String>srcPaths = new ArrayList<String>();
 

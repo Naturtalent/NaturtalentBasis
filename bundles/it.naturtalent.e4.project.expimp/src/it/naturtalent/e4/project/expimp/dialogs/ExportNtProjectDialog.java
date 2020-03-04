@@ -66,17 +66,17 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 
 	public static final String EXPORT_DIRECTORY = "exportDirectory"; //$NON-NLS-1$
 
-	private IProject[] resultExportProjects;
+	protected IProject[] resultExportProjects;
 
-	private File resultExportDir;
+	protected File resultExportDir;
 
 	protected CCombo exportComboDir;
 
-	private Button btnWorkingSet;
+	protected Button btnWorkingSet;
 
 	private Button btnProject;
 
-	private CheckboxTreeViewer checkboxTreeViewer;
+	protected CheckboxTreeViewer checkboxTreeViewer;
 
 	protected Button okButton;
 	
@@ -415,6 +415,12 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 	@Override
 	protected void okPressed()
 	{
+		doOkPressed();
+		super.okPressed();
+	}
+	
+	protected void doOkPressed()
+	{
 		// das ausgewaehlte Zielverzeichnis fuer spaetere Verwendung sichern
 		resultExportDir = new File(exportComboDir.getText());
 
@@ -437,8 +443,7 @@ public class ExportNtProjectDialog extends TitleAreaDialog
 		// CheckboxViewer bereits disposed)
 		resultExportProjects = getCheckedProjects();
 
-		storeSettings();
-		super.okPressed();
+		storeSettings();	
 	}
 
 	/*

@@ -49,5 +49,6 @@ Bundle-ClassPath: org.eclipse.ui_3.103.0.v20120705-114351.jar,
 Service-Component: OSGI-INF/exportAdapterRepository.xml,
  OSGI-INF/importAdapterRepository.xml
 Export-Package: it.naturtalent.e4.project.expimp,
+ it.naturtalent.e4.project.expimp.actions,
  it.naturtalent.e4.project.expimp.dialogs,
  it.naturtalent.e4.project.expimp.ecp

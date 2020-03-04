@@ -66,7 +66,7 @@ public class ExportAction extends Action
 
 	private Shell shell;
 
-	private File exportDestDir;
+	protected File exportDestDir;
 
 	private Map<String, List<String>> mapProjectFactories = new HashMap<String, List<String>>();
 		
@@ -180,6 +180,4 @@ public class ExportAction extends Action
 		}
 	}
 	
-
-
 }
