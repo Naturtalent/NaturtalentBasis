@@ -24,6 +24,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 /**
  * UI der Foldersuchseite.
@@ -59,7 +61,7 @@ public class DiagnoseSearchComposite extends Composite
 		Group groupDiag = new Group(composite, SWT.NONE);
 		groupDiag.setText("Prüffälle");
 		groupDiag.setLayout(new FillLayout(SWT.VERTICAL));
-		groupDiag.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		groupDiag.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		
 		Label lblPlaceholder = new Label(groupDiag, SWT.NONE);
 

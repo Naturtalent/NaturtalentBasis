@@ -9,6 +9,7 @@ Bundle-ClassPath: .,
 Bundle-Activator: it.naturtalent.e4.project.ui.Activator
 Bundle-Localization: plugin
 Export-Package: it.naturtalent.e4.project.ui,
+ it.naturtalent.e4.project.ui.actions.emf,
  it.naturtalent.e4.project.ui.datatransfer,
  it.naturtalent.e4.project.ui.dialogs,
  it.naturtalent.e4.project.ui.emf,

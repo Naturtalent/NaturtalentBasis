@@ -8,6 +8,7 @@ import org.eclipse.core.internal.resources.Folder;
 import org.eclipse.core.internal.resources.Project;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -30,8 +31,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IWorkingSet;
 
 import it.naturtalent.e4.project.INtProject;
+import it.naturtalent.e4.project.model.project.NtProject;
 import it.naturtalent.e4.project.search.ISearchInEclipsePage;
 import it.naturtalent.e4.project.ui.Activator;
+import it.naturtalent.e4.project.ui.actions.emf.CheckAndRepairNoQualfiedNameAction;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 
 /**
@@ -174,6 +177,46 @@ public class SearchView
 						treeViewer.getTree().setFocus();
 					}
 				}
+			}
+			else
+			{			
+				// pruefen, ob ein ProjektID 'NOQUALIFIEDPROJECTNAME' vorliegt und eine Korrektur vorgenommen werden soll
+			
+				
+				
+			
+				if (selObj instanceof String)
+				{
+					String id = (String) selObj;
+					CheckAndRepairNoQualfiedNameAction action = new CheckAndRepairNoQualfiedNameAction(id);
+					action.run();
+					
+					/*
+					IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject(id);
+					if(iProject.exists())
+					{
+						NtProject ntProject = Activator.findNtProject(id);
+						
+						if (ntProject != null)
+						{
+							String name = ntProject.getName();
+							try
+							{
+								iProject.setPersistentProperty(
+										INtProject.projectNameQualifiedName,name);
+							} catch (CoreException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+					*/
+					
+				}
+				
+				
+				
 			}
 		}
 	}
