@@ -20,7 +20,6 @@ public class ExpImpProcessor
 {
 	
 	@Inject @Optional IProjectDataFactory projectDataFactory;
-	@Inject @Optional ProjectDataAdapterRegistry projectDataAdapterRegister;
 	@Inject @Optional public static Shell shell;
 	
 	public static @Inject @Optional IImportAdapterRepository importAdapterRepository;
@@ -39,6 +38,8 @@ public class ExpImpProcessor
 		
 		// Projekt Import/Export Adapter registrieren 
 		importAdapterRepository.addImportAdapter(new ProjectImportAdapter());
-		exportAdapterRepository.addExportAdapter(new ProjectExportAdapter());		
+		importAdapterRepository.addImportAdapter(new ProjectRestoreAdapter());
+		exportAdapterRepository.addExportAdapter(new ProjectExportAdapter());
+		exportAdapterRepository.addExportAdapter(new ProjectBackupAdapter());
 	}
 }

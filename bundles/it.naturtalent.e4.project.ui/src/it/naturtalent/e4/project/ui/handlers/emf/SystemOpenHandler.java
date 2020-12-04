@@ -15,12 +15,13 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import it.naturtalent.e4.project.ui.navigator.ResourceNavigator;
 
 /**
- * 
+ * Eine Resource (Projekt/Ordner) in dem Dateibrowser oeffnen.
+ * Der Handler wird ueber das Projektexplorer-Toolbar Menue aufgerufen.
+ * Im Linux-Dateiexplorer fuehrt eine Resource mit einem Space im Namen zu einer Fehlermeldung.
  * 
  * @author dieter
  *
  */
-@Deprecated //@see SystenOpenEditorAction
 public class SystemOpenHandler
 {
 	@Inject @Optional private ESelectionService selectionService;
@@ -44,8 +45,8 @@ public class SystemOpenHandler
 			{
 				if (SystemUtils.IS_OS_LINUX)
 					try
-					{
-						Runtime.getRuntime().exec("nemo " + destPath);
+					{	
+						Runtime.getRuntime().exec("nemo " + destPath);						
 						return;
 					} catch (IOException e)
 					{
